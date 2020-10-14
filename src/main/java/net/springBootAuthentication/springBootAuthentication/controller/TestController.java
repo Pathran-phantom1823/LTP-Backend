@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/contoller/test")
-@CrossOrigin
+@RequestMapping("/api")
+//@CrossOrigin
 public class TestController {
 	@GetMapping("/")
 	public String index() {

@@ -27,43 +27,43 @@ import net.springBootAuthentication.springBootAuthentication.services.AccountDet
 import net.springBootAuthentication.springBootAuthentication.utility.JwtUtil;
 
 @RestController
-@RequestMapping("/api/test")
-//@CrossOrigin(origins = "http://localhost:8082/")
+@RequestMapping("/ltp")
+//@CrossOrigin(origins = "http://localhost:8080/")
 public class ProductController {
 	
 	@Autowired
 	private ProductsRepository productrepository;
 	
-	@Autowired
-	private AuthenticationManager authenticationmanager;
-	
-	@Autowired
-	private AccountDetailsService userDetailsService;
-	
-	@Autowired
-	private JwtUtil jwtTokenUtil;
+//	@Autowired
+//	private AuthenticationManager authenticationmanager;
+//	
+//	@Autowired
+//	private AccountDetailsService userDetailsService;
+//	
+//	@Autowired
+//	private JwtUtil jwtTokenUtil;
 
 	@GetMapping("/")
 	public List<Product> index() {
 		return productrepository.findAll();
 	}
 	
-	@PostMapping("/authenticate")
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-		try {
-			authenticationmanager.authenticate(
-					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
-				);
-		}catch (BadCredentialsException e ) {
-			throw new Exception("Incorrect username or password");
-		}
-		
-		final UserDetails userDetails  = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-		final String jwt = jwtTokenUtil.generateToken(userDetails);
-		
-		return ResponseEntity.ok(new AuthenticationResponse(jwt));
-	}
-	
+//	@PostMapping("/authenticate")
+//	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+//		try {
+//			authenticationmanager.authenticate(
+//					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+//				);
+//		}catch (BadCredentialsException e ) {
+//			throw new Exception("Incorrect username or password");
+//		}
+//		
+//		final UserDetails userDetails  = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+//		final String jwt = jwtTokenUtil.generateToken(userDetails);
+//		
+//		return ResponseEntity.ok(new AuthenticationResponse(jwt));
+//	}
+//	
 	@PostMapping("/product/add")
 	public Product addProduct(@RequestBody Product product){
 		return productrepository.save(product);
