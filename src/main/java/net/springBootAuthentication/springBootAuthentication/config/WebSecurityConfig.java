@@ -35,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 //		http
+		http.authorizeRequests().antMatchers("/api/**").permitAll();
 		http.cors().configurationSource(request -> {
             CorsConfiguration cors = new CorsConfiguration();
             cors.setAllowedOrigins(
@@ -45,7 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		.csrf()
 		.disable()
 		.authorizeRequests()
-		.antMatchers("/api/test/authenticate/")
+		.antMatchers("/ltp/authenticate")
 		.permitAll()
 		.anyRequest()
 		.authenticated()
