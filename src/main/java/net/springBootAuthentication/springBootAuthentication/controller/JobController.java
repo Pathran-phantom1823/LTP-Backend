@@ -6,25 +6,23 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
 import net.springBootAuthentication.springBootAuthentication.model.JobApplicants;
 import net.springBootAuthentication.springBootAuthentication.model.Jobs;
+import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,16 +30,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.springBootAuthentication.springBootAuthentication.model.Registration;
 import net.springBootAuthentication.springBootAuthentication.model.SaveJob;
 import net.springBootAuthentication.springBootAuthentication.repository.JobApplicantsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.JobsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.SaveJobRepository;
-import net.springBootAuthentication.springBootAuthentication.repository.UserRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/ltp")
@@ -59,9 +54,6 @@ public class JobController {
 
     @Autowired
     private SaveJobRepository saveJobRepository;
-
-    @Autowired
-    private UserRepository userRepository;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> postJob(@RequestPart(value = "postDetails") String postDetails,
@@ -89,7 +81,7 @@ public class JobController {
 
         jobs2.setTitle(jobs.getTitle());
         jobs2.setDescription(jobs.getDescription());
-        jobs2.setcategory(jobs.getcategory());
+        jobs2.setCategory(jobs.getCategory());
         jobs2.setSubject(jobs.getSubject());
         jobs2.setLanguageFrom(jobs.getLanguageFrom());
         jobs2.setLanguageTo(jobs.getLanguageTo().toString());
@@ -100,6 +92,7 @@ public class JobController {
         jobs2.setPriceType(jobs.getPriceType());
         jobs2.setPostById(jobs.getPostById());
         jobs2.setFile(String.format("%d%s%s", jobs.getPostById(), date, filename));
+        jobs2.setDatePosted(date);
         jobs2.setVisibility(jobs.getVisibility());
         jobs2.setlevelOfConfidentiality(jobs.getlevelOfConfidentiality());
         jobs2.setFixedPrice(jobs.getFixedPrice());
@@ -116,7 +109,7 @@ public class JobController {
 
     // }
     @PostMapping(value = "/getFile")
-    public ResponseEntity<?> getFiles(@RequestBody Registration data)throws IOException{
+    public ResponseEntity<?> getFiles(@RequestBody RegisterModel data)throws IOException{
         Long id = data.getId();
         List<String> res = new ArrayList<>(); 
         List<File> finaResults = new ArrayList<>();
@@ -146,14 +139,14 @@ public class JobController {
 
 
     @PostMapping(value="/getYourJobs")
-    public ResponseEntity<?> getYourJobs(@RequestBody Registration data) {
+    public ResponseEntity<?> getYourJobs(@RequestBody RegisterModel data) {
         Long id = data.getId();
         List<Jobs> jobs = jobsRepository.getFile(id);
         return new ResponseEntity<>(jobs, HttpStatus.OK);
     }
     
     @PostMapping(value="getAllJobs")
-    public List<Jobs> getAllJobs(@RequestBody Registration data) {
+    public List<Jobs> getAllJobs(@RequestBody RegisterModel data) {
         Long id = data.getId();
         return jobsRepository.getAllJobs(id);
     }

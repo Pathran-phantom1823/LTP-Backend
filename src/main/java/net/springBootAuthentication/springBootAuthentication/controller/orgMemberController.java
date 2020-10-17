@@ -24,13 +24,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.bytebuddy.asm.Advice.Local;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomOrgMember;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
-import net.springBootAuthentication.springBootAuthentication.model.Registration;
-import net.springBootAuthentication.springBootAuthentication.model.Role;
-import net.springBootAuthentication.springBootAuthentication.model.orgMembers;
+import net.springBootAuthentication.springBootAuthentication.model.OrgMembers;
+import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
+import net.springBootAuthentication.springBootAuthentication.model.RoleModel;
+import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
-import net.springBootAuthentication.springBootAuthentication.repository.UserRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.orgMemberRepository;
 // import net.springBootAuthentication.springBootAuthentication.services.orgMemberService;
 
@@ -57,73 +59,78 @@ public class orgMemberController {
     private EntityManager em;
 
     @Autowired
-    UserRepository userRepository;
+    RegisterRepository registerRepository;
 
     @Autowired
     orgMemberRepository orgMemberRepository;
 
-    @RequestMapping(value = "/member/create", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Object> addOrganizationMember(@RequestPart(value = "account") String account,
-            @RequestPart(value = "org") String org) throws IOException {
-        Registration registration = new Registration();
-        orgMembers orgMembers = new orgMembers();
-        Role role = new Role();
+    // @RequestMapping(value = "/member/create", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    // public ResponseEntity<Object> addOrganizationMember(@RequestPart(value = "account") String account,
+    //         @RequestPart(value = "org") String org) throws IOException {
+    //     RegisterModel registration = new RegisterModel();
+    //     OrgMembers orgMembers = new OrgMembers();
+    //     RoleModel role = new RoleModel();
+    //     LocalDate date = LocalDate.now();
+
+    //     Register acc = objecMapper.readValue(account, Register.class);
+    //     OrgMembers OrgMember = objecMapper.readValue(org, OrgMembers.class);
+
+    //     role.setRoleType("Org-Member");
+    //     roleRepository.save(role);
+    //     roleRepository.flush();
+          
+    //     registration.setEmail(acc.getEmail());
+    //     registration.setUsername(acc.getUsername());
+    //     registration.setPassword(new BCryptPasswordEncoder().encode(acc.getPassword()));
+    //     registration.setRoleid(role.getId());
+    //     registration.setExpired("false");
+    //     registration.setIsDisabled("false");
+    //     registration.setIsMember("false");
+    //     registration.setDateCreated(date);
+    //     registerRepository.save(registration);
+    //     registerRepository.flush();
+    //     orgMembers.setAccountId(registration.getId());
+    //     orgMembers.setOrgId(OrgMember.getOrgId());
+    //     orgMemberRepository.save(orgMembers);
+    //     return ResponseEntity.ok(registration);
+    // }
+
+    @PostMapping(value="/member/create")
+    public ResponseEntity<?> createMembers(@RequestBody CustomOrgMember entity) {
+        RegisterModel registerModel = new RegisterModel();
+        RoleModel roleModel = new RoleModel();
+        OrgMembers orgMembers = new OrgMembers();
         LocalDate date = LocalDate.now();
 
-        Register acc = objecMapper.readValue(account, Register.class);
-        orgMembers OrgMembers = objecMapper.readValue(org, orgMembers.class);
-
-        role.setName("Org-Member");
-        roleRepository.save(role);
+        roleModel.setRoleType("Org-Member");
+        roleRepository.save(roleModel);
         roleRepository.flush();
-          
-        registration.setEmail(acc.getEmail());
-        registration.setUsername(acc.getUsername());
-        registration.setPassword(new BCryptPasswordEncoder().encode(acc.getPassword()));
-        registration.setRoleId(role.getId());
-        registration.setExpired("false");
-        registration.setisDisabled("false");
-        registration.setIsMember("false");
-        registration.setCreatedAt(date);
-        userRepository.save(registration);
-        userRepository.flush();
-        orgMembers.setAccountId(registration.getId());
-        orgMembers.setOrgId(OrgMembers.getOrgId());
+
+        registerModel.setEmail(entity.getEmail());
+        registerModel.setUsername(entity.getUsername());
+        registerModel.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
+        registerModel.setRoleid(roleModel.getId());
+        registerModel.setExpired("false");
+        registerModel.setIsDisabled("false");
+        registerModel.setIsMember("false");
+        registerModel.setDateCreated(date);
+        registerRepository.save(registerModel);
+        registerRepository.flush();
+
+        orgMembers.setAccountId(registerModel.getId());
+        orgMembers.setOrgId(entity.getOrgId());
         orgMemberRepository.save(orgMembers);
-        return ResponseEntity.ok(registration);
+
+
+        return ResponseEntity.ok("");
     }
-
-    // @RequestMapping(value = "/getmembers", method = RequestMethod.POST, consumes
-    // = MediaType.MULTIPART_FORM_DATA_VALUE)
-    // public ResponseEntity<?> members(@RequestPart(value = "id") Integer id)throws
-    // IOException{
-    // // final List<orgMembers> orgMembers = orgMemberRepository.getMembers(id);
-    // return ResponseEntity.ok("success");
-    // }
-
-    // @RequestMapping(value = "/getmembers", method = RequestMethod.POST, consumes
-    // = MediaType.MULTIPART_FORM_DATA_VALUE)
-    // public ResponseEntity<?> getmembers(@RequestPart(value = "id") Registration
-    // data)throws IOException{
-    // // int temp = Integer.valueOf(id);
-    // Registration datas = objecMapper.readValue(data, Registration.class);
-    // datas.setId(data.getId());
-    // // Registration acc = objecMapper.readValue(id, Registration.class);
-    // System.out.println(data);
-
-    // // List<orgMembers> members = oms.getMembers(Integer.parseInt(id));
-    // // if(members == null){
-    // // return new ArrayList<orgMembers>();
-    // // }else{
-    // return new ArrayList<orgMembers>();
-    // // }
-    // }
+    
 
     @PostMapping(value = "/getmembers")
     public ResponseEntity<?> postMethodName(@RequestBody Register entity) {
         Long id = entity.getId();
         System.out.println(id);
-        List<Registration> member = userRepository.getMembers(id);
+        List<RegisterModel>member = registerRepository.getMembers(id);
         System.out.println(member);
         return ResponseEntity.ok(member);
     }
@@ -131,19 +138,19 @@ public class orgMemberController {
     @PutMapping(value = "/deleteMember")
     public ResponseEntity<?> deleteMember(@RequestBody Register data)throws ResourceNotFoundException{
         Long id = data.getId();
-        Registration member = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member not Found"));
+        RegisterModel member = registerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member not Found"));
         System.out.println(id);
 
         member.setEmail(data.getEmail());
         member.setUsername(data.getUsername());
         member.setPassword(data.getPassword());
-        member.setRoleId(data.getRoleId());
+        member.setRoleid(data.getRoleId());
         member.setExpired(data.getExpired());
-        member.setisDisabled(data.getisDisabled());
+        member.setIsDisabled(data.getIsDisabled());
         member.setIsMember(data.getIsMember());
-        member.setCreatedAt(data.getCreatedAt().toLocalDate());
+        member.setDateCreated(data.getDateCreated());
 
-        userRepository.save(member);
+        registerRepository.save(member);
 
         return ResponseEntity.ok(member);
 
@@ -159,16 +166,16 @@ public class orgMemberController {
     // }
 
     @PutMapping(value="/updateMember")
-    public ResponseEntity<?> putMethodName(@RequestBody Registration entity) {
+    public ResponseEntity<?> putMethodName(@RequestBody RegisterModel entity) {
         Long id = entity.getId();
-        Registration member = userRepository.getOne(id);
+        RegisterModel member = registerRepository.getOne(id);
         member.setUsername(entity.getUsername());
         member.setEmail(entity.getEmail());
         member.setPassword(entity.getPassword());
-        member.setRoleId(entity.getRoleId());
+        member.setRoleid(entity.getRoleid());
         member.setExpired(entity.getExpired());
 
-        userRepository.save(member);
+        registerRepository.save(member);
         
         return ResponseEntity.ok("updated");
     }

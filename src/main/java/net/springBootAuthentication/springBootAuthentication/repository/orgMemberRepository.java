@@ -9,16 +9,16 @@ import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import net.springBootAuthentication.springBootAuthentication.model.orgMembers;
+import net.springBootAuthentication.springBootAuthentication.model.OrgMembers;
 
 
 @Repository
-public interface orgMemberRepository extends JpaRepository<orgMembers, Long>{
+public interface orgMemberRepository extends JpaRepository<OrgMembers, Long>{
 
     @Query(value = "{call getMembers(:id)}", nativeQuery = true)
-    List<orgMembers> getMembers(@Param("id") Long id);
+    List<OrgMembers> getMembers(@Param("id") Long id);
 
-    @Query(value =  "{call deleteMemberById(:id)}" , nativeQuery = true)
+    @Query(value = "{call deleteMemberById(:id)}" , nativeQuery = true)
     void deleteMemberByid(@Param("id") Long id);
 
     @Query(value = "call updateMember(:id, :username, :email, :account_type, :expired, :is_member)", nativeQuery = true)

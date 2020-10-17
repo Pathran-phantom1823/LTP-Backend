@@ -1,8 +1,7 @@
 package net.springBootAuthentication.springBootAuthentication.model;
 
-
+import java.security.Timestamp;
 import java.time.LocalDate;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,50 +11,36 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "Accounts")
-public class Registration {
+@Table(name = "tblaccount")
+
+public class RegisterModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "Username")
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "Email")
+    @Column(name = "email")
     private String email;
 
-    @Column(name= "Password")
+    @Column(name = "password")
     private String password;
 
-    @Column(name="roleId")
-    private Integer roleId;
-
-    @Column(name="expired")
-    private String expired;
-
-    @Column(name = "isMember")
-    private String isMember;
+    @Column(name = "roleid")
+    private long roleid;
 
     @Column(name = "isDisabled")
     private String isDisabled;
 
-    @Column(name = "createdAt")
-    private LocalDate createdAt;
-    
-    public Registration() {
-    }
+    @Column(name="expired")
+    private String expired;
 
-    public Registration(long id, String username, String email, String password, Integer roleId, String expired,
-            String isMember, String isDisabled) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.roleId = roleId;
-        this.expired = expired;
-        this.isMember = isMember;
-        this.isDisabled = isDisabled;
-    }
+    @Column(name = "dateCreated")
+    private LocalDate dateCreated;
+
+    @Column(name = "isMember")
+    private String isMember;
 
     public long getId() {
         return id;
@@ -89,12 +74,30 @@ public class Registration {
         this.password = password;
     }
 
-    public Integer getRoleId() {
-        return roleId;
+    public long getRoleid() {
+        return roleid;
     }
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
+    public void setRoleid(long roleid) {
+        this.roleid = roleid;
+    }
+
+   
+
+    public LocalDate getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(LocalDate dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public String isDisabled() {
+        return isDisabled;
+    }
+
+    public void setIsDisabled(String isDisabled) {
+        this.isDisabled = isDisabled;
     }
 
     public String getExpired() {
@@ -113,22 +116,23 @@ public class Registration {
         this.isMember = isMember;
     }
 
-    public String getisDisabled() {
-        return isDisabled;
+    public RegisterModel() {
+        
     }
 
-    public void setisDisabled(String isDisabled) {
+    public RegisterModel(long id, String username, String email, String password, long roleid, String isDisabled,
+            String expired, LocalDate dateCreated, String isMember) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roleid = roleid;
         this.isDisabled = isDisabled;
+        this.expired = expired;
+        this.dateCreated = dateCreated;
+        this.isMember = isMember;
     }
 
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
+    
 
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-   
-    
 }

@@ -1,6 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,7 +27,7 @@ import javax.persistence.Table;
     )
 })
 @Table(name = "orgMembersAccount")
-public class orgMembers {
+public class OrgMembers {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,9 +36,9 @@ public class orgMembers {
 
     private Long accountId;
 
-    private Date createAt;
+    private LocalDate createAt;
 
-    public orgMembers() {
+    public OrgMembers() {
     }
 
     public Long getId() {
@@ -65,11 +65,18 @@ public class orgMembers {
         this.accountId = accountId;
     }
 
-    public Date getCreateAt() {
+    public LocalDate getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(Date createAt) {
+    public void setCreateAt(LocalDate createAt) {
         this.createAt = createAt;
     }
+
+	public OrgMembers(Long id, Long orgId, Long accountId, LocalDate createAt) {
+		this.id = id;
+		this.orgId = orgId;
+		this.accountId = accountId;
+		this.createAt = createAt;
+	}
 }

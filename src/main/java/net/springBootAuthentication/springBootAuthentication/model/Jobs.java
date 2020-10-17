@@ -1,5 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.persistence.Column;
@@ -88,6 +89,9 @@ public class Jobs {
         @Column(name = "subject")
         private String subject;
 
+        @Column(name = "datePosted")
+        private LocalDate datePosted;
+
     public Jobs(Long id, String title, String description, String category, String languageFrom,
             String languageTo, String fromDate, String toDate, String priceType,
             Integer fromPrice, Integer toPrice, String visibility, String levelOfConfidentiality, String file) {
@@ -132,14 +136,6 @@ public class Jobs {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getcategory() {
-        return category;
-    }
-
-    public void setcategory(String category) {
-        this.category = category;
     }
 
     public String getLanguageFrom() {
@@ -252,6 +248,22 @@ public class Jobs {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public LocalDate getDatePosted() {
+        return datePosted;
+    }
+
+    public void setDatePosted(LocalDate datePosted) {
+        this.datePosted = datePosted;
     }
     
 }

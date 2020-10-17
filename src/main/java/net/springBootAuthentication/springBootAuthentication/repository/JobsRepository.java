@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
 import net.springBootAuthentication.springBootAuthentication.model.Jobs;
-import net.springBootAuthentication.springBootAuthentication.model.Registration;
 
 @Repository
 public interface JobsRepository extends JpaRepository<Jobs, Long>{
