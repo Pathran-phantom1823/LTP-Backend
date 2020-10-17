@@ -92,6 +92,9 @@ public class Jobs {
         @Column(name = "datePosted")
         private LocalDate datePosted;
 
+        
+        private String isAvailable;
+
     public Jobs(Long id, String title, String description, String category, String languageFrom,
             String languageTo, String fromDate, String toDate, String priceType,
             Integer fromPrice, Integer toPrice, String visibility, String levelOfConfidentiality, String file) {
@@ -265,5 +268,14 @@ public class Jobs {
     public void setDatePosted(LocalDate datePosted) {
         this.datePosted = datePosted;
     }
+
+    public String getIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(String isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+
     
 }

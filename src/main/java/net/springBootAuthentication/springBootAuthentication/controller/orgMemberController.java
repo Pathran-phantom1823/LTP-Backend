@@ -117,6 +117,7 @@ public class orgMemberController {
         registerRepository.save(registerModel);
         registerRepository.flush();
 
+        orgMembers.setCreateAt(date);
         orgMembers.setAccountId(registerModel.getId());
         orgMembers.setOrgId(entity.getOrgId());
         orgMemberRepository.save(orgMembers);

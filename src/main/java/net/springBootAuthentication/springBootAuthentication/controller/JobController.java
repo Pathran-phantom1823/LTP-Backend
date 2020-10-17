@@ -16,9 +16,11 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.batch.BatchProperties.Job;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
+import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import net.springBootAuthentication.springBootAuthentication.model.JobApplicants;
 import net.springBootAuthentication.springBootAuthentication.model.Jobs;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
@@ -97,6 +99,7 @@ public class JobController {
         jobs2.setlevelOfConfidentiality(jobs.getlevelOfConfidentiality());
         jobs2.setFixedPrice(jobs.getFixedPrice());
         jobs2.setType(jobs.getType());
+        jobs2.setIsAvailable("true");
         // jobs2.setPostById(user.getId());
         jobsRepository.save(jobs2);
 
@@ -179,10 +182,12 @@ public class JobController {
     }
 
     @PostMapping(value="/save-job")
-    public ResponseEntity<?> saveJob(@RequestBody SaveJob data) {
+    public ResponseEntity<?> saveJob(@RequestBody SaveJob data) throws ResourceNotFoundException{
         LocalDate date = LocalDate.now();
+        Jobs job = jobsRepository.findById(data.getJobId()).orElseThrow(()-> new ResourceNotFoundException("job not found"));
         SaveJob saveJob = new SaveJob();
-
+        
+        job.setIsAvailable("false");
         saveJob.setDateSaved(date);
         saveJob.setJobId(data.getJobId());
         saveJob.setPostedById(data.getPostedById());
