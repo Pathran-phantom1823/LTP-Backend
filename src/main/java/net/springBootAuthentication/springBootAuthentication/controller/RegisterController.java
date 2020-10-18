@@ -25,7 +25,6 @@ import net.springBootAuthentication.springBootAuthentication.utility.JwtUtil;
 @RequestMapping("/api")
 public class RegisterController {
 
-
     @Autowired
     private AccountDetailsService userDetailsService;
 
@@ -39,20 +38,17 @@ public class RegisterController {
     private RegisterRepository registerRepository;
 
     @PostMapping("/register")
+
     public ResponseEntity<?> addAccount(@RequestBody Register entity) {
         RegisterModel account = new RegisterModel();
-        RoleModel role = new RoleModel();
-
-        role.setRoleType(entity.getRoleType());
-        roleRepository.save(role);
-        roleRepository.flush();
 
         account.setUsername(entity.getUsername());
         account.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
         account.setEmail(entity.getEmail());
         account.setIsDisabled(entity.isDisabled());
         account.setDateCreated(entity.getDateCreated());
-        account.setRoleid(role.getId());
+        account.setRoleid(entity.getRoleId());
+
         registerRepository.save(account);
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(account.getUsername());
@@ -63,5 +59,14 @@ public class RegisterController {
 
         return ResponseEntity.ok(list);
 
+    }
+
+    @PostMapping("/addRole")
+    public ResponseEntity<?> addRole(@RequestBody RoleModel data) {
+        RoleModel roles = new RoleModel();
+        roles.setRoleType(data.getRoleType());
+        roleRepository.save(roles);
+
+        return ResponseEntity.ok(roles);
     }
 }
