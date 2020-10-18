@@ -1,6 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.model;
 
-import java.security.Timestamp;
+
 import java.time.LocalDate;
 
 import javax.persistence.Column;
