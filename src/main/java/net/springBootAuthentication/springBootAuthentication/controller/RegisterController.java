@@ -1,5 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,7 @@ public class RegisterController {
     public ResponseEntity<?> addAccount(@RequestBody Register entity) {
         RegisterModel account = new RegisterModel();
         RoleModel role = new RoleModel();
+        LocalDate date  = LocalDate.now();
 
         role.setRoleType(entity.getRoleType());
         roleRepository.save(role);
@@ -50,16 +52,19 @@ public class RegisterController {
         account.setUsername(entity.getUsername());
         account.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
         account.setEmail(entity.getEmail());
-        account.setIsDisabled(entity.isDisabled());
-        account.setDateCreated(entity.getDateCreated());
+        account.setIsDisabled("false");
+		account.setIsMember("false");
         account.setRoleid(role.getId());
+        account.setDateCreated(date);
+        account.setExpired("false");
         registerRepository.save(account);
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(account.getUsername());
         final String jwt = jwtTokenUtil.generateToken(userDetails);
         ArrayList<Object> list = new ArrayList<>();
-        list.add(account);
         list.add(jwt);
+        list.add(account);
+        
 
         return ResponseEntity.ok(list);
 
