@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import net.springBootAuthentication.springBootAuthentication.model.RoleModel;
 
-public interface RoleRepository extends JpaRepository<RoleModel, Long> {
+public interface RoleRepository extends JpaRepository<RoleModel, Long>{
     
 }

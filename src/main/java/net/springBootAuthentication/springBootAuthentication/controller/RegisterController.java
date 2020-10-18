@@ -1,5 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,9 @@ public class RegisterController {
         final UserDetails userDetails = userDetailsService.loadUserByUsername(account.getUsername());
         final String jwt = jwtTokenUtil.generateToken(userDetails);
         ArrayList<Object> list = new ArrayList<>();
-        list.add(account);
         list.add(jwt);
+        list.add(account);
+        
 
         return ResponseEntity.ok(list);
 

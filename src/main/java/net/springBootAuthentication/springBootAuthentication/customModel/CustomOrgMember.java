@@ -2,7 +2,7 @@ package net.springBootAuthentication.springBootAuthentication.customModel;
 
 import java.time.LocalDate;
 
-public class Register {
+public class CustomOrgMember {
     private long id;
 
     private String username;
@@ -23,6 +23,25 @@ public class Register {
 
     private String expired;
 
+    private Long orgId;
+
+    public CustomOrgMember() {
+    }
+
+    public CustomOrgMember(long id, String username, String password, String email, String isDisabled,
+            LocalDate dateCreated, String isMember, long roleId, String roleType, String expired, Long orgId) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.isDisabled = isDisabled;
+        this.dateCreated = dateCreated;
+        this.isMember = isMember;
+        this.roleId = roleId;
+        this.roleType = roleType;
+        this.expired = expired;
+        this.orgId = orgId;
+    }
 
     public long getId() {
         return id;
@@ -48,11 +67,19 @@ public class Register {
         this.password = password;
     }
 
-    public String isDisabled() {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getIsDisabled() {
         return isDisabled;
     }
 
-    public void setDisabled(String isDisabled) {
+    public void setIsDisabled(String isDisabled) {
         this.isDisabled = isDisabled;
     }
 
@@ -62,6 +89,14 @@ public class Register {
 
     public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public String getIsMember() {
+        return isMember;
+    }
+
+    public void setIsMember(String isMember) {
+        this.isMember = isMember;
     }
 
     public long getRoleId() {
@@ -80,42 +115,6 @@ public class Register {
         this.roleType = roleType;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Register(long id, String username, String password, String email, String isDisabled, LocalDate dateCreated,
-            long roleId, String roleType) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.isDisabled = isDisabled;
-        this.dateCreated = dateCreated;
-        this.roleId = roleId;
-        this.roleType = roleType;
-    }
-
-    public String getIsMember() {
-        return isMember;
-    }
-
-    public void setIsMember(String isMember) {
-        this.isMember = isMember;
-    }
-
-    public String getIsDisabled() {
-        return isDisabled;
-    }
-
-    public void setIsDisabled(String isDisabled) {
-        this.isDisabled = isDisabled;
-    }
-
     public String getExpired() {
         return expired;
     }
@@ -124,4 +123,11 @@ public class Register {
         this.expired = expired;
     }
 
+    public Long getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Long orgId) {
+        this.orgId = orgId;
+    }
 }

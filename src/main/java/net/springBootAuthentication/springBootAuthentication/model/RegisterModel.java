@@ -31,10 +31,16 @@ public class RegisterModel {
     private long roleid;
 
     @Column(name = "isDisabled")
-    private boolean isDisabled;
+    private String isDisabled;
+
+    @Column(name="expired")
+    private String expired;
 
     @Column(name = "dateCreated")
     private LocalDate dateCreated;
+
+    @Column(name = "isMember")
+    private String isMember;
 
     public long getId() {
         return id;
@@ -86,26 +92,45 @@ public class RegisterModel {
         this.dateCreated = dateCreated;
     }
 
-    public RegisterModel(long id, String username, String email, String password, long roleid, boolean isDisabled,
-            LocalDate dateCreated) {
+    public String isDisabled() {
+        return isDisabled;
+    }
+
+    public void setIsDisabled(String isDisabled) {
+        this.isDisabled = isDisabled;
+    }
+
+    public String getExpired() {
+        return expired;
+    }
+
+    public void setExpired(String expired) {
+        this.expired = expired;
+    }
+
+    public String getIsMember() {
+        return isMember;
+    }
+
+    public void setIsMember(String isMember) {
+        this.isMember = isMember;
+    }
+
+    public RegisterModel() {
+        
+    }
+
+    public RegisterModel(long id, String username, String email, String password, long roleid, String isDisabled,
+            String expired, LocalDate dateCreated, String isMember) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.roleid = roleid;
         this.isDisabled = isDisabled;
+        this.expired = expired;
         this.dateCreated = dateCreated;
-    }
-
-    public RegisterModel() {
-    }
-
-    public boolean isDisabled() {
-        return isDisabled;
-    }
-
-    public void setIsDisabled(boolean isDisabled) {
-        this.isDisabled = isDisabled;
+        this.isMember = isMember;
     }
 
     
