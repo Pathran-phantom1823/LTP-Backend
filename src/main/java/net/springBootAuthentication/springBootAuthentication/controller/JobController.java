@@ -188,6 +188,27 @@ public class JobController {
         SaveJob saveJob = new SaveJob();
         
         job.setIsAvailable("false");
+        jobsRepository.save(job);
+        // job.setTitle(jobs.getTitle());
+        // job.setDescription(jobs.getDescription());
+        // job.setCategory(jobs.getCategory());
+        // job.setSubject(jobs.getSubject());
+        // job.setLanguageFrom(jobs.getLanguageFrom());
+        // job.setLanguageTo(jobs.getLanguageTo().toString());
+        // job.setFromDate(jobs.getFromDate());
+        // job.setToDate(jobs.getToDate());
+        // job.setFromPrice(jobs.getFromPrice());
+        // job.setToPrice(jobs.getToPrice());
+        // job.setPriceType(jobs.getPriceType());
+        // job.setPostById(jobs.getPostById());
+        // job.setFile(String.format("%d%s%s", jobs.getPostById(), date, filename));
+        // job.setDatePosted(date);
+        // job.setVisibility(jobs.getVisibility());
+        // job.setlevelOfConfidentiality(jobs.getlevelOfConfidentiality());
+        // job.setFixedPrice(jobs.getFixedPrice());
+        // job.setType(jobs.getType());
+        // job.setIsAvailable("true");
+
         saveJob.setDateSaved(date);
         saveJob.setJobId(data.getJobId());
         saveJob.setPostedById(data.getPostedById());
@@ -195,7 +216,7 @@ public class JobController {
 
         saveJobRepository.save(saveJob);
         
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("job is saved");
     }
     
     
