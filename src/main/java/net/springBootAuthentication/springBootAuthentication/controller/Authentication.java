@@ -46,18 +46,18 @@ public class Authentication {
 		try {
 			RegisterModel info = check.findByusername(authenticationRequest.getUsername());
 			String password = info.getPassword();
-			if(new BCryptPasswordEncoder().matches(authenticationRequest.getPassword(), password)) {
+			boolean matched = new BCryptPasswordEncoder().matches(authenticationRequest.getPassword(), password);
+			if(matched) {
 				authenticationmanager.authenticate(
-					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), password)
+					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
 				);
 			}else {
 				return ResponseEntity.ok(new Response(404, "Incorrect Username or Password", new ArrayList<>()));
 			}
-			System.out.println(new BCryptPasswordEncoder().matches(authenticationRequest.getPassword(), password));
 		}catch (BadCredentialsException e ) {
 			ArrayList<StackTraceElement[]> err = new ArrayList<StackTraceElement[]>();
 			err.add(e.getStackTrace());
-			return ResponseEntity.ok(new Response(404, "Incorrect Username or Password", err));
+			return ResponseEntity.ok(new Response(404, "Incorrect Username or Password 123", err));
 		}
 		final UserDetails userDetails  = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String jwt = jwtTokenUtil.generateToken(userDetails); 
@@ -65,6 +65,6 @@ public class Authentication {
 		HashMap<String, String> obj = new HashMap<String, String>();
 		obj.put("token", jwt);
 		res.add(obj);
-		return ResponseEntity.ok(new Response(404, "Successfully LogIn", res));
+		return ResponseEntity.ok(new Response(200, "Successfully LogIn", res));
 	}
 }
