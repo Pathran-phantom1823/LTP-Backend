@@ -31,7 +31,7 @@ public class AccountDetailsService implements UserDetailsService{
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 //		try {
-			RegisterModel Account = check.findByusername(username);
+		RegisterModel Account = check.findByusername(username);
 //			accountDetails = new AccountDetails(Account);
 ////			System.out.println("DB " + Account.getPassword());
 //		}catch(Exception e) {
