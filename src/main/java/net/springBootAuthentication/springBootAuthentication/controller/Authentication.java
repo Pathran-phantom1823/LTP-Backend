@@ -43,9 +43,11 @@ public class Authentication {
 	
 	@PostMapping("/authenticate")
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+		final Long id;
 		try {
 			RegisterModel info = check.findByusername(authenticationRequest.getUsername());
 			String password = info.getPassword();
+			id = info.getId();
 			boolean matched = new BCryptPasswordEncoder().matches(authenticationRequest.getPassword(), password);
 			if(matched) {
 				authenticationmanager.authenticate(
@@ -64,7 +66,9 @@ public class Authentication {
 		ArrayList<HashMap<String, String>> res = new ArrayList<HashMap<String, String>>();
 		HashMap<String, String> obj = new HashMap<String, String>();
 		obj.put("token", jwt);
+		obj.put("id", id.toString());
 		res.add(obj);
 		return ResponseEntity.ok(new Response(200, "Successfully LogIn", res));
 	}
+	
 }

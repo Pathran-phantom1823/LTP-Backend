@@ -102,9 +102,9 @@ public class orgMemberController {
         OrgMembers orgMembers = new OrgMembers();
         LocalDate date = LocalDate.now();
 
-        roleModel.setRoleType("Org-Member");
-        roleRepository.save(roleModel);
-        roleRepository.flush();
+        // roleModel.setRoleType("Org-Member");
+        // roleRepository.save(roleModel);
+        // roleRepository.flush();
 
         registerModel.setEmail(entity.getEmail());
         registerModel.setUsername(entity.getUsername());
@@ -114,6 +114,7 @@ public class orgMemberController {
         registerModel.setIsDisabled("false");
         registerModel.setIsMember("false");
         registerModel.setDateCreated(date);
+        registerModel.setRoleid(entity.getRoleId());
         registerRepository.save(registerModel);
         registerRepository.flush();
 

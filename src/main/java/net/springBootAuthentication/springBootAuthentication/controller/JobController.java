@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.springBootAuthentication.springBootAuthentication.model.SaveJob;
 import net.springBootAuthentication.springBootAuthentication.repository.JobApplicantsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.JobsRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.SaveJobRepository;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +47,10 @@ public class JobController {
     ObjectMapper objectMapper = new ObjectMapper();
 
     public String tempFile;
-
+    
+    @Autowired
+    private RegisterRepository registerRepository;
+    
     @Autowired
     private JobsRepository jobsRepository;
 
@@ -116,7 +119,7 @@ public class JobController {
         Long id = data.getId();
         List<String> res = new ArrayList<>(); 
         List<File> finaResults = new ArrayList<>();
-        System.out.println(jobsRepository.getFile(id));
+        // System.out.println(jobsRepository.getFile(id));
         List<Jobs> jobs = jobsRepository.getFile(id);
         jobs.forEach(el ->{
             tempFile = el.getFile();
@@ -134,7 +137,7 @@ public class JobController {
     @GetMapping(value="/getFiles/{file}")
     public ResponseEntity<?> getMethodName(@PathVariable(value = "file") String file) throws FileNotFoundException {
         List<String> res = jobsRepository.getFileThroughParameter(file);
-        System.out.println(res.get(0));
+        // System.out.println(res.get(0));
         File files = ResourceUtils.getFile("classpath:" + res.get(0));
         
         return new ResponseEntity<>(files ,HttpStatus.OK);
@@ -151,6 +154,7 @@ public class JobController {
     @PostMapping(value="getAllJobs")
     public List<Jobs> getAllJobs(@RequestBody RegisterModel data) {
         Long id = data.getId();
+        // System.out.println(id);
         return jobsRepository.getAllJobs(id);
     }
 
@@ -188,6 +192,7 @@ public class JobController {
         SaveJob saveJob = new SaveJob();
         
         job.setIsAvailable("false");
+        jobsRepository.save(job);
         saveJob.setDateSaved(date);
         saveJob.setJobId(data.getJobId());
         saveJob.setPostedById(data.getPostedById());
@@ -195,8 +200,35 @@ public class JobController {
 
         saveJobRepository.save(saveJob);
         
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok("job is saved");
     }
+
+    @PostMapping(value="/getsavejob")
+    public ResponseEntity<?> postMethodName(@RequestBody SaveJob data) {
+        Long id = data.getSavedById();
+
+        List<CustomJobs> saveJobs = saveJobRepository.getSaveJobs(id);
+
+        return ResponseEntity.ok(saveJobs);
+    }
+
+    @PostMapping(value="/getacceptedjobs")
+    public ResponseEntity<?> getAcceptedJobs(@RequestBody SaveJob data) {
+        Long id = data.getSavedById();
+        
+        List<CustomJobs> acceptedJobs = jobApplicantRepository.getAcceptedJobs(id);
+
+        return ResponseEntity.ok(acceptedJobs);
+    }
+    
+    @PostMapping(value="/getCurrentUser")
+	public ResponseEntity<?> getCurrentUser(@RequestBody RegisterModel entity)throws ResourceNotFoundException {
+		RegisterModel user =  registerRepository.findById(entity.getId()).orElseThrow(() -> new ResourceNotFoundException("User not found")); 
+        
+        String username = user.getUsername();
+		
+		return ResponseEntity.ok(username);
+	}
     
     
     
