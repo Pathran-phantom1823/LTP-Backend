@@ -40,4 +40,6 @@ public  interface CustomJobs {
      LocalDate getdatePosted();
 
      Integer getBids();
+
+     String getFile();
 }
