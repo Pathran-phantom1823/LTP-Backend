@@ -191,7 +191,13 @@ public class JobController {
         try {
             Long resId = data.getId();
             // CustomJobs custom;
+            // Jobs jobs = jobsRepository.findById(resId).orElseThrow(() -> new ResourceNotFoundException("not Found"));
             List<CustomJobs> job = jobsRepository.getJobById(resId);
+
+            // List<String> res = jobsRepository.getFileThroughParameter(jobs.getFile());
+            // // System.out.println(res.get(0));
+            // File files = ResourceUtils.getFile("classpath:" + res.get(0));
+            // System.out.println(files);
             return ResponseEntity.ok(job);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
