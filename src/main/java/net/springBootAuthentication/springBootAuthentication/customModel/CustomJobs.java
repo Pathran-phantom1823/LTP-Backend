@@ -37,5 +37,7 @@ public  interface CustomJobs {
 
      String getEmail();
 
-     LocalDate getDatePosted();
+     LocalDate getdatePosted();
+
+     Integer getBids();
 }

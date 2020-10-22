@@ -14,4 +14,5 @@ public interface JobApplicantsRepository extends JpaRepository<JobApplicants, Lo
     
     @Query(value = "{call getAcceptedJobs(:id)}", nativeQuery = true)
     List<CustomJobs> getAcceptedJobs(@Param("id") Long id);
+
 }
