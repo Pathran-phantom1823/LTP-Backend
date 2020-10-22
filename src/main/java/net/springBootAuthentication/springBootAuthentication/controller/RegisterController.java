@@ -46,14 +46,28 @@ public class RegisterController {
     public ResponseEntity<?> addAccount(@RequestBody Register entity)throws BadRequest {
         try {
             RegisterModel account = new RegisterModel();
+            LocalDate date = LocalDate.now();
 
-            account.setUsername(entity.getUsername());
-            account.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
-            account.setEmail(entity.getEmail());
-            account.setIsDisabled(entity.isDisabled());
-            account.setDateCreated(entity.getDateCreated());
-            account.setRoleid(entity.getRoleId());
-    
+            // System.out.println(entity.getRoleType());
+            if(entity.getRoleType() == "organization"){
+                account.setUsername(entity.getUsername());
+                account.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
+                account.setEmail(entity.getEmail());
+                account.setExpired("false");
+                account.setIsMember(entity.getIsMember());
+                account.setIsDisabled("false");
+                account.setDateCreated(date);
+                account.setRoleid(4);
+            }else{
+                account.setUsername(entity.getUsername());
+                account.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
+                account.setEmail(entity.getEmail());
+                account.setExpired("false");
+                account.setIsMember(entity.getIsMember());
+                account.setIsDisabled("false");
+                account.setDateCreated(date);
+                account.setRoleid(2);
+            }
             registerRepository.save(account);
     
             final UserDetails userDetails = userDetailsService.loadUserByUsername(account.getUsername());
