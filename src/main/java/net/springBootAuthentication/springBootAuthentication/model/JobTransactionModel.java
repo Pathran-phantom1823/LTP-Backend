@@ -26,6 +26,9 @@ public class JobTransactionModel {
     @Column(name = "workedBy")
     private Long workedBy;
 
+    @Column(name = "jobId")
+    private Long jobId;
+
     @Column(name = "finishFile")
     private String finishFile;
 
@@ -37,6 +40,9 @@ public class JobTransactionModel {
 
     @Column(name = "datePosted")
     private LocalDate datePosted;
+
+    @Column(name = "orgId")
+    private Long orgId;
 
     public JobTransactionModel() {
     }
@@ -106,6 +112,22 @@ public class JobTransactionModel {
 
     public void setDatePosted(LocalDate datePosted) {
         this.datePosted = datePosted;
+    }
+
+    public Long getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Long orgId) {
+        this.orgId = orgId;
+    }
+
+    public Long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
     }
     
 }
