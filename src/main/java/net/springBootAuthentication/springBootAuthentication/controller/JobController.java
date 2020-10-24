@@ -14,11 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.hibernate.engine.spi.EntityUniqueKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.batch.BatchProperties.Job;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomUser;
+import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import net.springBootAuthentication.springBootAuthentication.model.JobApplicants;
 import net.springBootAuthentication.springBootAuthentication.model.Jobs;
@@ -90,7 +93,7 @@ public class JobController {
             jobs2.setDescription(jobs.getDescription());
             jobs2.setCategory(jobs.getCategory());
             jobs2.setSubject(jobs.getSubject());
-            jobs2.setLanguageFrom(jobs.getLanguageFrom());
+            jobs2.setLanguageFrom(jobs.getLanguageFrom().toString());
             jobs2.setLanguageTo(jobs.getLanguageTo().toString());
             jobs2.setFromDate(jobs.getFromDate());
             jobs2.setToDate(jobs.getToDate());
@@ -175,7 +178,7 @@ public class JobController {
     public ResponseEntity<?> getAllJobs(@RequestBody RegisterModel data)throws BadRequest {
         try {
             Long id = data.getId();
-            List<Jobs> jobs = jobsRepository.getAllJobs(id);
+            List<CustomJobs> jobs = jobsRepository.getAllJobs(id);
             return ResponseEntity.ok(jobs);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -188,7 +191,13 @@ public class JobController {
         try {
             Long resId = data.getId();
             // CustomJobs custom;
+            // Jobs jobs = jobsRepository.findById(resId).orElseThrow(() -> new ResourceNotFoundException("not Found"));
             List<CustomJobs> job = jobsRepository.getJobById(resId);
+
+            // List<String> res = jobsRepository.getFileThroughParameter(jobs.getFile());
+            // // System.out.println(res.get(0));
+            // File files = ResourceUtils.getFile("classpath:" + res.get(0));
+            // System.out.println(files);
             return ResponseEntity.ok(job);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -276,9 +285,96 @@ public class JobController {
         RegisterModel user = registerRepository.findById(entity.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        List<String> list = new ArrayList<>();
         String username = user.getUsername();
+        String email = user.getEmail();
 
-        return ResponseEntity.ok(username);
+        list.add(username);
+        list.add(email);
+        return ResponseEntity.ok(list);
     }
+
+
+    @PostMapping(value="/get-my-jobs")
+    public ResponseEntity<?> getMyJobs(@RequestBody Register entity)throws Forbidden{
+        try {
+            Long id = entity.getId();
+
+            List<CustomJobs> myjobs = jobsRepository.getMyJobs(id);
+
+            return ResponseEntity.ok(myjobs);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
+        
+    }
+
+    @PostMapping(value = "/getBids")
+    public ResponseEntity<?> getBids(@RequestBody Jobs data) throws NumberFormatException {
+        // System.out.println("id" + param);
+        try {
+            Long id = data.getId();
+            // CustomJobs custom;
+            List<CustomUser> bids = jobsRepository.getBids(id);
+            // System.out.println(jobsRepository.getBids(id));
+            return ResponseEntity.ok(bids);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @PostMapping(value="/accept-bidder")
+    public ResponseEntity<?> acceptBidder(@RequestBody JobApplicants entity)throws Forbidden {
+        try {
+
+            Jobs job = jobsRepository.findById(entity.getJobId())
+                    .orElseThrow(() -> new ResourceNotFoundException("job not found"));
+
+            job.setIsAvailable("false");
+            jobsRepository.save(job);
+
+            JobApplicants applicants = jobApplicantRepository.findById(entity.getId())
+            .orElseThrow(() -> new ResourceNotFoundException("applicant not found"));
+
+            applicants.setStatus(entity.getStatus());
+            jobApplicantRepository.save(applicants);
+
+            // List<JobApplicants> accept = jobApplicantRepository.acceptBidder(jobId, applicantId, status, isAvailable);
+
+            return ResponseEntity.ok("accept");
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }        
+    }
+
+    @PostMapping(value="/decline-bidder")
+    public ResponseEntity<?> declineBidder(@RequestBody JobApplicants entity)throws Forbidden {
+        try {
+
+            Jobs job = jobsRepository.findById(entity.getJobId())
+                    .orElseThrow(() -> new ResourceNotFoundException("job not found"));
+
+            job.setIsAvailable("true");
+            jobsRepository.save(job);
+
+            JobApplicants applicants = jobApplicantRepository.findById(entity.getId())
+            .orElseThrow(() -> new ResourceNotFoundException("applicant not found"));
+
+            applicants.setStatus(entity.getStatus());
+            jobApplicantRepository.save(applicants);
+
+            // List<JobApplicants> accept = jobApplicantRepository.acceptBidder(jobId, applicantId, status, isAvailable);
+
+            return ResponseEntity.ok("decline");
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }        
+    }
+    
+    
+    
 
 }
