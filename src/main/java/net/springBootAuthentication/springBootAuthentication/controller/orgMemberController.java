@@ -72,6 +72,7 @@ public class orgMemberController {
             RoleModel roleModel = new RoleModel();
             OrgMembers orgMembers = new OrgMembers();
             LocalDate date = LocalDate.now();
+            Long roleType = orgMemberRepository.getRoleType();
 
             registerModel.setEmail(entity.getEmail());
             registerModel.setUsername(entity.getUsername());
@@ -81,9 +82,8 @@ public class orgMemberController {
             registerModel.setIsDisabled("false");
             registerModel.setIsMember("false");
             registerModel.setDateCreated(date);
-            registerModel.setRoleid(entity.getRoleId());
-            registerRepository.save(registerModel);
-            registerRepository.flush();
+            registerModel.setRoleid(roleType);
+            registerRepository.saveAndFlush(registerModel);
 
             orgMembers.setCreateAt(date);
             orgMembers.setAccountId(registerModel.getId());
@@ -118,7 +118,6 @@ public class orgMemberController {
             RegisterModel member = registerRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Member not Found"));
             System.out.println(id);
-
             member.setEmail(data.getEmail());
             member.setUsername(data.getUsername());
             member.setPassword(data.getPassword());
@@ -128,7 +127,7 @@ public class orgMemberController {
             member.setIsMember(data.getIsMember());
             member.setDateCreated(data.getDateCreated());
 
-            registerRepository.save(member);
+            // registerRepository.save(member);
 
             return ResponseEntity.ok(member);
         } catch (Exception e) {
