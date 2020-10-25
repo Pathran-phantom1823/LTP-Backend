@@ -29,6 +29,9 @@ public class CommentsModel {
     @Column(name = "dateCommented")
     private LocalDate dateCommented;
 
+    @Column(name = "status")
+    private String status;
+
 
     public CommentsModel() {
     }
@@ -70,6 +73,14 @@ public class CommentsModel {
 
     public void setDateCommented(LocalDate dateCommented) {
         this.dateCommented = dateCommented;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
 }
