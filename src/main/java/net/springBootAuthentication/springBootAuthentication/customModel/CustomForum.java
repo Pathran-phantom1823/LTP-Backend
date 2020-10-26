@@ -18,5 +18,6 @@ public interface CustomForum {
     Long getCommentId();
     Long getId();
     LocalDate getDate();
+    String getStatus();
     Long getLikeById();
 }

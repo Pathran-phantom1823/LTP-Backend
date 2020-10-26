@@ -29,7 +29,6 @@ public class CommentLikesModel {
     @Column(name = "date")
     private LocalDate date;
 
-
     public CommentLikesModel() {
     }
 

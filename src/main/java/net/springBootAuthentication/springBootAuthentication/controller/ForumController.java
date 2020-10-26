@@ -32,7 +32,7 @@ import net.springBootAuthentication.springBootAuthentication.repository.ForumTra
 public class ForumController {
     @Autowired
     private ForumPostRepository forumPostRepository;
-    
+
     @Autowired
     private ForumTransactionsRepository forumTransactionRepository;
 
@@ -43,9 +43,9 @@ public class ForumController {
     private CommentLikesRepository commentsLikesRepository;
 
     @PostMapping("/post")
-    public ResponseEntity<?> post(@RequestBody Forum entity){
+    public ResponseEntity<?> post(@RequestBody Forum entity) {
         ForumTransactionsModel fModel = new ForumTransactionsModel();
-        ForumPostModel forumPostModel =new ForumPostModel();
+        ForumPostModel forumPostModel = new ForumPostModel();
         LocalDate date = LocalDate.now();
 
         forumPostModel.setDescription(entity.getDescription());
@@ -65,18 +65,18 @@ public class ForumController {
         list.add(forumPostModel);
         list.add(fModel);
 
-
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/getPost")
-    public ResponseEntity<?> getPost(){
-       List<CustomForum> forum = forumTransactionRepository.getPost();
+    public ResponseEntity<?> getPost() {
+        List<CustomForum> forum = forumTransactionRepository.getPost();
         return ResponseEntity.ok(forum);
     }
 
     @PostMapping(value = "/getForumDetails")
-    public ResponseEntity<?> postMethodName(@RequestBody ForumTransactionsModel entity) throws ResourceNotFoundException {
+    public ResponseEntity<?> postMethodName(@RequestBody ForumTransactionsModel entity)
+            throws ResourceNotFoundException {
         try {
             Long id = entity.getPostId();
             System.out.println(id);
@@ -88,8 +88,9 @@ public class ForumController {
         }
 
     }
+
     @PostMapping(value = "/saveComment")
-    public ResponseEntity<?>postSaveMethod(@RequestBody CustomComment entity) throws ResourceNotFoundException{
+    public ResponseEntity<?> postSaveMethod(@RequestBody CustomComment entity) throws ResourceNotFoundException {
         Long id = entity.getPostId();
         CommentsModel comments = new CommentsModel();
         ForumTransactionsModel forum = new ForumTransactionsModel();
@@ -100,18 +101,20 @@ public class ForumController {
         comments.setDateCommented(date);
         commentsRepository.save(comments);
         commentsRepository.flush();
-        
-        ForumTransactionsModel tModel = forumTransactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+
+        ForumTransactionsModel tModel = forumTransactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
         tModel.getCommentId();
-        if(tModel.getCommentId() == null){
+        if (tModel.getCommentId() == null) {
             tModel.setCommentId(comments.getId());
             // tModel.setAccountId(tModel.getAccountId());
             // tModel.setDate(tModel.getDate());
             // tModel.setPostId(tModel.getPostId());
-            // System.out.println(String.format("%d,%d,%d", comments.getId(), tModel.getAccountId(), tModel.getPostId()));
+            // System.out.println(String.format("%d,%d,%d", comments.getId(),
+            // tModel.getAccountId(), tModel.getPostId()));
             System.out.println("null");
             forumTransactionRepository.save(tModel);
-        }else{
+        } else {
             forum.setCommentId(comments.getId());
             forum.setPostId(tModel.getPostId());
             forum.setDate(date);
@@ -124,26 +127,45 @@ public class ForumController {
         return ResponseEntity.ok(comments);
     }
 
-    @PostMapping(value="/getComment")
+    @PostMapping(value = "/getComment")
     public ResponseEntity<?> getComment(@RequestBody CustomComment entity) {
         Long id = entity.getPostId();
 
         List<CustomForum> list = forumTransactionRepository.getComment(id);
-        
+
         return ResponseEntity.ok(list);
     }
-    
-    @PostMapping(value="/like")
-    public ResponseEntity<?> addLIke(@RequestBody CommentLikesModel entity) {
-        Long id = entity.getCommentId();
-        
+
+    @PostMapping(value = "/like")
+    public ResponseEntity<?> addLIke(@RequestBody CommentLikesModel entity)throws ResourceNotFoundException{
+        Long commentId = entity.getCommentId();
+        Long likeById = entity.getLikeById();
+        Long res = commentsLikesRepository.getLikes(commentId, likeById);
+        CommentsModel comments = commentsRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("not found"));
         CommentLikesModel likes = new CommentLikesModel();
-        LocalDate date = LocalDate.now();
-        likes.setCommentId(entity.getCommentId());
-        likes.setLikeById(entity.getLikeById());
-        likes.setDateCommented(date);
+        if (res != null) {
+            commentsLikesRepository.deleteById(res);
+            comments.setStatus("Null");
+            commentsRepository.save(comments);
+        } else {
+            System.out.println("null");
+            LocalDate date = LocalDate.now();
+            likes.setCommentId(entity.getCommentId());
+            likes.setLikeById(entity.getLikeById());
+            likes.setDateCommented(date);
+            comments.setStatus("like");
+            commentsRepository.save(comments);
+        }
+
         commentsLikesRepository.save(likes);
-        
+
         return ResponseEntity.ok("");
     }
+
+    @GetMapping(value="/getLikes")
+    public ResponseEntity<?> postMethodName() {
+        List<CommentLikesModel> res = commentsLikesRepository.findAll();
+        return ResponseEntity.ok(res);
+    }
+    
 }
