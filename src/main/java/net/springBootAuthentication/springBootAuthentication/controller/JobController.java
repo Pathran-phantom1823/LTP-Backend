@@ -156,16 +156,18 @@ public class JobController {
 
     }
 
-    @GetMapping(value = "/getFiles/{file}")
-    public ResponseEntity<?> getMethodName(@PathVariable(value = "file") String file) throws FileNotFoundException {
+    @PostMapping(value = "/getFiles")
+    public ResponseEntity<?> getMethodName(@RequestBody Jobs file) throws FileNotFoundException {
         try {
-            List<String> res = jobsRepository.getFileThroughParameter(file);
-            // System.out.println(res.get(0));
-            File files = ResourceUtils.getFile("classpath:" + res.get(0));
+            String temp = file.getFile();
 
-            return new ResponseEntity<>(files, HttpStatus.OK);
+            List<String> res = jobsRepository.getFileThroughParameter(temp);
+            // System.out.println(res.get(0));
+            File files = ResourceUtils.getFile("classpath:" + "files/" + res.get(0));
+            System.out.println(files);
+            return ResponseEntity.ok(files);
         } catch (Exception e) {
-            return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(e, HttpStatus.OK);
         }
 
     }
@@ -211,6 +213,18 @@ public class JobController {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(value="/getJobDetails")
+    public ResponseEntity<?> getJobDetails(@RequestBody Jobs entity) {
+        try {
+            Long resId = entity.getId();
+            List<CustomJobs> job = jobsRepository.getJobById(resId);
+            return ResponseEntity.ok(job);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
+        }
+    }
+    
 
     @PostMapping(value = "/apply-job")
     public ResponseEntity<?> postMethodName(@RequestBody JobApplicants data) throws ResourceNotFoundException {

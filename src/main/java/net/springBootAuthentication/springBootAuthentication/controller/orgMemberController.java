@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import net.bytebuddy.asm.Advice.Local;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomOrgMember;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
@@ -155,5 +156,18 @@ public class orgMemberController {
         }
 
     }
+
+    @PostMapping(value="/getMyAssignedJobs")
+    public ResponseEntity<?> getMyAssignedJobs(@RequestBody Register entity) {
+        try {
+            Long id = entity.getId();
+            List<CustomJobs> list = orgMemberRepository.getMyAssignedJobs(id);
+
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
+        }        
+    }
+    
 
 }

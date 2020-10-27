@@ -35,5 +35,8 @@ public interface JobsRepository extends JpaRepository<Jobs, Long>{
     @Query(value = "{call getMyJobs(:id)}", nativeQuery = true)
     List<CustomJobs> getMyJobs(@Param("id") Long id);
 
+    @Query(value = "{call getJobDetails(:id)}", nativeQuery = true)
+    List<CustomJobs> getJobDetails(@Param("id") Long id);
+
     
 }
