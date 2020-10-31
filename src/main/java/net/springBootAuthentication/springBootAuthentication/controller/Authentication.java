@@ -12,6 +12,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,7 +66,7 @@ public class Authentication {
 					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
 				);
 			}else {
-				return ResponseEntity.ok(new Response(404, "Incorrect Username or Password", new ArrayList<>()));
+				return new ResponseEntity<>("Incorrect Password or Username", HttpStatus.NOT_ACCEPTABLE);
 			}
 		}catch (BadCredentialsException e ) {
 			ArrayList<StackTraceElement[]> err = new ArrayList<StackTraceElement[]>();
