@@ -47,8 +47,10 @@ import net.springBootAuthentication.springBootAuthentication.repository.JobsTran
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.SaveJobRepository;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
 
 @RestController
 @RequestMapping("/ltp")

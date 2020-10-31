@@ -1,11 +1,54 @@
 package net.springBootAuthentication.springBootAuthentication.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "tblMessages")
 public class MessageModel {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "roomId")
+    private Long roomId;
+
+    @Column(name = "senderId")
+    private Long senderId;
+
+    @Column(name = "message")
     private String message;
-    private Long sentbyId;
-    private Long toId;
 
     public MessageModel() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
+    }
+
+    public Long getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(Long senderId) {
+        this.senderId = senderId;
     }
 
     public String getMessage() {
@@ -16,24 +59,6 @@ public class MessageModel {
         this.message = message;
     }
 
-    public Long getSentbyId() {
-        return sentbyId;
-    }
-
-    public void setSentbyId(Long sentbyId) {
-        this.sentbyId = sentbyId;
-    }
-
-    public Long getToId() {
-        return toId;
-    }
-
-    public void setToId(Long toId) {
-        this.toId = toId;
-    }
-
-    @Override
-    public String toString() {
-        return "MessageModel [message=" + message + ", sentbyId=" + sentbyId + ", toId=" + toId + "]";
-    }
+    
+    
 }

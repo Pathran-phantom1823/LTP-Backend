@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import net.springBootAuthentication.springBootAuthentication.repository.Register
 import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
 import net.springBootAuthentication.springBootAuthentication.services.AccountDetailsService;
 import net.springBootAuthentication.springBootAuthentication.utility.JwtUtil;
+
 
 @RestController
 @RequestMapping("/api")
