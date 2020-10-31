@@ -23,4 +23,7 @@ public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
     
     @Query(value = "{call getEmail(:email)}", nativeQuery = true)
     Long getEmail(@Param("email") String email);
+    
+    @Query (value =  "{call spRetrieveRoleIdByRoleType(:roletype)}", nativeQuery = true)
+    Integer getRoleIdByType(@Param("roletype") String roletype);
 }
