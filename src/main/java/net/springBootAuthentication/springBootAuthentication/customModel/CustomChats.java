@@ -9,7 +9,7 @@ public interface CustomChats {
     Long getMemberId();
     String getRoomName();
     Long getOwnerId();
-    Date getDate();
+    String getDate();
     String getFromTime();
     String getToTime();
     String getUsername();

@@ -92,6 +92,9 @@ public class Jobs {
         @Column(name = "datePosted")
         private LocalDate datePosted;
 
+        @Column(name = "deleted")
+        private LocalDate deleted;
+
         
         private String isAvailable;
 
@@ -275,6 +278,14 @@ public class Jobs {
 
     public void setIsAvailable(String isAvailable) {
         this.isAvailable = isAvailable;
+    }
+
+    public LocalDate getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(LocalDate deleted) {
+        this.deleted = deleted;
     }
 
     

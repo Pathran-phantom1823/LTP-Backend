@@ -39,6 +39,12 @@ public  interface CustomJobs {
 
      LocalDate getdatePosted();
 
+     String getLevelOfConfidentiality();
+
+     String getVisibility();
+
+     String getPriceType();
+
      Integer getBids();
 
      String getFile();

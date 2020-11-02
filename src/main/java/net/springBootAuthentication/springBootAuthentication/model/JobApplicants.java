@@ -24,6 +24,12 @@ public class JobApplicants {
 
     private LocalDate dateApplied;
 
+    private LocalDate dateAccepted;
+
+    private LocalDate dateFinished;
+
+    private String finishedFile;
+
     public JobApplicants() {
     }
 
@@ -73,5 +79,29 @@ public class JobApplicants {
 
     public void setDateApplied(LocalDate dateApplied) {
         this.dateApplied = dateApplied;
+    }
+
+    public LocalDate getDateAccepted() {
+        return dateAccepted;
+    }
+
+    public void setDateAccepted(LocalDate dateAccepted) {
+        this.dateAccepted = dateAccepted;
+    }
+
+    public LocalDate getDateFinished() {
+        return dateFinished;
+    }
+
+    public void setDateFinished(LocalDate dateFinished) {
+        this.dateFinished = dateFinished;
+    }
+
+    public String getFinishedFile() {
+        return finishedFile;
+    }
+
+    public void setFinishedFile(String finishedFile) {
+        this.finishedFile = finishedFile;
     }
 }
