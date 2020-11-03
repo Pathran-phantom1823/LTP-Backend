@@ -1,6 +1,5 @@
 package net.springBootAuthentication.springBootAuthentication.model;
 
-import java.sql.Date;
 import java.sql.Time;
 
 import javax.persistence.Column;
@@ -31,7 +30,7 @@ public class RoomModel {
     private Long memberId;
 
     @Column(name = "date")
-    private Date date;
+    private String date;
 
     @Column(name = "fromTime")
     private String fromTime;
@@ -82,11 +81,11 @@ public class RoomModel {
         this.memberId = memberId;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
