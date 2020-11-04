@@ -13,10 +13,13 @@ import net.springBootAuthentication.springBootAuthentication.model.RegisterModel
 public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
     public RegisterModel findByUsername(String username);
 
+    @Query (value =  "{call spRetrieveRoleIdByRoleType(:roletype)}", nativeQuery = true)
+    Integer getRoleIdByType(@Param("roletype") String roletype);
+
     @Query(value = "{call getMembers(:id)}", nativeQuery = true)
     List<RegisterModel> getMembers(@Param("id") Long id);
 
-
     @Query(value = "{call getJobById(:id)}", nativeQuery = true)
     List<RegisterModel> getOwnerofJobs(@Param("id") Long id);
+
 }

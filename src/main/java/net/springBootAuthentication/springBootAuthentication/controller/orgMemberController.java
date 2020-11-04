@@ -56,8 +56,6 @@ public class orgMemberController {
     @Autowired
     RoleRepository roleRepository;
 
-    @Autowired
-    private EntityManager em;
 
     @Autowired
     RegisterRepository registerRepository;
