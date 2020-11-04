@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import net.bytebuddy.asm.Advice.Local;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomOrgMember;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
@@ -70,6 +72,7 @@ public class orgMemberController {
             RoleModel roleModel = new RoleModel();
             OrgMembers orgMembers = new OrgMembers();
             LocalDate date = LocalDate.now();
+            Long roleType = orgMemberRepository.getRoleType();
 
             registerModel.setEmail(entity.getEmail());
             registerModel.setUsername(entity.getUsername());
@@ -79,9 +82,8 @@ public class orgMemberController {
             registerModel.setIsDisabled("false");
             registerModel.setIsMember("false");
             registerModel.setDateCreated(date);
-            registerModel.setRoleid(entity.getRoleId());
-            registerRepository.save(registerModel);
-            registerRepository.flush();
+            registerModel.setRoleid(roleType);
+            registerRepository.saveAndFlush(registerModel);
 
             orgMembers.setCreateAt(date);
             orgMembers.setAccountId(registerModel.getId());
@@ -116,7 +118,6 @@ public class orgMemberController {
             RegisterModel member = registerRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Member not Found"));
             System.out.println(id);
-
             member.setEmail(data.getEmail());
             member.setUsername(data.getUsername());
             member.setPassword(data.getPassword());
@@ -126,7 +127,7 @@ public class orgMemberController {
             member.setIsMember(data.getIsMember());
             member.setDateCreated(data.getDateCreated());
 
-            registerRepository.save(member);
+            // registerRepository.save(member);
 
             return ResponseEntity.ok(member);
         } catch (Exception e) {
@@ -154,5 +155,18 @@ public class orgMemberController {
         }
 
     }
+
+    @PostMapping(value="/getMyAssignedJobs")
+    public ResponseEntity<?> getMyAssignedJobs(@RequestBody Register entity) {
+        try {
+            Long id = entity.getId();
+            List<CustomJobs> list = orgMemberRepository.getMyAssignedJobs(id);
+
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
+        }        
+    }
+    
 
 }

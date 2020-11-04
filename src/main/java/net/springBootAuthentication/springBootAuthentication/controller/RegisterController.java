@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,18 +20,11 @@ import net.springBootAuthentication.springBootAuthentication.model.RegisterModel
 import net.springBootAuthentication.springBootAuthentication.model.RoleModel;
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
-import net.springBootAuthentication.springBootAuthentication.services.AccountDetailsService;
-import net.springBootAuthentication.springBootAuthentication.utility.JwtUtil;
+
 
 @RestController
 @RequestMapping("/api")
 public class RegisterController {
-
-    @Autowired
-    private AccountDetailsService userDetailsService;
-
-    @Autowired
-    private JwtUtil jwtTokenUtil;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -58,8 +52,11 @@ public class RegisterController {
 
             registerRepository.save(account);
 
+<<<<<<< HEAD
             final UserDetails userDetails = userDetailsService.loadUserByUsername(account.getUsername());
 
+=======
+>>>>>>> 1348c8333d1ddce86c43447c81d4c54da0477082
             ArrayList<Object> list = new ArrayList<>();
 
             list.add(account);

@@ -2,9 +2,7 @@ package net.springBootAuthentication.springBootAuthentication.customModel;
 
 import java.time.LocalDate;
 
-import org.springframework.beans.factory.annotation.Value;
-
-public  interface CustomJobs {
+public interface CustomTransactionJobs {
     Long getId();
 
      String getTitle();
@@ -33,20 +31,22 @@ public  interface CustomJobs {
         
      String getSubject();
 
-     String getUsername();
+     String getPostedByUsername();
 
      String getEmail();
 
      LocalDate getdatePosted();
 
-     String getLevelOfConfidentiality();
-
-     String getVisibility();
-
-     String getPriceType();
-
      Integer getBids();
 
      String getFile();
+
+     String getWorkedByUsername();
+
+     String getOrgName();
+
+     String getFinishFiles();
+
+     LocalDate getDateFinishDate();
 
 }
