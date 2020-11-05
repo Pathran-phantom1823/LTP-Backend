@@ -58,20 +58,18 @@ public class Authentication {
 			Long roleId = info.getRoleid();
 			RoleModel role = rolerepository.findById(roleId).orElseThrow(() -> new ResourceAccessException("not Found"));
 			roleName = role.getRoleType();
-			String password = info.getPassword();
 			id = info.getId();
-			boolean matched = new BCryptPasswordEncoder().matches(authenticationRequest.getPassword(), password);
-			if(matched) {
-				authenticationmanager.authenticate(
-					new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
-				);
-			}else {
-				return new ResponseEntity<>("Incorrect Password or Username", HttpStatus.NOT_ACCEPTABLE);
-			}
+			authenticationmanager.authenticate(
+				new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+			);
 		}catch (BadCredentialsException e ) {
 			ArrayList<StackTraceElement[]> err = new ArrayList<StackTraceElement[]>();
 			err.add(e.getStackTrace());
-			return ResponseEntity.ok(new Response(404, "Incorrect Username or Password 123", err));
+			return ResponseEntity.ok(new Response(404, "Incorrect Username or Password", err));
+		}catch (NullPointerException e) {
+			ArrayList<StackTraceElement[]> err = new ArrayList<StackTraceElement[]>();
+			err.add(e.getStackTrace());
+			return ResponseEntity.ok(new Response(404, "Incorrect Username or Password", err));
 		}
 		final UserDetails userDetails  = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String jwt = jwtTokenUtil.generateToken(userDetails); 
@@ -84,19 +82,19 @@ public class Authentication {
 		return ResponseEntity.ok(new Response(200, "Successfully LogIn", res));
 	}
 
-	// @PostMapping(value="/verify")
-	// public ResponseEntity<?> postMethodName(@RequestBody AuthenticationRequest entity) {
-	// 	final String roleName;
-	// 	try {
-	// 		RegisterModel info = check.findByusername(entity.getUsername());
-	// 		Long roleId = info.getRoleid();
-	// 		RoleModel role = rolerepository.findById(roleId).orElseThrow(() -> new ResourceAccessException("not Found"));
-	// 		roleName = role.getRoleType();
-	// 	} catch (Exception e) {
-	// 		return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
-	// 	}
-	// 	return ResponseEntity.ok(roleName);
-	// }
+	 @PostMapping(value="/verify")
+	 public ResponseEntity<?> postMethodName(@RequestBody AuthenticationRequest entity) {
+	 	final String roleName;
+	 	try {
+	 		RegisterModel info = check.findByusername(entity.getUsername());
+	 		Long roleId = info.getRoleid();
+	 		RoleModel role = rolerepository.findById(roleId).orElseThrow(() -> new ResourceAccessException("not Found"));
+	 		roleName = role.getRoleType();
+	 	} catch (Exception e) {
+	 		return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+	 	}
+	 	return ResponseEntity.ok(roleName);
+	 }
 	
 	
 }
