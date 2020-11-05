@@ -49,4 +49,6 @@ public  interface CustomJobs {
 
      String getFile();
 
+     String getAssignedTo();
+
 }

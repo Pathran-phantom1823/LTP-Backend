@@ -42,6 +42,7 @@ public class EmailController {
         return emailService.sendMail(entity, model);
     }
 
+
     @PostMapping(value="/reset-password")
     public ResponseEntity<?> ResetPassword(@RequestBody RegisterModel entity)throws ResourceNotFoundException{
         Long id = registerRepository.getEmail(entity.getEmail());

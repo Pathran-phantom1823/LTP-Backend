@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobApplicant;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobHistory;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomQuotationAssigned;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomTransactionJobs;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomUser;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
@@ -56,6 +57,8 @@ import net.springBootAuthentication.springBootAuthentication.repository.SaveJobR
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -641,8 +644,23 @@ public class JobController {
         }
         
         return ResponseEntity.ok("Uploaded");
-    
+    }
 
+    @GetMapping(value="/getQuote")
+    public ResponseEntity<?> getQuote() {
+        List<CustomJobs> list = jobsRepository.getQuotation();
+
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping(value="/getQuotation")
+    public ResponseEntity<?> getQuotation() {
+        List<CustomQuotationAssigned> list = jobsRepository.getQuotationAdmin();
+
+        return ResponseEntity.ok(list);
+
+    }
+    
     
     
     

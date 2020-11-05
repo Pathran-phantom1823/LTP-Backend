@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobApplicant;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
-
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomQuotationAssignment;
 import net.springBootAuthentication.springBootAuthentication.model.JobApplicants;
 
 public interface JobApplicantsRepository extends JpaRepository<JobApplicants, Long> {
@@ -18,5 +18,8 @@ public interface JobApplicantsRepository extends JpaRepository<JobApplicants, Lo
 
     @Query(value = "{call getMyJobHistory(:id)}", nativeQuery = true)
     List<CustomJobApplicant> getMyJobHistory(@Param("id") Long id);
+
+    @Query(value = "{call getMembersAccount(:roleType)}", nativeQuery = true)
+    List<CustomQuotationAssignment> getMembersAccount(@Param("roleType") String roleType);
 
 }
