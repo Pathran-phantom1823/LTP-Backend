@@ -3,8 +3,10 @@ package net.springBootAuthentication.springBootAuthentication.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import net.springBootAuthentication.springBootAuthentication.model.RoleModel;
+import net.springBootAuthentication.springBootAuthentication.model.ProfileModel;
+
 @Repository
-public interface RoleRepository extends JpaRepository<RoleModel, Long>{
-    
+public interface ProfileRepository extends JpaRepository<ProfileModel, Long> {
+
+
 }

@@ -52,6 +52,11 @@ public class RegisterController {
 
             registerRepository.save(account);
 
+<<<<<<< HEAD
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(account.getUsername());
+
+=======
+>>>>>>> 1348c8333d1ddce86c43447c81d4c54da0477082
             ArrayList<Object> list = new ArrayList<>();
 
             list.add(account);
