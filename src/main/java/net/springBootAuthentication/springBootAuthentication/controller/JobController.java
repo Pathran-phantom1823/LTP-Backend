@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.hibernate.engine.spi.EntityUniqueKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.batch.BatchProperties.Job;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,10 +39,12 @@ import net.springBootAuthentication.springBootAuthentication.model.JobApplicants
 import net.springBootAuthentication.springBootAuthentication.model.JobTransactionModel;
 import net.springBootAuthentication.springBootAuthentication.model.Jobs;
 import net.springBootAuthentication.springBootAuthentication.model.JobsTransaction;
+import net.springBootAuthentication.springBootAuthentication.model.ProfileModel;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +56,7 @@ import net.springBootAuthentication.springBootAuthentication.model.SaveJob;
 import net.springBootAuthentication.springBootAuthentication.repository.JobApplicantsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.JobsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.JobsTransactionRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.ProfileRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.SaveJobRepository;
 
@@ -80,6 +86,9 @@ public class JobController {
 
     @Autowired
     private JobApplicantsRepository jobApplicantRepository;
+
+    @Autowired 
+    private ProfileRepository profileRepository;
 
     @Autowired
     private SaveJobRepository saveJobRepository;
@@ -195,6 +204,50 @@ public class JobController {
         }
 
     }
+
+    @PostMapping(value="/getProfile", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<?> getProfiles(@RequestBody ProfileModel entity) throws IOException {
+        Long id = entity.getAccountId();
+            System.out.println(id);
+            String file = profileRepository.getImage(id);
+
+            ClassPathResource  files = new ClassPathResource("img/" + file);
+            byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
+        
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+    }
+    
+    
+
+    // @PostMapping(value = "/getProfile")
+    // public void getProfile(@RequestBody ProfileModel entity, HttpServletResponse servletResponse) throws FileNotFoundException {
+    //     try {
+    //         Long id = entity.getAccountId();
+    //         System.out.println(id);
+    //         String file = profileRepository.getImage(id);
+
+    //         File files = ResourceUtils.getFile("src/main/resources/img/" + file);
+    //         System.out.println(files);
+    //         FileInputStream stream = new FileInputStream(files);
+    //         servletResponse.setContentType("application/pdf;charset=UTF-8");
+    //         servletResponse.setCharacterEncoding("UTF-8");
+    //         servletResponse.setHeader("Content-Disposition","attachment;filename=" + java.net.URLEncoder.encode(file, "UTF-8"));
+    //         byte[] b = new byte[100];
+    //         int len;
+    //         while((len = stream.read(b)) > 0){
+    //             servletResponse.getOutputStream().write(b, 0, len);
+    //         }
+    //         servletResponse.getOutputStream().flush(); 
+    //         servletResponse.getOutputStream().close();
+    //         stream.close();
+    //         // InputStreamResource resource = new InputStreamResource( new FileInputStream(files));
+    //         System.out.println(files);
+    //     } catch (Exception e) {
+    //         System.out.println(e);
+    //     }
+
+    // }
+    
 
     @PostMapping(value = "/getYourJobs")
     public ResponseEntity<?> getYourJobs(@RequestBody RegisterModel data) throws ResourceNotFoundException {

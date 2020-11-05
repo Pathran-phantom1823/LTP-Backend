@@ -1,12 +1,14 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
+import java.util.Date;
+
 public interface CustomQuotationAssignment {
     Long getAccountId();
 
     String getUsername();
 
     String getFirstName();
-    
+
     String getLastName();
 
     String getEmail();
@@ -14,5 +16,13 @@ public interface CustomQuotationAssignment {
     String getStatus();
 
     String getDateAssigned();
+
+    String getDateFrom();
+
+    String getDateTo();
+
+    String getTimeFrom();
+
+    String getTimeTo();
 
 }
