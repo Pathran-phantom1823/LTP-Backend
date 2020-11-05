@@ -18,4 +18,16 @@ public interface CustomQuotationAssigned {
 
     String getAssignedBy();
 
+    String getPostedByFirstName();
+
+    String getAssignedToFirstName();
+
+    String getAssignedByFirstName();
+
+    String getPostedByLastName();
+
+    String getAssignedToLastName();
+
+    String getAssignedByLastName();
+
 }

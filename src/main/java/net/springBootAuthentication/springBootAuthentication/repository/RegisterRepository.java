@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomTranslators;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomUser;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 
@@ -31,4 +32,7 @@ public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
 
     @Query(value = "{call getAllTranslators(:id)}", nativeQuery = true)
     List<CustomTranslators> getAllTranslators(@Param("id") Long id);
+
+    @Query(value = "{call getCurrentUser(:id)}", nativeQuery = true)
+    CustomUser getCurrentUser(@Param("id") Long id);
 }

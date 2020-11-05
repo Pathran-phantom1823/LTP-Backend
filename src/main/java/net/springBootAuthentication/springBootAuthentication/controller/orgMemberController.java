@@ -84,6 +84,7 @@ public class orgMemberController {
         try {
             RegisterModel registerModel = new RegisterModel();
             // RoleModel roleModel = new RoleModel();
+            // System.out.println(entity.getRoleType());
             Integer roleModel = registerRepository.getRoleIdByType(entity.getRoleType());
             OrgMembers orgMembers = new OrgMembers();
             LocalDate date = LocalDate.now();
@@ -174,6 +175,9 @@ public class orgMemberController {
         try {
             Long id = entity.getId();
             List<CustomJobs> list = orgMemberRepository.getMyAssignedJobs(id);
+            for (CustomJobs customJobs : list) {
+                System.out.println(customJobs.getToPrice());
+            }
 
             return ResponseEntity.ok(list);
         } catch (Exception e) {

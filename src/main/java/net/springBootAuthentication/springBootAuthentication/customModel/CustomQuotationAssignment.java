@@ -5,9 +5,14 @@ public interface CustomQuotationAssignment {
 
     String getUsername();
 
+    String getFirstName();
+    
+    String getLastName();
+
     String getEmail();
 
     String getStatus();
 
     String getDateAssigned();
+
 }

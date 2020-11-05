@@ -51,4 +51,16 @@ public  interface CustomJobs {
 
      String getAssignedTo();
 
+     String getFirstName();
+
+     String getLastname();
+
+     String getAssignedToFirstName();
+
+     String getAssignedToLastname();
+
+     String getCity();
+
+     String getCountry();
+
 }

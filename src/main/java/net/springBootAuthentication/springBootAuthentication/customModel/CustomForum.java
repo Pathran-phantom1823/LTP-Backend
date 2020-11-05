@@ -7,6 +7,8 @@ public interface CustomForum {
     String getDescription();
     String getTopic();
     String getUsername();
+    String getFirstName();
+    String getLastName();
     String getComment();
     Long getNumberOfComments();
     LocalDate getDatePosted();

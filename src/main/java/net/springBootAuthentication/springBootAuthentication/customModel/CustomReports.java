@@ -7,6 +7,8 @@ public interface CustomReports {
     String getTopic();
     String getResolve();
     String getUsername();
+    String getFirstName();
+    String getLastName();
     String getEmail();
     Long  getAccountId();
     Long getReportId();

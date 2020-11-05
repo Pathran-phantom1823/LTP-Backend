@@ -9,6 +9,8 @@ public interface CustomJobApplicant {
     Float getFromPrice();
     Float getToPrice();
     String getPostedBy();
+    String getFirstName();
+    String getLastName();
     LocalDate getDateAccepted();
     LocalDate getDateFinished();
     LocalDate getDateApplied();

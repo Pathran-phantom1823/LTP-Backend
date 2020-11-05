@@ -347,16 +347,9 @@ public class JobController {
 
     @PostMapping(value = "/getCurrentUser")
     public ResponseEntity<?> getCurrentUser(@RequestBody RegisterModel entity) throws ResourceNotFoundException {
-        RegisterModel user = registerRepository.findById(entity.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        List<String> list = new ArrayList<>();
-        String username = user.getUsername();
-        String email = user.getEmail();
-
-        list.add(username);
-        list.add(email);
-        return ResponseEntity.ok(list);
+        Long id = entity.getId();
+        CustomUser user  = registerRepository.getCurrentUser(id);
+        return ResponseEntity.ok(user);
     }
 
 
@@ -609,6 +602,37 @@ public class JobController {
             jobApplicants.setFinishedFile(filename);
             jobApplicants.setDateFinished(date);
             jobApplicantRepository.save(jobApplicants);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
+        
+        return ResponseEntity.ok("Uploaded");
+    }
+
+
+    @RequestMapping(value = "/finish-file-orgmember", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadFinishFileOrgMember(@RequestPart(value = "job") String job,
+    @RequestPart(value = "file") MultipartFile file)throws ResourceNotFoundException, IOException{
+        try {
+            JobApplicants jobs = objectMapper.readValue(job, JobApplicants.class);
+            LocalDate date = LocalDate.now();
+            String tempFileName = file.getOriginalFilename();
+            String filename = tempFileName.replaceAll("\\s+", "_");
+
+            File convertfile = new File(
+                    "src/main/resources/files/" + String.format("%d%s%s", jobs.getApplicantId(), date, filename));
+
+            convertfile.createNewFile();
+            FileOutputStream fout = new FileOutputStream(convertfile);
+            fout.write(file.getBytes());
+            fout.close();
+
+            Long id = jobs.getId();
+            System.out.println(id);
+            JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            jobApplicants.setFinishFile(filename);
+            jobApplicants.setDateFinished(date);
+            jobsTransactionRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
