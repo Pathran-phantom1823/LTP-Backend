@@ -9,6 +9,10 @@ public interface CustomJobHistory {
     
     String getWorkedByUsername();
 
+    String getFirstName();
+
+    String getLastName();
+
     Integer getFromPrice();
 
     Integer getToPrice();

@@ -49,4 +49,20 @@ public interface CustomTransactionJobs {
 
      LocalDate getDateFinishDate();
 
+     String getPostedByFirstName();
+
+     String getPostedByLastName();
+
+     String getWorkedByFirstName();
+
+     String getWorkedLastname();
+
+     String getPostedByCity();
+
+     String getPostedByCountry();
+
+     String getWorkedByCity();
+
+     String getWorkedByCountry();
+
 }

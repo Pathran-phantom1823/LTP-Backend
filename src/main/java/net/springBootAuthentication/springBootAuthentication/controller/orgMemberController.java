@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.management.relation.Role;
 import javax.persistence.EntityManager;
 import javax.persistence.StoredProcedureQuery;
 
@@ -28,13 +29,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import net.bytebuddy.asm.Advice.Local;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobApplicant;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomOrgMember;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomQuotationAssignment;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import net.springBootAuthentication.springBootAuthentication.model.OrgMembers;
+import net.springBootAuthentication.springBootAuthentication.model.QuotationAssigmentModel;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.model.RoleModel;
+import net.springBootAuthentication.springBootAuthentication.repository.JobApplicantsRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.QuotationAssigmentRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.orgMemberRepository;
@@ -58,6 +64,14 @@ public class orgMemberController {
     @Autowired
     RoleRepository roleRepository;
 
+    @Autowired
+    JobApplicantsRepository jobapplicationRepository;
+
+    @Autowired
+    QuotationAssigmentRepository quotationAssigmentRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @Autowired
     RegisterRepository registerRepository;
@@ -69,20 +83,20 @@ public class orgMemberController {
     public ResponseEntity<?> createMembers(@RequestBody CustomOrgMember entity) throws BadRequest {
         try {
             RegisterModel registerModel = new RegisterModel();
-            RoleModel roleModel = new RoleModel();
+            // RoleModel roleModel = new RoleModel();
+            // System.out.println(entity.getRoleType());
+            Integer roleModel = registerRepository.getRoleIdByType(entity.getRoleType());
             OrgMembers orgMembers = new OrgMembers();
             LocalDate date = LocalDate.now();
-            Long roleType = orgMemberRepository.getRoleType();
 
             registerModel.setEmail(entity.getEmail());
             registerModel.setUsername(entity.getUsername());
             registerModel.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
-            registerModel.setRoleid(roleModel.getId());
+            registerModel.setRoleid(roleModel);
             registerModel.setExpired("false");
             registerModel.setIsDisabled("false");
             registerModel.setIsMember("false");
             registerModel.setDateCreated(date);
-            registerModel.setRoleid(roleType);
             registerRepository.saveAndFlush(registerModel);
 
             orgMembers.setCreateAt(date);
@@ -156,17 +170,48 @@ public class orgMemberController {
 
     }
 
-    @PostMapping(value="/getMyAssignedJobs")
+    @PostMapping(value = "/getMyAssignedJobs")
     public ResponseEntity<?> getMyAssignedJobs(@RequestBody Register entity) {
         try {
             Long id = entity.getId();
             List<CustomJobs> list = orgMemberRepository.getMyAssignedJobs(id);
+            for (CustomJobs customJobs : list) {
+                System.out.println(customJobs.getToPrice());
+            }
 
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
-        }        
+        }
     }
+
+    @PostMapping(value = "/getAccounts")
+    public ResponseEntity<?> getAccounts(@RequestBody RoleModel entity) {
+        String roleType = entity.getRoleType();
+        List<CustomQuotationAssignment> list = jobapplicationRepository.getMembersAccount(roleType);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @PostMapping(value = "/assignQuote")
+    public ResponseEntity<?> assignQuote(@RequestBody QuotationAssigmentModel entity) {
+        QuotationAssigmentModel model = new QuotationAssigmentModel();
+        LocalDate date = LocalDate.now();
+        try {
+            model.setAccountId(entity.getAccountId());
+            model.setJobId(entity.getJobId());
+            model.setDateAssigned(date);
+            model.setStatus(entity.getStatus());
+            model.setAssignedById(entity.getAssignedById());
+
+            quotationAssigmentRepository.save(model);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
+
+        return ResponseEntity.ok("ok");
+    }
+
     
 
 }

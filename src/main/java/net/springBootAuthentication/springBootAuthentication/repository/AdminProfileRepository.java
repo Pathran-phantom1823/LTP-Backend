@@ -5,10 +5,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import net.springBootAuthentication.springBootAuthentication.model.ProfileModel;
+import net.springBootAuthentication.springBootAuthentication.model.AdminProfileModel;
+
 
 @Repository
-public interface ProfileRepository extends JpaRepository<ProfileModel, Long> {
+public interface AdminProfileRepository extends JpaRepository<AdminProfileModel, Long> {
 
     @Query(value = "{call getImage(:id)}", nativeQuery = true)
     String getImage(@Param("id") Long id);

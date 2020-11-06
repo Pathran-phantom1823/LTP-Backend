@@ -1,7 +1,9 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,11 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomChats;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomRooms;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
-import net.springBootAuthentication.springBootAuthentication.model.MessageModel;
+import net.springBootAuthentication.springBootAuthentication.model.MailRequest;
+import net.springBootAuthentication.springBootAuthentication.model.MailResponse;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.model.RoomModel;
 import net.springBootAuthentication.springBootAuthentication.repository.MessageRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RoomRespository;
+import net.springBootAuthentication.springBootAuthentication.services.EmailNotificationService;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,6 +35,9 @@ public class ChatController {
 
     @Autowired
     private MessageRepository messageRepository;
+
+    @Autowired
+    private EmailNotificationService emailService;
 
 
     @PostMapping(value="/createRoom")
@@ -94,6 +102,14 @@ public class ChatController {
     //     }
     //     return ResponseEntity.ok("message sent");
     // }
+
+    @PostMapping(value="/send-notification")
+    public MailResponse sendNotify(@RequestBody MailRequest entity) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("Subject", entity.getSubject());
+        
+        return emailService.sendMail(entity, model);
+    }
     
     
     

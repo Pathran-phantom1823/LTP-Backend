@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomQuotationAssigned;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomUser;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.model.Jobs;
@@ -37,6 +38,13 @@ public interface JobsRepository extends JpaRepository<Jobs, Long>{
 
     @Query(value = "{call getJobDetails(:id)}", nativeQuery = true)
     List<CustomJobs> getJobDetails(@Param("id") Long id);
+
+    @Query(value = "{call getQuotations()}", nativeQuery = true)
+    List<CustomJobs> getQuotation();
+
+    
+    @Query(value = "{call getQuotationAdmin()}", nativeQuery = true)
+    List<CustomQuotationAssigned> getQuotationAdmin();
 
     
 }
