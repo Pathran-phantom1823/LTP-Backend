@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import net.bytebuddy.asm.Advice.Local;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomAssignedQuotation;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobApplicant;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomOrgMember;
@@ -211,6 +212,22 @@ public class orgMemberController {
 
         return ResponseEntity.ok("ok");
     }
+
+
+    @PostMapping(value="/getmyAssignedQuotations")
+    public ResponseEntity<?> getmyAssignedQuotations(@RequestBody RegisterModel entity) {
+        try {
+            Long id = entity.getId();
+
+        List<CustomAssignedQuotation> list = quotationAssigmentRepository.getMyAssignedQuotations(id);
+        
+        return ResponseEntity.ok(list);
+        } catch (Exception e) { 
+            return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
+        }
+    }
+    
+
 
     
 

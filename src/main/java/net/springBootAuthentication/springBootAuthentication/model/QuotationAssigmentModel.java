@@ -32,6 +32,12 @@ public class QuotationAssigmentModel {
     @Column(name = "assignedById")
     private Long assignedById;
 
+    @Column(name = "finishedFile")
+    private String finishedFile;
+
+    @Column(name = "dateFinished")
+    private LocalDate dateFinished;
+
     public QuotationAssigmentModel() {
     }
 
@@ -81,6 +87,22 @@ public class QuotationAssigmentModel {
 
     public void setAssignedById(Long assignedById) {
         this.assignedById = assignedById;
+    }
+
+    public String getFinishedFile() {
+        return finishedFile;
+    }
+
+    public void setFinishedFile(String finshedFile) {
+        this.finishedFile = finshedFile;
+    }
+
+    public LocalDate getDateFinished() {
+        return dateFinished;
+    }
+
+    public void setDateFinished(LocalDate dateFinished) {
+        this.dateFinished = dateFinished;
     }
 
     

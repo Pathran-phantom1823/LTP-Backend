@@ -40,6 +40,7 @@ import net.springBootAuthentication.springBootAuthentication.model.JobTransactio
 import net.springBootAuthentication.springBootAuthentication.model.Jobs;
 import net.springBootAuthentication.springBootAuthentication.model.JobsTransaction;
 import net.springBootAuthentication.springBootAuthentication.model.ProfileModel;
+import net.springBootAuthentication.springBootAuthentication.model.QuotationAssigmentModel;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,7 @@ import net.springBootAuthentication.springBootAuthentication.repository.JobAppli
 import net.springBootAuthentication.springBootAuthentication.repository.JobsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.JobsTransactionRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.ProfileRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.QuotationAssigmentRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.SaveJobRepository;
 
@@ -86,6 +88,9 @@ public class JobController {
 
     @Autowired
     private JobApplicantsRepository jobApplicantRepository;
+
+    @Autowired
+    private QuotationAssigmentRepository quotationAssigmentRepository;
 
     @Autowired 
     private ProfileRepository profileRepository;
@@ -686,6 +691,37 @@ public class JobController {
             jobApplicants.setFinishFile(filename);
             jobApplicants.setDateFinished(date);
             jobsTransactionRepository.save(jobApplicants);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+        }
+        
+        return ResponseEntity.ok("Uploaded");
+    }
+
+    @RequestMapping(value = "/finish-assigned-quote", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> uploadFinshedAssignedQuote(@RequestPart(value = "job") String job,
+    @RequestPart(value = "file") MultipartFile file)throws ResourceNotFoundException, IOException{
+        try {
+            QuotationAssigmentModel jobs = objectMapper.readValue(job, QuotationAssigmentModel.class);
+            LocalDate date = LocalDate.now();
+            String tempFileName = file.getOriginalFilename();
+            String filename = tempFileName.replaceAll("\\s+", "_");
+
+            File convertfile = new File(
+                    "src/main/resources/files/" + String.format("%d%s%s", jobs.getAccountId(), date, filename));
+
+            convertfile.createNewFile();
+            FileOutputStream fout = new FileOutputStream(convertfile);
+            fout.write(file.getBytes());
+            fout.close();
+
+            Long id = jobs.getJobId();
+            Long pid = quotationAssigmentRepository.getQuotationPrimaryId(id);
+            System.out.println(id);
+            QuotationAssigmentModel jobApplicants = quotationAssigmentRepository.findById(pid).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            jobApplicants.setFinishedFile(filename);
+            jobApplicants.setDateFinished(date);
+            quotationAssigmentRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
