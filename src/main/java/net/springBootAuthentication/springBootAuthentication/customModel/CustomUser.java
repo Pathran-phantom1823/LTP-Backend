@@ -17,4 +17,6 @@ public interface CustomUser {
     String getRoleType();
 
     String getApplicationId();
+
+    String getStatus();
 }

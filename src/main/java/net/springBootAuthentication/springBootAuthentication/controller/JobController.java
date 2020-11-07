@@ -67,8 +67,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
-
 @RestController
 @RequestMapping("/ltp")
 public class JobController {
@@ -92,7 +90,7 @@ public class JobController {
     @Autowired
     private QuotationAssigmentRepository quotationAssigmentRepository;
 
-    @Autowired 
+    @Autowired
     private ProfileRepository profileRepository;
 
     @Autowired
@@ -182,27 +180,29 @@ public class JobController {
     }
 
     @GetMapping(value = "/getFiles/{file}")
-    public void getMethodName(@PathVariable(value = "file") String file, HttpServletResponse servletResponse) throws FileNotFoundException {
+    public void getMethodName(@PathVariable(value = "file") String file, HttpServletResponse servletResponse)
+            throws FileNotFoundException {
         try {
             // String temp = file.getFile();
 
-            
             // List<String> res = jobsRepository.getFileThroughParameter(temp);
             // System.out.println(res.get(0));
             File files = ResourceUtils.getFile("classpath:" + "files/" + file);
             FileInputStream stream = new FileInputStream(files);
             servletResponse.setContentType("application/pdf;charset=UTF-8");
             servletResponse.setCharacterEncoding("UTF-8");
-            servletResponse.setHeader("Content-Disposition","attachment;filename=" + java.net.URLEncoder.encode(file, "UTF-8"));
+            servletResponse.setHeader("Content-Disposition",
+                    "attachment;filename=" + java.net.URLEncoder.encode(file, "UTF-8"));
             byte[] b = new byte[100];
             int len;
-            while((len = stream.read(b)) > 0){
+            while ((len = stream.read(b)) > 0) {
                 servletResponse.getOutputStream().write(b, 0, len);
             }
-            servletResponse.getOutputStream().flush(); 
+            servletResponse.getOutputStream().flush();
             servletResponse.getOutputStream().close();
             stream.close();
-            // InputStreamResource resource = new InputStreamResource( new FileInputStream(files));
+            // InputStreamResource resource = new InputStreamResource( new
+            // FileInputStream(files));
             System.out.println(files);
         } catch (Exception e) {
             System.out.println(e);
@@ -210,49 +210,52 @@ public class JobController {
 
     }
 
-    @PostMapping(value="/getProfile", produces = MediaType.IMAGE_JPEG_VALUE)
+    @PostMapping(value = "/getProfile", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<?> getProfiles(@RequestBody ProfileModel entity) throws IOException {
         Long id = entity.getAccountId();
-            System.out.println(id);
-            String file = profileRepository.getImage(id);
-
-            ClassPathResource  files = new ClassPathResource("img/" + file);
+        // System.out.println(id);
+        String file = profileRepository.getImage(id);
+        if (file == null) {
+            return ResponseEntity.ok(null);
+        } else {
+            ClassPathResource files = new ClassPathResource("img/" + file);
             byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
-        
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+        }
     }
-    
-    
 
     // @PostMapping(value = "/getProfile")
-    // public void getProfile(@RequestBody ProfileModel entity, HttpServletResponse servletResponse) throws FileNotFoundException {
-    //     try {
-    //         Long id = entity.getAccountId();
-    //         System.out.println(id);
-    //         String file = profileRepository.getImage(id);
+    // public void getProfile(@RequestBody ProfileModel entity, HttpServletResponse
+    // servletResponse) throws FileNotFoundException {
+    // try {
+    // Long id = entity.getAccountId();
+    // System.out.println(id);
+    // String file = profileRepository.getImage(id);
 
-    //         File files = ResourceUtils.getFile("src/main/resources/img/" + file);
-    //         System.out.println(files);
-    //         FileInputStream stream = new FileInputStream(files);
-    //         servletResponse.setContentType("application/pdf;charset=UTF-8");
-    //         servletResponse.setCharacterEncoding("UTF-8");
-    //         servletResponse.setHeader("Content-Disposition","attachment;filename=" + java.net.URLEncoder.encode(file, "UTF-8"));
-    //         byte[] b = new byte[100];
-    //         int len;
-    //         while((len = stream.read(b)) > 0){
-    //             servletResponse.getOutputStream().write(b, 0, len);
-    //         }
-    //         servletResponse.getOutputStream().flush(); 
-    //         servletResponse.getOutputStream().close();
-    //         stream.close();
-    //         // InputStreamResource resource = new InputStreamResource( new FileInputStream(files));
-    //         System.out.println(files);
-    //     } catch (Exception e) {
-    //         System.out.println(e);
-    //     }
+    // File files = ResourceUtils.getFile("src/main/resources/img/" + file);
+    // System.out.println(files);
+    // FileInputStream stream = new FileInputStream(files);
+    // servletResponse.setContentType("application/pdf;charset=UTF-8");
+    // servletResponse.setCharacterEncoding("UTF-8");
+    // servletResponse.setHeader("Content-Disposition","attachment;filename=" +
+    // java.net.URLEncoder.encode(file, "UTF-8"));
+    // byte[] b = new byte[100];
+    // int len;
+    // while((len = stream.read(b)) > 0){
+    // servletResponse.getOutputStream().write(b, 0, len);
+    // }
+    // servletResponse.getOutputStream().flush();
+    // servletResponse.getOutputStream().close();
+    // stream.close();
+    // // InputStreamResource resource = new InputStreamResource( new
+    // FileInputStream(files));
+    // System.out.println(files);
+    // } catch (Exception e) {
+    // System.out.println(e);
+    // }
 
     // }
-    
 
     @PostMapping(value = "/getYourJobs")
     public ResponseEntity<?> getYourJobs(@RequestBody RegisterModel data) throws ResourceNotFoundException {
@@ -267,7 +270,7 @@ public class JobController {
     }
 
     @PostMapping(value = "getAllJobs")
-    public ResponseEntity<?> getAllJobs(@RequestBody RegisterModel data)throws BadRequest {
+    public ResponseEntity<?> getAllJobs(@RequestBody RegisterModel data) throws BadRequest {
         try {
             Long id = data.getId();
             List<CustomJobs> jobs = jobsRepository.getAllJobs(id);
@@ -277,15 +280,14 @@ public class JobController {
         }
     }
 
-
-
     @PostMapping(value = "/getJob")
     public ResponseEntity<?> getJobById(@RequestBody Jobs data) throws NumberFormatException {
         // System.out.println("id" + param);
         try {
             Long resId = data.getId();
             // CustomJobs custom;
-            // Jobs jobs = jobsRepository.findById(resId).orElseThrow(() -> new ResourceNotFoundException("not Found"));
+            // Jobs jobs = jobsRepository.findById(resId).orElseThrow(() -> new
+            // ResourceNotFoundException("not Found"));
             List<CustomJobs> job = jobsRepository.getJobById(resId);
             // List<String> res = jobsRepository.getFileThroughParameter(jobs.getFile());
             // // System.out.println(res.get(0));
@@ -303,7 +305,8 @@ public class JobController {
         try {
             Long resId = data.getId();
             // CustomJobs custom;
-            // Jobs jobs = jobsRepository.findById(resId).orElseThrow(() -> new ResourceNotFoundException("not Found"));
+            // Jobs jobs = jobsRepository.findById(resId).orElseThrow(() -> new
+            // ResourceNotFoundException("not Found"));
             List<CustomJobs> job = jobsRepository.getJobById(resId);
             // List<String> res = jobsRepository.getFileThroughParameter(jobs.getFile());
             // // System.out.println(res.get(0));
@@ -315,7 +318,7 @@ public class JobController {
         }
     }
 
-    @PostMapping(value="/getJobDetails")
+    @PostMapping(value = "/getJobDetails")
     public ResponseEntity<?> getJobDetails(@RequestBody Jobs entity) {
         try {
             Long resId = entity.getId();
@@ -325,7 +328,6 @@ public class JobController {
             return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
         }
     }
-    
 
     @PostMapping(value = "/apply-job")
     public ResponseEntity<?> postMethodName(@RequestBody JobApplicants data) throws ResourceNotFoundException {
@@ -394,8 +396,13 @@ public class JobController {
             Long id = data.getSavedById();
 
             List<CustomJobs> acceptedJobs = jobApplicantRepository.getAcceptedJobs(id);
+            // System.out.println(acceptedJobs.toString());
+            if(acceptedJobs == null){
+                return ResponseEntity.ok(null);
+            }else{
+                return ResponseEntity.ok(acceptedJobs);
+            }
 
-            return ResponseEntity.ok(acceptedJobs);
 
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
@@ -406,13 +413,12 @@ public class JobController {
     @PostMapping(value = "/getCurrentUser")
     public ResponseEntity<?> getCurrentUser(@RequestBody RegisterModel entity) throws ResourceNotFoundException {
         Long id = entity.getId();
-        CustomUser user  = registerRepository.getCurrentUser(id);
+        CustomUser user = registerRepository.getCurrentUser(id);
         return ResponseEntity.ok(user);
     }
 
-
-    @PostMapping(value="/get-my-jobs")
-    public ResponseEntity<?> getMyJobs(@RequestBody Register entity)throws Forbidden{
+    @PostMapping(value = "/get-my-jobs")
+    public ResponseEntity<?> getMyJobs(@RequestBody Register entity) throws Forbidden {
         try {
             Long id = entity.getId();
 
@@ -425,7 +431,7 @@ public class JobController {
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
-        
+
     }
 
     @PostMapping(value = "/getBids")
@@ -442,9 +448,8 @@ public class JobController {
         }
     }
 
-
-    @PostMapping(value="/accept-bidder")
-    public ResponseEntity<?> acceptBidder(@RequestBody JobApplicants entity)throws Forbidden {
+    @PostMapping(value = "/accept-bidder")
+    public ResponseEntity<?> acceptBidder(@RequestBody JobApplicants entity) throws Forbidden {
         try {
             LocalDate date = LocalDate.now();
 
@@ -455,25 +460,24 @@ public class JobController {
             jobsRepository.save(job);
 
             JobApplicants applicants = jobApplicantRepository.findById(entity.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("applicant not found"));
-
-
+                    .orElseThrow(() -> new ResourceNotFoundException("applicant not found"));
 
             applicants.setStatus(entity.getStatus());
             applicants.setDateAccepted(date);
             jobApplicantRepository.save(applicants);
 
-            // List<JobApplicants> accept = jobApplicantRepository.acceptBidder(jobId, applicantId, status, isAvailable);
+            // List<JobApplicants> accept = jobApplicantRepository.acceptBidder(jobId,
+            // applicantId, status, isAvailable);
 
             return ResponseEntity.ok("accept");
 
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
-        }        
+        }
     }
 
-    @PostMapping(value="/decline-bidder")
-    public ResponseEntity<?> declineBidder(@RequestBody JobApplicants entity)throws Forbidden {
+    @PostMapping(value = "/decline-bidder")
+    public ResponseEntity<?> declineBidder(@RequestBody JobApplicants entity) throws Forbidden {
         try {
 
             Jobs job = jobsRepository.findById(entity.getJobId())
@@ -483,22 +487,23 @@ public class JobController {
             jobsRepository.save(job);
 
             JobApplicants applicants = jobApplicantRepository.findById(entity.getId())
-            .orElseThrow(() -> new ResourceNotFoundException("applicant not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("applicant not found"));
 
             applicants.setStatus(entity.getStatus());
             jobApplicantRepository.save(applicants);
 
-            // List<JobApplicants> accept = jobApplicantRepository.acceptBidder(jobId, applicantId, status, isAvailable);
+            // List<JobApplicants> accept = jobApplicantRepository.acceptBidder(jobId,
+            // applicantId, status, isAvailable);
 
             return ResponseEntity.ok("decline");
 
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
-        }        
+        }
     }
 
-    @PostMapping(value="/assign-job")
-    public ResponseEntity<?> assignJob(@RequestBody JobTransactionModel entity)throws ResourceNotFoundException{
+    @PostMapping(value = "/assign-job")
+    public ResponseEntity<?> assignJob(@RequestBody JobTransactionModel entity) throws ResourceNotFoundException {
         try {
             JobTransactionModel hJobsTransaction = new JobTransactionModel();
             LocalDate date = LocalDate.now();
@@ -515,12 +520,12 @@ public class JobController {
 
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.NOT_FOUND);
-        }        
-        
+        }
+
     }
 
-    @PostMapping(value="/getAssignedJobs")
-    public ResponseEntity<?> getAssignedJobs(@RequestBody JobTransactionModel entity)throws ResourceNotFoundException {
+    @PostMapping(value = "/getAssignedJobs")
+    public ResponseEntity<?> getAssignedJobs(@RequestBody JobTransactionModel entity) throws ResourceNotFoundException {
         try {
             Long id = entity.getOrgId();
             List<CustomTransactionJobs> list = jobsTransactionRepository.getAssignedJobs(id);
@@ -528,12 +533,12 @@ public class JobController {
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
-        }        
+        }
     }
 
-    
-    @PostMapping(value="/getAssignedJobsDetails")
-    public ResponseEntity<?> getAssignedJobsDetail(@RequestBody JobTransactionModel entity)throws ResourceNotFoundException {
+    @PostMapping(value = "/getAssignedJobsDetails")
+    public ResponseEntity<?> getAssignedJobsDetail(@RequestBody JobTransactionModel entity)
+            throws ResourceNotFoundException {
         try {
             Long id = entity.getId();
             List<CustomTransactionJobs> list = jobsTransactionRepository.getAssignedJobsById(id);
@@ -541,11 +546,11 @@ public class JobController {
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
-        }        
+        }
     }
-    
-    @PostMapping(value="/getJobHistory")
-    public ResponseEntity<?> getJobHistory(@RequestBody JobTransactionModel entity)throws ResourceNotFoundException {
+
+    @PostMapping(value = "/getJobHistory")
+    public ResponseEntity<?> getJobHistory(@RequestBody JobTransactionModel entity) throws ResourceNotFoundException {
         try {
             Long id = entity.getOrgId();
             List<CustomJobHistory> list = jobsTransactionRepository.getJobHistory(id);
@@ -553,11 +558,10 @@ public class JobController {
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
-        }        
+        }
     }
 
-
-    @PostMapping(value="/getMyJobHistory")
+    @PostMapping(value = "/getMyJobHistory")
     public ResponseEntity<?> postMethodName(@RequestBody Register entity) {
         try {
             Long id = entity.getId();
@@ -566,11 +570,11 @@ public class JobController {
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
         }
-        
+
     }
-    
-    @PostMapping(value="/deleteJob")
-    public ResponseEntity<?> deleteJob(@RequestBody Jobs entity)throws ResourceNotFoundException {
+
+    @PostMapping(value = "/deleteJob")
+    public ResponseEntity<?> deleteJob(@RequestBody Jobs entity) throws ResourceNotFoundException {
         LocalDate date = LocalDate.now();
         try {
             Long id = entity.getId();
@@ -581,8 +585,6 @@ public class JobController {
         }
         return ResponseEntity.ok("Deleted");
     }
-
-
 
     @RequestMapping(value = "/update", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> UpdateJob(@RequestPart(value = "job") String job,
@@ -605,7 +607,7 @@ public class JobController {
             fout.close();
 
             Long id = jobs.getId();
-            Jobs jobs2 = jobsRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("not found"));
+            Jobs jobs2 = jobsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
             // objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 
             jobs2.setTitle(jobs.getTitle());
@@ -639,7 +641,7 @@ public class JobController {
 
     @RequestMapping(value = "/finish-file", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFinishFile(@RequestPart(value = "job") String job,
-    @RequestPart(value = "file") MultipartFile file)throws ResourceNotFoundException, IOException{
+            @RequestPart(value = "file") MultipartFile file) throws ResourceNotFoundException, IOException {
         try {
             JobApplicants jobs = objectMapper.readValue(job, JobApplicants.class);
             LocalDate date = LocalDate.now();
@@ -656,21 +658,21 @@ public class JobController {
 
             Long id = jobs.getId();
             System.out.println(id);
-            JobApplicants jobApplicants = jobApplicantRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            JobApplicants jobApplicants = jobApplicantRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishedFile(filename);
             jobApplicants.setDateFinished(date);
             jobApplicantRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
-        
+
         return ResponseEntity.ok("Uploaded");
     }
 
-
     @RequestMapping(value = "/finish-file-orgmember", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFinishFileOrgMember(@RequestPart(value = "job") String job,
-    @RequestPart(value = "file") MultipartFile file)throws ResourceNotFoundException, IOException{
+            @RequestPart(value = "file") MultipartFile file) throws ResourceNotFoundException, IOException {
         try {
             JobApplicants jobs = objectMapper.readValue(job, JobApplicants.class);
             LocalDate date = LocalDate.now();
@@ -687,20 +689,21 @@ public class JobController {
 
             Long id = jobs.getId();
             System.out.println(id);
-            JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishFile(filename);
             jobApplicants.setDateFinished(date);
             jobsTransactionRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
-        
+
         return ResponseEntity.ok("Uploaded");
     }
 
     @RequestMapping(value = "/finish-assigned-quote", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFinshedAssignedQuote(@RequestPart(value = "job") String job,
-    @RequestPart(value = "file") MultipartFile file)throws ResourceNotFoundException, IOException{
+            @RequestPart(value = "file") MultipartFile file) throws ResourceNotFoundException, IOException {
         try {
             QuotationAssigmentModel jobs = objectMapper.readValue(job, QuotationAssigmentModel.class);
             LocalDate date = LocalDate.now();
@@ -718,20 +721,21 @@ public class JobController {
             Long id = jobs.getJobId();
             Long pid = quotationAssigmentRepository.getQuotationPrimaryId(id);
             System.out.println(id);
-            QuotationAssigmentModel jobApplicants = quotationAssigmentRepository.findById(pid).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            QuotationAssigmentModel jobApplicants = quotationAssigmentRepository.findById(pid)
+                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishedFile(filename);
             jobApplicants.setDateFinished(date);
             quotationAssigmentRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
-        
+
         return ResponseEntity.ok("Uploaded");
     }
 
     @RequestMapping(value = "/finish-file-agencymember", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> finishInJobTransaction(@RequestPart(value = "job") String job,
-    @RequestPart(value = "file") MultipartFile file)throws ResourceNotFoundException, IOException{
+            @RequestPart(value = "file") MultipartFile file) throws ResourceNotFoundException, IOException {
         try {
             JobTransactionModel jobs = objectMapper.readValue(job, JobTransactionModel.class);
             LocalDate date = LocalDate.now();
@@ -748,35 +752,31 @@ public class JobController {
 
             Long id = jobs.getId();
             System.out.println(id);
-            JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishFile(filename);
             jobApplicants.setDateFinished(date);
             jobsTransactionRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
-        
+
         return ResponseEntity.ok("Uploaded");
     }
 
-    @GetMapping(value="/getQuote")
+    @GetMapping(value = "/getQuote")
     public ResponseEntity<?> getQuote() {
         List<CustomJobs> list = jobsRepository.getQuotation();
 
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping(value="/getQuotation")
+    @GetMapping(value = "/getQuotation")
     public ResponseEntity<?> getQuotation() {
         List<CustomQuotationAssigned> list = jobsRepository.getQuotationAdmin();
 
         return ResponseEntity.ok(list);
 
     }
-    
-    
-    
-    
-    
 
 }

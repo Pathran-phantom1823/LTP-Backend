@@ -69,27 +69,6 @@ public class ForumController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping("/getPost")
-    public ResponseEntity<?> getPost() {
-        List<CustomForum> forum = forumTransactionRepository.getPost();
-        return ResponseEntity.ok(forum);
-    }
-
-    @PostMapping(value = "/getForumDetails")
-    public ResponseEntity<?> postMethodName(@RequestBody ForumTransactionsModel entity)
-            throws ResourceNotFoundException {
-        try {
-            Long id = entity.getPostId();
-            System.out.println(id);
-            List<CustomForum> details = forumTransactionRepository.getForumDetails(id);
-            System.out.println(details);
-            return ResponseEntity.ok(details);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
-        }
-
-    }
-
     @PostMapping(value = "/saveComment")
     public ResponseEntity<?> postSaveMethod(@RequestBody CustomComment entity) throws ResourceNotFoundException {
         Long id = entity.getPostId();
@@ -128,14 +107,14 @@ public class ForumController {
         return ResponseEntity.ok(comments);
     }
 
-    @PostMapping(value = "/getComment")
-    public ResponseEntity<?> getComment(@RequestBody CustomComment entity) {
-        Long id = entity.getPostId();
+    // @PostMapping(value = "/getComment")
+    // public ResponseEntity<?> getComment(@RequestBody CustomComment entity) {
+    //     Long id = entity.getPostId();
 
-        List<CustomForum> list = forumTransactionRepository.getComment(id);
+    //     List<CustomForum> list = forumTransactionRepository.getComment(id);
 
-        return ResponseEntity.ok(list);
-    }
+    //     return ResponseEntity.ok(list);
+    // }
 
     @PostMapping(value = "/like")
     public ResponseEntity<?> addLIke(@RequestBody CommentLikesModel entity)throws ResourceNotFoundException{
@@ -163,10 +142,10 @@ public class ForumController {
         return ResponseEntity.ok("");
     }
 
-    @GetMapping(value="/getLikes")
-    public ResponseEntity<?> postMethodName() {
-        List<CommentLikesModel> res = commentsLikesRepository.findAll();
-        return ResponseEntity.ok(res);
-    }
+    // @GetMapping(value="/getLikes")
+    // public ResponseEntity<?> postMethodName() {
+    //     List<CommentLikesModel> res = commentsLikesRepository.findAll();
+    //     return ResponseEntity.ok(res);
+    // }
     
 }
