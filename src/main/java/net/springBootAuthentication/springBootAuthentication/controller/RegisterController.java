@@ -2,6 +2,7 @@ package net.springBootAuthentication.springBootAuthentication.controller;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,15 +10,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomComment;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomForum;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
+import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
+import net.springBootAuthentication.springBootAuthentication.model.CommentLikesModel;
+import net.springBootAuthentication.springBootAuthentication.model.ForumTransactionsModel;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.model.RoleModel;
+import net.springBootAuthentication.springBootAuthentication.repository.CommentLikesRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.CommentsRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.ForumTransactionsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
 
@@ -31,6 +41,16 @@ public class RegisterController {
 
     @Autowired
     private RegisterRepository registerRepository;
+
+    @Autowired
+    private ForumTransactionsRepository forumTransactionRepository;
+
+    @Autowired
+    private CommentsRepository commentsRepository;
+
+    @Autowired
+    private CommentLikesRepository commentsLikesRepository;
+
 
     @PostMapping("/register")
 
@@ -70,5 +90,67 @@ public class RegisterController {
         roleRepository.save(roles);
 
         return ResponseEntity.ok(roles);
+    }
+
+    @PostMapping(value="/checUsername")
+    public String checkUsernameExist(@RequestBody RegisterModel entity) {
+        String username = entity.getUsername();
+        String res = registerRepository.checkUsernameExist(username);
+        if(res != null){
+            return "Username is Unavailable";
+        }else{
+            return "Username is available";
+        }
+    }
+
+    @PostMapping(value="/checkEmail")
+    public String checkEmailExist(@RequestBody RegisterModel entity) {
+        String email = entity.getEmail();
+        String res = registerRepository.checkEmailExist(email);
+        if(res != null){
+            return "Email is Unavailable";
+        }else{
+            return "Email is available";
+        }
+    }
+
+    @GetMapping("/getPost")
+    public ResponseEntity<?> getPost() {
+        List<CustomForum> forum = forumTransactionRepository.getPost();
+        if(forum == null){
+            return ResponseEntity.ok(null);
+        }else{
+            return ResponseEntity.ok(forum);
+        }
+    }
+
+    @PostMapping(value = "/getForumDetails")
+    public ResponseEntity<?> postMethodName(@RequestBody ForumTransactionsModel entity)
+            throws ResourceNotFoundException {
+        try {
+            Long id = entity.getPostId();
+            // System.out.println(id);
+            List<CustomForum> details = forumTransactionRepository.getForumDetails(id);
+            // System.out.println(details);
+            return ResponseEntity.ok(details);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
+        }
+
+    }
+
+    @PostMapping(value = "/getComment")
+    public ResponseEntity<?> getComment(@RequestBody CustomComment entity) {
+        Long id = entity.getPostId();
+
+        List<CustomForum> list = forumTransactionRepository.getComment(id);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping(value="/getLikes")
+    public ResponseEntity<?> postMethodName() {
+        List<CommentLikesModel> res = commentsLikesRepository.findAll();
+        return ResponseEntity.ok(res);
     }
 }

@@ -39,4 +39,5 @@ public class UsersController {
         List<CustomTranslators> list = registerRepository.getAllTranslators(id);
         return ResponseEntity.ok(list);
     }
+    
 }
