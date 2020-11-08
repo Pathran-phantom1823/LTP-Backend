@@ -147,5 +147,45 @@ public class ForumController {
     //     List<CommentLikesModel> res = commentsLikesRepository.findAll();
     //     return ResponseEntity.ok(res);
     // }
+
+    @GetMapping("/getPostwithAuth")
+    public ResponseEntity<?> getPost() {
+        List<CustomForum> forum = forumTransactionRepository.getPost();
+        if(forum == null){
+            return ResponseEntity.ok(null);
+        }else{
+            return ResponseEntity.ok(forum);
+        }
+    }
+
+    @PostMapping(value = "/getForumDetailswithAuth")
+    public ResponseEntity<?> postMethodName(@RequestBody ForumTransactionsModel entity)
+            throws ResourceNotFoundException {
+        try {
+            Long id = entity.getPostId();
+            // System.out.println(id);
+            List<CustomForum> details = forumTransactionRepository.getForumDetails(id);
+            // System.out.println(details);
+            return ResponseEntity.ok(details);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
+        }
+
+    }
+
+    @PostMapping(value = "/getCommentwithAuth")
+    public ResponseEntity<?> getComment(@RequestBody CustomComment entity) {
+        Long id = entity.getPostId();
+
+        List<CustomForum> list = forumTransactionRepository.getComment(id);
+
+        return ResponseEntity.ok(list);
+    }
+
+    @GetMapping(value="/getLikeswithAuth")
+    public ResponseEntity<?> postMethodName() {
+        List<CommentLikesModel> res = commentsLikesRepository.findAll();
+        return ResponseEntity.ok(res);
+    }
     
 }
