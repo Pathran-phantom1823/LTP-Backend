@@ -12,4 +12,7 @@ public interface ProfileRepository extends JpaRepository<ProfileModel, Long> {
 
     @Query(value = "{call getImage(:id)}", nativeQuery = true)
     String getImage(@Param("id") Long id);
+
+    @Query(value = "{call getAdminImage(:id)}", nativeQuery = true)
+    String getAdminImage(@Param("id") Long id);
 }

@@ -35,6 +35,7 @@ import net.springBootAuthentication.springBootAuthentication.customModel.CustomT
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomUser;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
+import net.springBootAuthentication.springBootAuthentication.model.AdminProfileModel;
 import net.springBootAuthentication.springBootAuthentication.model.JobApplicants;
 import net.springBootAuthentication.springBootAuthentication.model.JobTransactionModel;
 import net.springBootAuthentication.springBootAuthentication.model.Jobs;
@@ -212,50 +213,41 @@ public class JobController {
 
     @PostMapping(value = "/getProfile", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<?> getProfiles(@RequestBody ProfileModel entity) throws IOException {
-        Long id = entity.getAccountId();
-        // System.out.println(id);
-        String file = profileRepository.getImage(id);
-        if (file == null) {
-            return ResponseEntity.ok(null);
-        } else {
-            ClassPathResource files = new ClassPathResource("img/" + file);
-            byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
+        try {
+            Long id = entity.getAccountId();
+            // System.out.println(id);
+            String file = profileRepository.getImage(id);
+            if (file == null) {
+                return ResponseEntity.ok(null);
+            } else {
+                ClassPathResource files = new ClassPathResource("img/" + file);
+                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
 
-            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.ok(e);
         }
     }
 
-    // @PostMapping(value = "/getProfile")
-    // public void getProfile(@RequestBody ProfileModel entity, HttpServletResponse
-    // servletResponse) throws FileNotFoundException {
-    // try {
-    // Long id = entity.getAccountId();
-    // System.out.println(id);
-    // String file = profileRepository.getImage(id);
+    @PostMapping(value = "/getAdminProfile", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<?> getAdminProfiles(@RequestBody AdminProfileModel entity) throws IOException {
+        try {
+            Long id = entity.getAccountId();
+            // System.out.println(id);
+            String file = profileRepository.getAdminImage(id);
+            if (file == null) {
+                return ResponseEntity.ok(null);
+            } else {
+                ClassPathResource files = new ClassPathResource("img/" + file);
+                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
 
-    // File files = ResourceUtils.getFile("src/main/resources/img/" + file);
-    // System.out.println(files);
-    // FileInputStream stream = new FileInputStream(files);
-    // servletResponse.setContentType("application/pdf;charset=UTF-8");
-    // servletResponse.setCharacterEncoding("UTF-8");
-    // servletResponse.setHeader("Content-Disposition","attachment;filename=" +
-    // java.net.URLEncoder.encode(file, "UTF-8"));
-    // byte[] b = new byte[100];
-    // int len;
-    // while((len = stream.read(b)) > 0){
-    // servletResponse.getOutputStream().write(b, 0, len);
-    // }
-    // servletResponse.getOutputStream().flush();
-    // servletResponse.getOutputStream().close();
-    // stream.close();
-    // // InputStreamResource resource = new InputStreamResource( new
-    // FileInputStream(files));
-    // System.out.println(files);
-    // } catch (Exception e) {
-    // System.out.println(e);
-    // }
-
-    // }
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.ok(e);
+        }
+    }
 
     @PostMapping(value = "/getYourJobs")
     public ResponseEntity<?> getYourJobs(@RequestBody RegisterModel data) throws ResourceNotFoundException {
@@ -397,12 +389,11 @@ public class JobController {
 
             List<CustomJobs> acceptedJobs = jobApplicantRepository.getAcceptedJobs(id);
             // System.out.println(acceptedJobs.toString());
-            if(acceptedJobs == null){
+            if (acceptedJobs == null) {
                 return ResponseEntity.ok(null);
-            }else{
+            } else {
                 return ResponseEntity.ok(acceptedJobs);
             }
-
 
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);

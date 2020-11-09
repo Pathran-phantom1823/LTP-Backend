@@ -39,5 +39,27 @@ public class UsersController {
         List<CustomTranslators> list = registerRepository.getAllTranslators(id);
         return ResponseEntity.ok(list);
     }
+
+    @PostMapping(value="/checkUsernameExistence")
+    public String checkUsernameExist(@RequestBody RegisterModel entity) {
+        String username = entity.getUsername();
+        String res = registerRepository.checkUsernameExist(username);
+        if(res != null){
+            return "Username is Unavailable";
+        }else{
+            return "Username is available";
+        }
+    }
+
+    @PostMapping(value="/checkEmailExistence")
+    public String checkEmailExist(@RequestBody RegisterModel entity) {
+        String email = entity.getEmail();
+        String res = registerRepository.checkEmailExist(email);
+        if(res != null){
+            return "Email is Unavailable";
+        }else{
+            return "Email is available";
+        }
+    }
     
 }
