@@ -35,6 +35,7 @@ import net.springBootAuthentication.springBootAuthentication.customModel.CustomT
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomUser;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
+import net.springBootAuthentication.springBootAuthentication.model.AdminProfileModel;
 import net.springBootAuthentication.springBootAuthentication.model.JobApplicants;
 import net.springBootAuthentication.springBootAuthentication.model.JobTransactionModel;
 import net.springBootAuthentication.springBootAuthentication.model.Jobs;
@@ -216,6 +217,25 @@ public class JobController {
             Long id = entity.getAccountId();
             // System.out.println(id);
             String file = profileRepository.getImage(id);
+            if (file == null) {
+                return ResponseEntity.ok(null);
+            } else {
+                ClassPathResource files = new ClassPathResource("img/" + file);
+                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
+
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.ok(e);
+        }
+    }
+
+    @PostMapping(value = "/getAdminProfile", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<?> getAdminProfiles(@RequestBody AdminProfileModel entity) throws IOException {
+        try {
+            Long id = entity.getAccountId();
+            // System.out.println(id);
+            String file = profileRepository.getAdminImage(id);
             if (file == null) {
                 return ResponseEntity.ok(null);
             } else {
