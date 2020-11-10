@@ -9,8 +9,6 @@ public class CustomAdminProfile {
 
     private String firstname;
 
-    private String middlename;
-
     private String lastname;
 
     private Integer age;
@@ -32,8 +30,6 @@ public class CustomAdminProfile {
     private String city;
 
     private String country;
-
-    private String address;
 
     private String street;
     
@@ -61,14 +57,6 @@ public class CustomAdminProfile {
 
     public void setFirstname(String firstname) {
         this.firstname = firstname;
-    }
-
-    public String getMiddlename() {
-        return middlename;
-    }
-
-    public void setMiddlename(String middlename) {
-        this.middlename = middlename;
     }
 
     public String getLastname() {
@@ -159,14 +147,6 @@ public class CustomAdminProfile {
         this.country = country;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getStreet() {
         return street;
     }
@@ -186,14 +166,13 @@ public class CustomAdminProfile {
     public CustomAdminProfile() {
     }
 
-    public CustomAdminProfile(long id, long accountId, String firstname, String middlename, String lastname,
+    public CustomAdminProfile(long id, long accountId, String firstname, String lastname,
             Integer age, Date birthdate, String email, String gender, String phonenumber, Long address_id,
-            Integer postalcode, Integer zipcode, String city, String country, String address, String street,
+            Integer postalcode, Integer zipcode, String city, String country,  String street,
             String img) {
         this.id = id;
         this.accountId = accountId;
         this.firstname = firstname;
-        this.middlename = middlename;
         this.lastname = lastname;
         this.age = age;
         this.birthdate = birthdate;
@@ -205,7 +184,6 @@ public class CustomAdminProfile {
         this.zipcode = zipcode;
         this.city = city;
         this.country = country;
-        this.address = address;
         this.street = street;
         this.img = img;
     }
