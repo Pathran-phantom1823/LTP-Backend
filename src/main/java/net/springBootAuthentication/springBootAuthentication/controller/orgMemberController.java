@@ -152,15 +152,12 @@ public class orgMemberController {
     }
 
     @PutMapping(value = "/updateMember")
-    public ResponseEntity<?> putMethodName(@RequestBody RegisterModel entity) throws BadRequest {
+    public ResponseEntity<?> putMethodName(@RequestBody RegisterModel entity) throws BadRequest, ResourceNotFoundException {
         try {
             Long id = entity.getId();
-            RegisterModel member = registerRepository.getOne(id);
+            RegisterModel member = registerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found"));
             member.setUsername(entity.getUsername());
             member.setEmail(entity.getEmail());
-            member.setPassword(entity.getPassword());
-            member.setRoleid(entity.getRoleid());
-            member.setExpired(entity.getExpired());
 
             registerRepository.save(member);
 

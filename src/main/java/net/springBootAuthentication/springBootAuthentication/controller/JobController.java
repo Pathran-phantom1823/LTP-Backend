@@ -92,9 +92,6 @@ public class JobController {
     private QuotationAssigmentRepository quotationAssigmentRepository;
 
     @Autowired
-    private ProfileRepository profileRepository;
-
-    @Autowired
     private SaveJobRepository saveJobRepository;
 
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -209,44 +206,6 @@ public class JobController {
             System.out.println(e);
         }
 
-    }
-
-    @PostMapping(value = "/getProfile", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<?> getProfiles(@RequestBody ProfileModel entity) throws IOException {
-        try {
-            Long id = entity.getAccountId();
-            // System.out.println(id);
-            String file = profileRepository.getImage(id);
-            if (file == null) {
-                return ResponseEntity.ok(null);
-            } else {
-                ClassPathResource files = new ClassPathResource("img/" + file);
-                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
-
-                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.ok(e);
-        }
-    }
-
-    @PostMapping(value = "/getAdminProfile", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<?> getAdminProfiles(@RequestBody AdminProfileModel entity) throws IOException {
-        try {
-            Long id = entity.getAccountId();
-            // System.out.println(id);
-            String file = profileRepository.getAdminImage(id);
-            if (file == null) {
-                return ResponseEntity.ok(null);
-            } else {
-                ClassPathResource files = new ClassPathResource("img/" + file);
-                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
-
-                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.ok(e);
-        }
     }
 
     @PostMapping(value = "/getYourJobs")
