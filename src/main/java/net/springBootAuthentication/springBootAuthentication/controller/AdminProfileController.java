@@ -67,6 +67,7 @@ public class AdminProfileController {
             addressModel.setPostal(customAdminProfile.getPostalcode());
             addressModel.setStreet(customAdminProfile.getStreet());
             addressModel.setZipcode(customAdminProfile.getZipcode());
+            
             addressRepository.saveAndFlush(addressModel);
             // System.out.println(customAdminProfile.getBirthdate());
             adminModel.setAddressId(addressModel.getId());
