@@ -39,6 +39,12 @@ public class UsersController {
         List<CustomTranslators> list = registerRepository.getAllTranslators(id);
         return ResponseEntity.ok(list);
     }
+    @PostMapping(value="get-agency-translators")
+    public ResponseEntity<?> getAgencyTranslators(@RequestBody RegisterModel entity) {
+        Long id = entity.getId();
+        List<CustomTranslators> list = registerRepository.getAgencyTranslators(id);
+        return ResponseEntity.ok(list);
+    }
 
     @PostMapping(value="/checkUsernameExistence")
     public String checkUsernameExist(@RequestBody RegisterModel entity) {

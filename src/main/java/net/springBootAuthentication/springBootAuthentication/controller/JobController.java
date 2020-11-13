@@ -373,9 +373,6 @@ public class JobController {
             Long id = entity.getId();
 
             List<CustomJobs> myjobs = jobsRepository.getMyJobs(id);
-            for (CustomJobs customJobs : myjobs) {
-                System.out.println(customJobs.getToPrice());
-            }
 
             return ResponseEntity.ok(myjobs);
         } catch (Exception e) {

@@ -31,6 +31,9 @@ public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
     @Query(value = "{call getAllTranslators(:id)}", nativeQuery = true)
     List<CustomTranslators> getAllTranslators(@Param("id") Long id);
 
+    @Query(value = "{call getAgencyTranslators(:id)}", nativeQuery = true)
+    List<CustomTranslators> getAgencyTranslators(@Param("id") Long id);
+
     @Query(value = "{call getCurrentUser(:id)}", nativeQuery = true)
     CustomUser getCurrentUser(@Param("id") Long id);
 
