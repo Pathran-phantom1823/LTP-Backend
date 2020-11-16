@@ -8,6 +8,6 @@ public interface CustomTranslators {
     String getDateTo();
     String getTimeFrom();
     String getTimeTo();
-
+    String getRoleType();
     String geLastName();
 }
