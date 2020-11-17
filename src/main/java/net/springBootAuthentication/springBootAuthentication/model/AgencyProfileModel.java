@@ -25,9 +25,6 @@ public class AgencyProfileModel {
 
     @Column(name = "website")
     private String website;
-
-    @Column(name = "email")
-    private String email;
     
     @Column(name = "pricing")
     private double pricing;
@@ -96,14 +93,6 @@ public class AgencyProfileModel {
 
     public void setWebsite(String website) {
         this.website = website;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public double getPricing() {
