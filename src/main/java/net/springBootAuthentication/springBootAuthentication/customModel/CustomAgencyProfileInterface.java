@@ -27,5 +27,7 @@ public interface CustomAgencyProfileInterface {
     String getToDay();
     String getFromTime();
     String getToTime();
+    String getUsername();
+    String getPassword();
     
 }
