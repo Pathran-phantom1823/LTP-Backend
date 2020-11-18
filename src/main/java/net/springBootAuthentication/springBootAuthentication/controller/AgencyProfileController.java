@@ -95,6 +95,7 @@ public class AgencyProfileController {
         registerModel.setUsername(entity.getUsername());
         registerModel.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
         registerModel.setEmail(entity.getEmail());
+        registerRepository.save(registerModel);
 
         addressModel.setCity(entity.getCity());
         addressModel.setCountry(entity.getCountry());
@@ -215,6 +216,7 @@ public class AgencyProfileController {
         registerModel.setUsername(entity.getUsername());
         registerModel.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
         registerModel.setEmail(entity.getEmail());
+        registerRepository.save(registerModel);
 
         agencyProfileModel.setAbout(entity.getAbout());
         agencyProfileModel.setEffectDate(entity.getEffectDate());
@@ -265,6 +267,7 @@ public class AgencyProfileController {
         registerModel.setUsername(entity.getUsername());
         registerModel.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
         registerModel.setEmail(entity.getEmail());
+        registerRepository.save(registerModel);
 
         agencyProfileModel.setAbout(entity.getAbout());
         agencyProfileModel.setEffectDate(entity.getEffectDate());
