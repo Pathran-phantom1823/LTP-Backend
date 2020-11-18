@@ -35,6 +35,10 @@ public class CustomAdminProfile {
     
     private String img;
 
+    private String username;
+
+    private String password;
+
     public long getId() {
         return id;
     }
@@ -186,5 +190,21 @@ public class CustomAdminProfile {
         this.country = country;
         this.street = street;
         this.img = img;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
