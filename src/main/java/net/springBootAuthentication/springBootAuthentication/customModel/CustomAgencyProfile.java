@@ -26,7 +26,9 @@ public class CustomAgencyProfile {
     private String fromDay;
     private String toDay;
     private String fromTime;
-    private String toTime;
+	private String toTime;
+	private String username;
+	private String password;
 
     public CustomAgencyProfile() {
     }
@@ -221,5 +223,21 @@ public class CustomAgencyProfile {
 
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

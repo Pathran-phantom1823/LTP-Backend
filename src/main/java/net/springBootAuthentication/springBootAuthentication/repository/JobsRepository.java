@@ -42,9 +42,16 @@ public interface JobsRepository extends JpaRepository<Jobs, Long>{
     @Query(value = "{call getQuotations()}", nativeQuery = true)
     List<CustomJobs> getQuotation();
 
+    @Query(value = "{call searchJobs(:category, :languageFrom, :languageTo, :id)}", nativeQuery = true)
+    List<CustomJobs> searchJobs(@Param("category") String category, @Param("languageFrom") String languageFrom, @Param("languageTo") String languageTo, @Param("id") Long id);
+
+    @Query(value = "{call searchJobTitle(:title, :id)}", nativeQuery = true)
+    List<CustomJobs> searchJobTitle(@Param("title") String title, @Param("id") Long id);
     
     @Query(value = "{call getQuotationAdmin()}", nativeQuery = true)
     List<CustomQuotationAssigned> getQuotationAdmin();
+
+
 
     
 }

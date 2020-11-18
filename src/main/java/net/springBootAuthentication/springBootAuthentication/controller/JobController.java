@@ -726,4 +726,31 @@ public class JobController {
 
     }
 
+    @PostMapping(value="/searchJobs")
+    public ResponseEntity<?> postMethodName(@RequestBody Jobs entity) {
+        try {
+            Long id = entity.getPostById();
+            String category = entity.getSubject();
+            String languageFrom = entity.getLanguageFrom();
+            String languageTo = entity.getLanguageTo();
+            List<CustomJobs> list = jobsRepository.searchJobs(category, languageFrom, languageTo, id);
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            return ResponseEntity.ok(e);
+        }
+    }
+
+    @PostMapping(value="/searchJobTitle")
+    public ResponseEntity<?> search(@RequestBody Jobs entity) {
+        try {
+            Long id = entity.getPostById();
+            String title = entity.getTitle();
+            List<CustomJobs> list = jobsRepository.searchJobTitle(title, id);
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            return ResponseEntity.ok(e);
+        }
+    }
+    
+
 }
