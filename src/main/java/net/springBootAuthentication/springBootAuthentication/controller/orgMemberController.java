@@ -116,9 +116,7 @@ public class orgMemberController {
     public ResponseEntity<?> postMethodName(@RequestBody Register entity) throws ResourceNotFoundException {
         try {
             Long id = entity.getId();
-            System.out.println(id);
             List<RegisterModel> member = registerRepository.getMembers(id);
-            System.out.println(member);
             return ResponseEntity.ok(member);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
@@ -126,23 +124,25 @@ public class orgMemberController {
 
     }
 
-    @PutMapping(value = "/deleteMember")
+    @GetMapping(value="/getAgents")
+    public ResponseEntity<?> getMethodName() {
+        try {
+            List<RegisterModel> member = registerRepository.getAgents();
+            return ResponseEntity.ok(member);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
+        }
+    }
+    
+
+    @PostMapping(value = "/deleteMember")
     public ResponseEntity<?> deleteMember(@RequestBody Register data) throws ResourceNotFoundException {
         try {
             Long id = data.getId();
             RegisterModel member = registerRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("Member not Found"));
-            System.out.println(id);
-            member.setEmail(data.getEmail());
-            member.setUsername(data.getUsername());
-            member.setPassword(data.getPassword());
-            member.setRoleid(data.getRoleId());
-            member.setExpired(data.getExpired());
             member.setIsDisabled(data.getIsDisabled());
-            member.setIsMember(data.getIsMember());
-            member.setDateCreated(data.getDateCreated());
-
-            // registerRepository.save(member);
+            registerRepository.save(member);
 
             return ResponseEntity.ok(member);
         } catch (Exception e) {
