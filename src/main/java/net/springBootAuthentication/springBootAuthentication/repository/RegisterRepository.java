@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomTranslators;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomUser;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomUserInterface;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 
@@ -42,4 +43,10 @@ public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
 
     @Query(value = "{call checkEmailExist(:email)}", nativeQuery = true)
     String checkEmailExist(@Param("email") String email);
+
+    @Query(value = "{call getAgents()}", nativeQuery = true)
+    List<RegisterModel> getAgents();
+
+    @Query(value = "{call getAllUser()}", nativeQuery = true)
+    List<CustomUserInterface> getAllUser();
 }

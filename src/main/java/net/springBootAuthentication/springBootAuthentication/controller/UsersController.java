@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomTranslators;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomUserInterface;
 import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
@@ -67,5 +68,12 @@ public class UsersController {
             return "Email is available";
         }
     }
+
+    @GetMapping(value="/getAllUsers")
+    public List<CustomUserInterface> getAllUsers() {
+        List<CustomUserInterface> list = registerRepository.getAllUser();
+        return list;
+    }
+    
     
 }
