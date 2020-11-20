@@ -1,6 +1,7 @@
 package net.springBootAuthentication.springBootAuthentication.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,7 @@ import net.springBootAuthentication.springBootAuthentication.model.RegisterModel
 @Repository
 public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
     public RegisterModel findByUsername(String username);
+    public Optional<RegisterModel> findById(long id);
 
     @Query (value =  "{call spRetrieveRoleIdByRoleType(:roletype)}", nativeQuery = true)
     Integer getRoleIdByType(@Param("roletype") String roletype);
