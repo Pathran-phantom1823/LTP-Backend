@@ -13,7 +13,7 @@ public class CustomAdminProfile {
 
     private Integer age;
 
-    private Date birthdate;
+    private String birthdate;
 
     private String email;
 
@@ -79,11 +79,11 @@ public class CustomAdminProfile {
         this.age = age;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 
@@ -171,7 +171,7 @@ public class CustomAdminProfile {
     }
 
     public CustomAdminProfile(long id, long accountId, String firstname, String lastname,
-            Integer age, Date birthdate, String email, String gender, String phonenumber, Long address_id,
+            Integer age, String birthdate, String email, String gender, String phonenumber, Long address_id,
             Integer postalcode, Integer zipcode, String city, String country,  String street,
             String img) {
         this.id = id;

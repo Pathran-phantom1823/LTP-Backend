@@ -27,7 +27,7 @@ public class QuotationAssigmentModel {
     private String status;
 
     @Column(name = "dateAssigned")
-    private LocalDate dateAssigned;
+    private String dateAssigned;
 
     @Column(name = "assignedById")
     private Long assignedById;
@@ -36,7 +36,7 @@ public class QuotationAssigmentModel {
     private String finishedFile;
 
     @Column(name = "dateFinished")
-    private LocalDate dateFinished;
+    private String dateFinished;
 
     public QuotationAssigmentModel() {
     }
@@ -73,11 +73,11 @@ public class QuotationAssigmentModel {
         this.status = status;
     }
 
-    public LocalDate getDateAssigned() {
+    public String getDateAssigned() {
         return dateAssigned;
     }
 
-    public void setDateAssigned(LocalDate dateAssigned) {
+    public void setDateAssigned(String dateAssigned) {
         this.dateAssigned = dateAssigned;
     }
 
@@ -97,13 +97,12 @@ public class QuotationAssigmentModel {
         this.finishedFile = finshedFile;
     }
 
-    public LocalDate getDateFinished() {
+    public String getDateFinished() {
         return dateFinished;
     }
 
-    public void setDateFinished(LocalDate dateFinished) {
+    public void setDateFinished(String dateFinished) {
         this.dateFinished = dateFinished;
     }
 
-    
 }

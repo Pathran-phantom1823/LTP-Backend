@@ -27,12 +27,12 @@ public class SaveJob {
     private Long savedById;
 
     @Column(name = "dateSaved")
-    private LocalDate dateSaved;
+    private String dateSaved;
 
     public SaveJob() {
     }
 
-    public SaveJob(Long id, Long jobId, Long postedById, Long savedById, LocalDate dateSaved) {
+    public SaveJob(Long id, Long jobId, Long postedById, Long savedById, String dateSaved) {
         this.id = id;
         this.jobId = jobId;
         this.postedById = postedById;
@@ -72,11 +72,11 @@ public class SaveJob {
         this.savedById = savedById;
     }
 
-    public LocalDate getDateSaved() {
+    public String getDateSaved() {
         return dateSaved;
     }
 
-    public void setDateSaved(LocalDate dateSaved) {
+    public void setDateSaved(String dateSaved) {
         this.dateSaved = dateSaved;
     }
 }

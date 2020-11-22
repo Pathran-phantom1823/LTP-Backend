@@ -1,15 +1,14 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +25,6 @@ import net.springBootAuthentication.springBootAuthentication.model.ForumTransact
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.model.RoleModel;
 import net.springBootAuthentication.springBootAuthentication.repository.CommentLikesRepository;
-import net.springBootAuthentication.springBootAuthentication.repository.CommentsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.ForumTransactionsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
@@ -46,9 +44,6 @@ public class RegisterController {
     private ForumTransactionsRepository forumTransactionRepository;
 
     @Autowired
-    private CommentsRepository commentsRepository;
-
-    @Autowired
     private CommentLikesRepository commentsLikesRepository;
 
 
@@ -59,13 +54,14 @@ public class RegisterController {
             RegisterModel account = new RegisterModel();
             Integer roleId = registerRepository.getRoleIdByType(entity.getRoleType());
 
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
 
             account.setUsername(entity.getUsername());
             account.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
             account.setEmail(entity.getEmail());
             account.setIsDisabled("false");
-            account.setDateCreated(date);
+            account.setDateCreated(dateFormat.format(date));
             account.setExpired("false");
             account.setIsMember("false");
             account.setRoleid(roleId);

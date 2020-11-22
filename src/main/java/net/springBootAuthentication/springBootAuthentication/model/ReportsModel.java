@@ -21,7 +21,7 @@ public class ReportsModel {
     private Long accountId;
 
     @Column(name = "reportTimestamp")
-    private LocalDate reportTimestamp;
+    private String reportTimestamp;
 
     @Column( name = "topic")
     private String topic;
@@ -33,7 +33,7 @@ public class ReportsModel {
     private String resolve;
 
     @Column (name = "dateResolve")
-    private LocalDate dateResolve;
+    private String dateResolve;
 
     public long getId() {
         return id;
@@ -51,11 +51,11 @@ public class ReportsModel {
         this.accountId = accountId;
     }
 
-    public LocalDate getReportTimestamp() {
+    public String getReportTimestamp() {
         return reportTimestamp;
     }
 
-    public void setReportTimestamp(LocalDate reportTimestamp) {
+    public void setReportTimestamp(String reportTimestamp) {
         this.reportTimestamp = reportTimestamp;
     }
 
@@ -83,16 +83,16 @@ public class ReportsModel {
         this.resolve = resolve;
     }
 
-    public LocalDate getDateResolve() {
+    public String getDateResolve() {
         return dateResolve;
     }
 
-    public void setDateResolve(LocalDate dateResolve) {
+    public void setDateResolve(String dateResolve) {
         this.dateResolve = dateResolve;
     }
 
-    public ReportsModel(long id, Long accountId, LocalDate reportTimestamp, String topic, String description,
-            String resolve, LocalDate dateResolve) {
+    public ReportsModel(long id, Long accountId, String reportTimestamp, String topic, String description,
+            String resolve, String dateResolve) {
         this.id = id;
         this.accountId = accountId;
         this.reportTimestamp = reportTimestamp;

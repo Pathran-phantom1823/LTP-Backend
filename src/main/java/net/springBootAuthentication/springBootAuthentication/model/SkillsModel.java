@@ -20,12 +20,12 @@ public class SkillsModel {
     private String skillname;
 
     @Column(name = "timestamps")
-    private LocalDate timestamps;
+    private String timestamps;
 
     public SkillsModel() {
     }
 
-    public SkillsModel(long id, String skillname, LocalDate timestamps) {
+    public SkillsModel(long id, String skillname, String timestamps) {
         this.id = id;
         this.skillname = skillname;
         this.timestamps = timestamps;
@@ -47,11 +47,11 @@ public class SkillsModel {
         this.skillname = skillname;
     }
 
-    public LocalDate getTimestamps() {
+    public String getTimestamps() {
         return timestamps;
     }
 
-    public void setTimestamps(LocalDate timestamps) {
+    public void setTimestamps(String timestamps) {
         this.timestamps = timestamps;
     }
 

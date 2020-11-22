@@ -29,13 +29,13 @@ public class EducationModel {
     private long addressId;
 
     @Column(name = "timestamps")
-    private LocalDate timestamps;
+    private String timestamps;
 
     public EducationModel() {
     }
 
     public EducationModel(long id, long profileId, String schoolname, int schoolyear, long addressId,
-    LocalDate timestamps) {
+    String timestamps) {
         this.id = id;
         this.profileId = profileId;
         this.schoolname = schoolname;
@@ -84,11 +84,11 @@ public class EducationModel {
         this.addressId = addressId;
     }
 
-    public LocalDate getTimestamps() {
+    public String getTimestamps() {
         return timestamps;
     }
 
-    public void setTimestamps(LocalDate timestamps) {
+    public void setTimestamps(String timestamps) {
         this.timestamps = timestamps;
     }
 

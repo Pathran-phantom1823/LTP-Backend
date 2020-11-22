@@ -6,22 +6,22 @@ public class CustomComment {
     private String description;
     private String topic;
     private String username;
-    private LocalDate datePosted;
+    private String datePosted;
     private Long accountId ;
     private Long transactionId;
     private Long postId;
     private Long commentId;
     private Long Id;
-    private LocalDate date;
+    private String date;
     private String comment;
     private Long commentedById;
-    private LocalDate dateCommented;
+    private String dateCommented;
 
     public CustomComment() {
     }
 
-    public CustomComment(String description, String topic, String username, LocalDate datePosted, Long accountId,
-            Long transactionId, Long postId, Long commentId, Long id, LocalDate date) {
+    public CustomComment(String description, String topic, String username, String datePosted, Long accountId,
+            Long transactionId, Long postId, Long commentId, Long id, String date) {
         this.description = description;
         this.topic = topic;
         this.username = username;
@@ -58,11 +58,11 @@ public class CustomComment {
         this.username = username;
     }
 
-    public LocalDate getDatePosted() {
+    public String getDatePosted() {
         return datePosted;
     }
 
-    public void setDatePosted(LocalDate datePosted) {
+    public void setDatePosted(String datePosted) {
         this.datePosted = datePosted;
     }
 
@@ -106,11 +106,11 @@ public class CustomComment {
         Id = id;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -130,11 +130,11 @@ public class CustomComment {
         this.commentedById = commentedById;
     }
 
-    public LocalDate getDateCommented() {
+    public String getDateCommented() {
         return dateCommented;
     }
 
-    public void setDateCommented(LocalDate dateCommented) {
+    public void setDateCommented(String dateCommented) {
         this.dateCommented = dateCommented;
     }
 
