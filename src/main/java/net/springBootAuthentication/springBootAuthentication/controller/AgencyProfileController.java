@@ -69,7 +69,6 @@ public class AgencyProfileController {
     public ResponseEntity<Object> createAgencyProfile(@RequestPart(value = "data") String data,
             @RequestPart(value = "img") final MultipartFile img) throws IOException, ResourceNotFoundException {
 
-        System.out.println(img);
         HashMap<String, Object> map = new HashMap<>();
         AgencyProfileModel agencyProfileModel = new AgencyProfileModel();
         AddressModel addressModel = new AddressModel();

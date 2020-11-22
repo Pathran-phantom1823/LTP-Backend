@@ -62,8 +62,6 @@ public class ProfileController {
     public ResponseEntity<Object> postJob(@RequestPart(value = "data") String data,
             @RequestPart(value = "img") final MultipartFile img) throws IOException {
 
-        // System.out.println(postDetails);
-        // System.out.println(file);
         try {
             ProfileModel profileModel = new ProfileModel();
             AddressModel addressModel = new AddressModel();
@@ -96,9 +94,7 @@ public class ProfileController {
             skillModel.setTimestamps(date);
             skillsRepository.saveAndFlush(skillModel);
 
-            System.out.println(customProfile.getAccountId());
             profileModel.setAccountId(customProfile.getAccountId());
-            System.out.println(profileModel.getAccountId());
             profileModel.setImage(String.format("%d%s%s", customProfile.getAccountId(), date, imageName));
             profileModel.setAddressId(addressModel.getId());
             profileModel.setAge(customProfile.getAge());

@@ -55,7 +55,6 @@ public class ForumController {
         forumPostRepository.save(forumPostModel);
         forumPostRepository.flush();
 
-        // System.out.println(entity.getAccountId());
         fModel.setAccountId(entity.getAccountId());
         fModel.setPostId(forumPostModel.getId());
         fModel.setDate(date);
@@ -87,19 +86,12 @@ public class ForumController {
         tModel.getCommentId();
         if (tModel.getCommentId() == null) {
             tModel.setCommentId(comments.getId());
-            // tModel.setAccountId(tModel.getAccountId());
-            // tModel.setDate(tModel.getDate());
-            // tModel.setPostId(tModel.getPostId());
-            // System.out.println(String.format("%d,%d,%d", comments.getId(),
-            // tModel.getAccountId(), tModel.getPostId()));
-            System.out.println("null");
             forumTransactionRepository.save(tModel);
         } else {
             forum.setCommentId(comments.getId());
             forum.setPostId(tModel.getPostId());
             forum.setDate(date);
             forum.setAccountId(entity.getCommentedById());
-            System.out.println("naa");
             forumTransactionRepository.save(forum);
         }
         // forumTransactionRepository.save(forum);
@@ -128,7 +120,6 @@ public class ForumController {
             comments.setStatus("Null");
             commentsRepository.save(comments);
         } else {
-            System.out.println("null");
             LocalDate date = LocalDate.now();
             likes.setCommentId(entity.getCommentId());
             likes.setLikeById(entity.getLikeById());
@@ -163,9 +154,7 @@ public class ForumController {
             throws ResourceNotFoundException {
         try {
             Long id = entity.getPostId();
-            // System.out.println(id);
             List<CustomForum> details = forumTransactionRepository.getForumDetails(id);
-            // System.out.println(details);
             return ResponseEntity.ok(details);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);

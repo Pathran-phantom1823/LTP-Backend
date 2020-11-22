@@ -83,7 +83,6 @@ public class AdminProfileController {
             registerRepository.save(registerModel);
 
             addressRepository.saveAndFlush(addressModel);
-            // System.out.println(customAdminProfile.getBirthdate());
             adminModel.setAddressId(addressModel.getId());
             adminModel.setAccountId(customAdminProfile.getAccountId());
             adminModel.setAge(customAdminProfile.getAge());
@@ -146,7 +145,6 @@ public class AdminProfileController {
 
         String tempImageName = img.getOriginalFilename();
         String imageName = tempImageName.replaceAll("\\s+", "_");
-        System.out.println(String.format("%d%s%s", address.getAccountId(), date, imageName));
         File convertfile = new File(
                 "src/main/resources/img/" + String.format("%d%s%s", address.getAccountId(), date, imageName));
         convertfile.createNewFile();
@@ -190,7 +188,6 @@ public class AdminProfileController {
             AdminProfileModel apModel = adminProfileRepository.findById(adminId)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
 
-            System.out.println(entity.getImg());
 
             adModel.setCity(entity.getCity());
             adModel.setCountry(entity.getCountry());

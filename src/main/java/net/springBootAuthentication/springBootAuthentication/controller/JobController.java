@@ -97,9 +97,6 @@ public class JobController {
     @RequestMapping(value = "/create", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> postJob(@RequestPart(value = "postDetails") String postDetails,
             @RequestPart(value = "file") final MultipartFile file) throws IOException {
-
-        // System.out.println(postDetails);
-        // System.out.println(file);
         try {
             Jobs jobs2 = new Jobs();
 
@@ -158,7 +155,6 @@ public class JobController {
             Long id = data.getId();
             List<String> res = new ArrayList<>();
             List<File> finaResults = new ArrayList<>();
-            // System.out.println(jobsRepository.getFile(id));
             List<Jobs> jobs = jobsRepository.getFile(id);
             jobs.forEach(el -> {
                 tempFile = el.getFile();
@@ -168,8 +164,6 @@ public class JobController {
                 File file = ResourceUtils.getFile("classpath:" + res.get(i));
                 finaResults.add(file);
             }
-            // res.add(file);
-            // System.out.println(jobs);
             return ResponseEntity.ok(finaResults);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
@@ -181,10 +175,6 @@ public class JobController {
     public void getMethodName(@PathVariable(value = "file") String file, HttpServletResponse servletResponse)
             throws FileNotFoundException {
         try {
-            // String temp = file.getFile();
-
-            // List<String> res = jobsRepository.getFileThroughParameter(temp);
-            // System.out.println(res.get(0));
             File files = ResourceUtils.getFile("classpath:" + "files/" + file);
             FileInputStream stream = new FileInputStream(files);
             servletResponse.setContentType("application/pdf;charset=UTF-8");
@@ -199,8 +189,6 @@ public class JobController {
             servletResponse.getOutputStream().flush();
             servletResponse.getOutputStream().close();
             stream.close();
-            // InputStreamResource resource = new InputStreamResource( new
-            // FileInputStream(files));
             System.out.println(files);
         } catch (Exception e) {
             System.out.println(e);
@@ -233,17 +221,9 @@ public class JobController {
 
     @PostMapping(value = "/getJob")
     public ResponseEntity<?> getJobById(@RequestBody Jobs data) throws NumberFormatException {
-        // System.out.println("id" + param);
         try {
             Long resId = data.getId();
-            // CustomJobs custom;
-            // Jobs jobs = jobsRepository.findById(resId).orElseThrow(() -> new
-            // ResourceNotFoundException("not Found"));
             List<CustomJobs> job = jobsRepository.getJobById(resId);
-            // List<String> res = jobsRepository.getFileThroughParameter(jobs.getFile());
-            // // System.out.println(res.get(0));
-            // File files = ResourceUtils.getFile("classpath:" + res.get(0));
-            // System.out.println(files);
             return ResponseEntity.ok(job);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -252,17 +232,9 @@ public class JobController {
 
     @PostMapping(value = "/editJob")
     public ResponseEntity<?> getJobByDetails(@RequestBody Jobs data) throws NumberFormatException {
-        // System.out.println("id" + param);
         try {
             Long resId = data.getId();
-            // CustomJobs custom;
-            // Jobs jobs = jobsRepository.findById(resId).orElseThrow(() -> new
-            // ResourceNotFoundException("not Found"));
             List<CustomJobs> job = jobsRepository.getJobById(resId);
-            // List<String> res = jobsRepository.getFileThroughParameter(jobs.getFile());
-            // // System.out.println(res.get(0));
-            // File files = ResourceUtils.getFile("classpath:" + res.get(0));
-            // System.out.println(files);
             return ResponseEntity.ok(job);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -347,7 +319,6 @@ public class JobController {
             Long id = data.getSavedById();
 
             List<CustomJobs> acceptedJobs = jobApplicantRepository.getAcceptedJobs(id);
-            // System.out.println(acceptedJobs.toString());
             if (acceptedJobs == null) {
                 return ResponseEntity.ok(null);
             } else {
@@ -383,12 +354,9 @@ public class JobController {
 
     @PostMapping(value = "/getBids")
     public ResponseEntity<?> getBids(@RequestBody Jobs data) throws NumberFormatException {
-        // System.out.println("id" + param);
         try {
             Long id = data.getId();
-            // CustomJobs custom;
             List<CustomUser> bids = jobsRepository.getBids(id);
-            // System.out.println(jobsRepository.getBids(id));
             return ResponseEntity.ok(bids);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -536,9 +504,6 @@ public class JobController {
     @RequestMapping(value = "/update", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> UpdateJob(@RequestPart(value = "job") String job,
             @RequestPart(value = "file") MultipartFile file) throws IOException {
-
-        // System.out.println(postDetails);
-        // System.out.println(file);
         try {
             Jobs jobs = objectMapper.readValue(job, Jobs.class);
             LocalDate date = LocalDate.now();
@@ -604,7 +569,6 @@ public class JobController {
             fout.close();
 
             Long id = jobs.getId();
-            System.out.println(id);
             JobApplicants jobApplicants = jobApplicantRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishedFile(filename);
@@ -635,7 +599,6 @@ public class JobController {
             fout.close();
 
             Long id = jobs.getId();
-            System.out.println(id);
             JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishFile(filename);
@@ -667,7 +630,6 @@ public class JobController {
 
             Long id = jobs.getJobId();
             Long pid = quotationAssigmentRepository.getQuotationPrimaryId(id);
-            System.out.println(id);
             QuotationAssigmentModel jobApplicants = quotationAssigmentRepository.findById(pid)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishedFile(filename);
@@ -698,7 +660,6 @@ public class JobController {
             fout.close();
 
             Long id = jobs.getId();
-            System.out.println(id);
             JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishFile(filename);

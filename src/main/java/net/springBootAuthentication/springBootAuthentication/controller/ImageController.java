@@ -33,7 +33,6 @@ public class ImageController {
     public ResponseEntity<?> getAdminProfiles(@RequestBody AgencyProfileModel entity) throws IOException {
         try {
             Long id = entity.getAccountId();
-            // System.out.println(id);
             String file = agencyProfileRepository.getAgencyImage(id);
             if (file == null) {
                 return ResponseEntity.ok(null);
@@ -52,7 +51,6 @@ public class ImageController {
     public ResponseEntity<?> getProfiles(@RequestBody ProfileModel entity) throws IOException {
         try {
             Long id = entity.getAccountId();
-            // System.out.println(id);
             String file = profileRepository.getImage(id);
             if (file == null) {
                 return ResponseEntity.ok(null);
@@ -71,7 +69,6 @@ public class ImageController {
     public ResponseEntity<?> getAdminProfiles(@RequestBody AdminProfileModel entity) throws IOException {
         try {
             Long id = entity.getAccountId();
-            // System.out.println(id);
             String file = profileRepository.getAdminImage(id);
             if (file == null) {
                 return ResponseEntity.ok(null);
