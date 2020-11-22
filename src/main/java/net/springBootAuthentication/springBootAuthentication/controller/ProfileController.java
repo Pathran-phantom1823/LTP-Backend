@@ -7,7 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +72,8 @@ public class ProfileController {
 
             CustomProfiles customProfile = objectMapper.readValue(data, CustomProfiles.class);
             // LocalDate date = LocalDate.now();
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             String tempImageName = img.getOriginalFilename();
             String imageName = tempImageName.replaceAll("\\s+", "_");
 
@@ -91,14 +93,14 @@ public class ProfileController {
             addressRepository.saveAndFlush(addressModel);
 
             skillModel.setSkillname(customProfile.getSkillname());
-            skillModel.setTimestamps(date);
+            skillModel.setTimestamps(dateFormat.format(date));
             skillsRepository.saveAndFlush(skillModel);
 
             profileModel.setAccountId(customProfile.getAccountId());
             profileModel.setImage(String.format("%d%s%s", customProfile.getAccountId(), date, imageName));
             profileModel.setAddressId(addressModel.getId());
             profileModel.setAge(customProfile.getAge());
-            profileModel.setBirthdate(customProfile.getBirthdate());
+            profileModel.setBirthdate(dateFormat.format(customProfile.getBirthdate()));
             profileModel.setFirstname(customProfile.getFirstname());
             profileModel.setLastname(customProfile.getLastname());
             profileModel.setPhonenumber(customProfile.getPhonenumber());
@@ -111,13 +113,13 @@ public class ProfileController {
             profileModel.setTimeTo(customProfile.getTimeTo());
             profileRepository.saveAndFlush(profileModel);
 
-            profileSkillsModel.setTimestamps(date);
+            profileSkillsModel.setTimestamps(dateFormat.format(date));
             profileSkillsModel.setProfileid(profileModel.getId());
             profileSkillsModel.setSkillid(skillModel.getId());
             profileSkillsRepository.saveAndFlush(profileSkillsModel);
 
             categoryModel.setName(customProfile.getCategory());
-            categoryModel.setTimestamps(date);
+            categoryModel.setTimestamps(dateFormat.format(date));
 
             List<Object> list = new ArrayList<>();
 
@@ -140,7 +142,8 @@ public class ProfileController {
 
         AddressModel addressModel = new AddressModel();
         EducationModel educationModel = new EducationModel();
-        LocalDate date = LocalDate.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = new Date();
         List<Object> list = new ArrayList<>();
 
         try {
@@ -155,7 +158,7 @@ public class ProfileController {
             educationModel.setProfileId(customProfile.getId());
             educationModel.setSchoolname(customProfile.getSchoolname());
             educationModel.setSchoolyear(customProfile.getSchoolyear());
-            educationModel.setTimestamps(date);
+            educationModel.setTimestamps(dateFormat.format(date));
             educationRepository.saveAndFlush(educationModel);
 
             list.add(addressModel);

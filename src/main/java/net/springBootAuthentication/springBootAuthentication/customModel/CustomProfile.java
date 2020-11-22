@@ -1,6 +1,4 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
-
-import java.time.LocalDate;
 import java.util.Date;
 
 public class CustomProfile {
@@ -20,7 +18,7 @@ public class CustomProfile {
 
     private Long schoolYear;
 
-    private LocalDate timeStamp;
+    private String timeStamp;
 
     private Long profileId;
 
@@ -44,7 +42,7 @@ public class CustomProfile {
 
     private Long addressId;
 
-    private LocalDate timseStamp;
+    private String timseStamp;
 
     private Long skillId;
 
@@ -109,11 +107,11 @@ public class CustomProfile {
         this.schoolYear = schoolYear;
     }
 
-    public LocalDate getTimeStamp() {
+    public String getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(LocalDate timeStamp) {
+    public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
     }
 
@@ -197,11 +195,11 @@ public class CustomProfile {
         this.addressId = addressId;
     }
 
-    public LocalDate getTimseStamp() {
+    public String getTimseStamp() {
         return timseStamp;
     }
 
-    public void setTimseStamp(LocalDate timseStamp) {
+    public void setTimseStamp(String timseStamp) {
         this.timseStamp = timseStamp;
     }
 

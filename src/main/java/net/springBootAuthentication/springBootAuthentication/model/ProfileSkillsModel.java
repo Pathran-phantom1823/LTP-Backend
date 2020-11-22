@@ -23,12 +23,12 @@ public class ProfileSkillsModel {
     private long profileid;
 
     @Column(name = "timestamps")
-    private LocalDate timestamps;
+    private String timestamps;
 
     public ProfileSkillsModel() {
     }
 
-    public ProfileSkillsModel(long id, long skillid, long profileid, LocalDate timestamps) {
+    public ProfileSkillsModel(long id, long skillid, long profileid, String timestamps) {
         this.id = id;
         this.skillid = skillid;
         this.profileid = profileid;
@@ -59,11 +59,11 @@ public class ProfileSkillsModel {
         this.profileid = profileid;
     }
 
-    public LocalDate getTimestamps() {
+    public String getTimestamps() {
         return timestamps;
     }
 
-    public void setTimestamps(LocalDate timestamps) {
+    public void setTimestamps(String timestamps) {
         this.timestamps = timestamps;
     }
 

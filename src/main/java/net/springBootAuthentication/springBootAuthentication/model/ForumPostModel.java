@@ -28,13 +28,13 @@ public class ForumPostModel {
 
 
     @Column(name = "datePosted")
-    private LocalDate datePosted;
+    private String datePosted;
 
 
     public ForumPostModel() {
     }
 
-    public ForumPostModel(Long id, String Description, String Topic, LocalDate datePosted) {
+    public ForumPostModel(Long id, String Description, String Topic, String datePosted) {
         this.id = id;
         this.Description = Description;
         this.Topic = Topic;
@@ -57,11 +57,11 @@ public class ForumPostModel {
         this.Description = Description;
     }
 
-    public LocalDate getDatePosted() {
+    public String getDatePosted() {
         return datePosted;
     }
 
-    public void setDatePosted(LocalDate datePosted) {
+    public void setDatePosted(String datePosted) {
         this.datePosted = datePosted;
     }
 

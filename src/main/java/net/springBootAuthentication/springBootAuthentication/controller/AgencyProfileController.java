@@ -3,8 +3,10 @@ package net.springBootAuthentication.springBootAuthentication.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -76,7 +78,8 @@ public class AgencyProfileController {
         CategoryModel categoryModel = new CategoryModel();
         ProfileSkillsModel profileSkillsModel = new ProfileSkillsModel();
 
-        LocalDate date = LocalDate.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = new Date();
 
         CustomAgencyProfile entity = objectMapper.readValue(data, CustomAgencyProfile.class);
 
@@ -104,11 +107,11 @@ public class AgencyProfileController {
         addressRepository.saveAndFlush(addressModel);
 
         skillsModel.setSkillname(entity.getSkillName().toString());
-        skillsModel.setTimestamps(date);
+        skillsModel.setTimestamps(dateFormat.format(date));
         skillsRepository.saveAndFlush(skillsModel);
 
         categoryModel.setName(entity.getCategory().toString());
-        categoryModel.setTimestamps(date);
+        categoryModel.setTimestamps(dateFormat.format(date));
         categoryRepository.saveAndFlush(categoryModel);
 
         agencyProfileModel.setAbout(entity.getAbout());
@@ -129,7 +132,7 @@ public class AgencyProfileController {
 
         profileSkillsModel.setProfileid(agencyProfileModel.getId());
         profileSkillsModel.setSkillid(skillsModel.getId());
-        profileSkillsModel.setTimestamps(date);
+        profileSkillsModel.setTimestamps(dateFormat.format(date));
         profileSkillsRepository.save(profileSkillsModel);
 
         map.put("address", addressModel);
@@ -174,8 +177,8 @@ public class AgencyProfileController {
     @RequestMapping(value = "/updateAgencyProfilewithImage", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> updateAgencyProfilewithImage(@RequestPart(value = "data") String data,
             @RequestPart(value = "img") final MultipartFile img) throws IOException, ResourceNotFoundException {
-
-        LocalDate date = LocalDate.now();
+                    
+        Date date = new Date();
 
         CustomAgencyProfile entity = objectMapper.readValue(data, CustomAgencyProfile.class);
 

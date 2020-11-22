@@ -27,12 +27,12 @@ public class CommentLikesModel {
     private Long likeById;
 
     @Column(name = "date")
-    private LocalDate date;
+    private String date;
 
     public CommentLikesModel() {
     }
 
-    public CommentLikesModel(Long id, Long commentId, Long likeById, LocalDate date) {
+    public CommentLikesModel(Long id, Long commentId, Long likeById, String date) {
         this.id = id;
         this.commentId = commentId;
         this.likeById = likeById;
@@ -63,11 +63,11 @@ public class CommentLikesModel {
         this.likeById = likeById;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDateCommented(LocalDate date) {
+    public void setDateCommented(String date) {
         this.date = date;
     }
     

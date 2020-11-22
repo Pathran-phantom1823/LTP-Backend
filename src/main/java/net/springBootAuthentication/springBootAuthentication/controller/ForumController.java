@@ -1,7 +1,9 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,17 +49,18 @@ public class ForumController {
     public ResponseEntity<?> post(@RequestBody Forum entity) {
         ForumTransactionsModel fModel = new ForumTransactionsModel();
         ForumPostModel forumPostModel = new ForumPostModel();
-        LocalDate date = LocalDate.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = new Date();
 
         forumPostModel.setDescription(entity.getDescription());
         forumPostModel.setTopic(entity.getTopic());
-        forumPostModel.setDatePosted(date);
+        forumPostModel.setDatePosted(dateFormat.format(date));
         forumPostRepository.save(forumPostModel);
         forumPostRepository.flush();
 
         fModel.setAccountId(entity.getAccountId());
         fModel.setPostId(forumPostModel.getId());
-        fModel.setDate(date);
+        fModel.setDate(dateFormat.format(date));
         forumTransactionRepository.save(fModel);
 
         List<Object> list = new ArrayList<>();
@@ -73,11 +76,12 @@ public class ForumController {
         Long id = entity.getPostId();
         CommentsModel comments = new CommentsModel();
         ForumTransactionsModel forum = new ForumTransactionsModel();
-        LocalDate date = LocalDate.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = new Date();
 
         comments.setComment(entity.getComment());
         comments.setCommentById(entity.getCommentedById());
-        comments.setDateCommented(date);
+        comments.setDateCommented(dateFormat.format(date));
         commentsRepository.save(comments);
         commentsRepository.flush();
 
@@ -90,7 +94,7 @@ public class ForumController {
         } else {
             forum.setCommentId(comments.getId());
             forum.setPostId(tModel.getPostId());
-            forum.setDate(date);
+            forum.setDate(dateFormat.format(date));
             forum.setAccountId(entity.getCommentedById());
             forumTransactionRepository.save(forum);
         }
@@ -120,10 +124,11 @@ public class ForumController {
             comments.setStatus("Null");
             commentsRepository.save(comments);
         } else {
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             likes.setCommentId(entity.getCommentId());
             likes.setLikeById(entity.getLikeById());
-            likes.setDateCommented(date);
+            likes.setDateCommented(dateFormat.format(date));
             comments.setStatus("like");
             commentsRepository.save(comments);
         }

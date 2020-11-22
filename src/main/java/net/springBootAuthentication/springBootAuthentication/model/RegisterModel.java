@@ -1,8 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.model;
 
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,7 +35,7 @@ public class RegisterModel {
     private String expired;
 
     @Column(name = "dateCreated")
-    private LocalDate dateCreated;
+    private String dateCreated;
 
     @Column(name = "isMember")
     private String isMember;
@@ -84,11 +82,11 @@ public class RegisterModel {
 
    
 
-    public LocalDate getDateCreated() {
+    public String getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDate dateCreated) {
+    public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -121,7 +119,7 @@ public class RegisterModel {
     }
 
     public RegisterModel(long id, String username, String email, String password, long roleid, String isDisabled,
-            String expired, LocalDate dateCreated, String isMember) {
+            String expired, String dateCreated, String isMember) {
         this.id = id;
         this.username = username;
         this.email = email;

@@ -4,10 +4,12 @@ import org.springframework.http.MediaType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -188,6 +190,8 @@ public class AdminProfileController {
             AdminProfileModel apModel = adminProfileRepository.findById(adminId)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
 
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+
 
             adModel.setCity(entity.getCity());
             adModel.setCountry(entity.getCountry());
@@ -197,7 +201,7 @@ public class AdminProfileController {
             addressRepository.save(adModel);
 
             apModel.setAge(entity.getAge());
-            apModel.setBirthdate(entity.getBirthdate());
+            apModel.setBirthdate(dateFormat.format(entity.getBirthdate()));
             apModel.setEmail(entity.getEmail());
             apModel.setFirstname(entity.getFirstname());
             apModel.setGender(entity.getGender());

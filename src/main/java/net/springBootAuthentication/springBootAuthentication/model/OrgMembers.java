@@ -36,7 +36,7 @@ public class OrgMembers {
 
     private Long accountId;
 
-    private LocalDate createAt;
+    private String createAt;
 
     public OrgMembers() {
     }
@@ -65,15 +65,15 @@ public class OrgMembers {
         this.accountId = accountId;
     }
 
-    public LocalDate getCreateAt() {
+    public String getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(LocalDate createAt) {
+    public void setCreateAt(String createAt) {
         this.createAt = createAt;
     }
 
-	public OrgMembers(Long id, Long orgId, Long accountId, LocalDate createAt) {
+	public OrgMembers(Long id, Long orgId, Long accountId, String createAt) {
 		this.id = id;
 		this.orgId = orgId;
 		this.accountId = accountId;

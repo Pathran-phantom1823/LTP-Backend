@@ -9,7 +9,7 @@ public interface CustomAdminInterface {
     String getFirstname();
     String getLastname();
     Integer getAge();
-    Date getBirthdate();
+    String getBirthdate();
     String getEmail();
     String getGender();
     String getPhonenumber();

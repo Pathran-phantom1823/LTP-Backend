@@ -30,13 +30,13 @@ public class ForumTransactionsModel {
     private Long commentId;
 
     @Column(name = "Date")
-    private LocalDate Date;
+    private String Date;
 
 
     public ForumTransactionsModel() {
     }
 
-    public ForumTransactionsModel(Long id, Long accountId, Long postId, Long commentId, LocalDate Date) {
+    public ForumTransactionsModel(Long id, Long accountId, Long postId, Long commentId, String Date) {
         this.id = id;
         this.accountId = accountId;
         this.postId = postId;
@@ -68,11 +68,11 @@ public class ForumTransactionsModel {
         this.postId = postId;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return Date;
     }
 
-    public void setDate(LocalDate Date) {
+    public void setDate(String Date) {
         this.Date = Date;
     }
 

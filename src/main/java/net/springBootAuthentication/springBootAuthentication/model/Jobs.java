@@ -1,6 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.model;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.ArrayList;
 
 import javax.persistence.Column;
@@ -90,10 +90,10 @@ public class Jobs {
         private String subject;
 
         @Column(name = "datePosted")
-        private LocalDate datePosted;
+        private String datePosted;
 
         @Column(name = "deleted")
-        private LocalDate deleted;
+        private String deleted;
 
         
         private String isAvailable;
@@ -264,11 +264,11 @@ public class Jobs {
         this.category = category;
     }
 
-    public LocalDate getDatePosted() {
+    public String getDatePosted() {
         return datePosted;
     }
 
-    public void setDatePosted(LocalDate datePosted) {
+    public void setDatePosted(String datePosted) {
         this.datePosted = datePosted;
     }
 
@@ -280,11 +280,11 @@ public class Jobs {
         this.isAvailable = isAvailable;
     }
 
-    public LocalDate getDeleted() {
+    public String getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(LocalDate deleted) {
+    public void setDeleted(String deleted) {
         this.deleted = deleted;
     }
 

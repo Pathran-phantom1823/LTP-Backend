@@ -1,6 +1,5 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
-import java.time.LocalDate;
 
 public interface CustomTransactionJobs {
     Long getId();
@@ -35,7 +34,7 @@ public interface CustomTransactionJobs {
 
      String getEmail();
 
-     LocalDate getdatePosted();
+     String getdatePosted();
 
      Integer getBids();
 
@@ -47,7 +46,7 @@ public interface CustomTransactionJobs {
 
      String getFinishFiles();
 
-     LocalDate getDateFinishDate();
+     String getDateFinishDate();
 
      String getPostedByFirstName();
 

@@ -8,7 +8,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -101,7 +102,8 @@ public class JobController {
             Jobs jobs2 = new Jobs();
 
             Jobs jobs = objectMapper.readValue(postDetails, Jobs.class);
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             String tempFileName = file.getOriginalFilename();
             String filename = tempFileName.replaceAll("\\s+", "_");
 
@@ -128,7 +130,7 @@ public class JobController {
             jobs2.setPriceType(jobs.getPriceType());
             jobs2.setPostById(jobs.getPostById());
             jobs2.setFile(String.format("%d%s%s", jobs.getPostById(), date, filename));
-            jobs2.setDatePosted(date);
+            jobs2.setDatePosted(dateFormat.format(date));
             jobs2.setVisibility(jobs.getVisibility());
             jobs2.setlevelOfConfidentiality(jobs.getlevelOfConfidentiality());
             jobs2.setFixedPrice(jobs.getFixedPrice());
@@ -257,10 +259,11 @@ public class JobController {
 
         try {
             JobApplicants applicants = new JobApplicants();
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
 
             applicants.setApplicantId(data.getApplicantId());
-            applicants.setDateApplied(date);
+            applicants.setDateApplied(dateFormat.format(date));
             applicants.setJobId(data.getJobId());
             applicants.setStatus("pending");
 
@@ -277,14 +280,15 @@ public class JobController {
     @PostMapping(value = "/save-job")
     public ResponseEntity<?> saveJob(@RequestBody SaveJob data) throws ResourceNotFoundException {
         try {
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             Jobs job = jobsRepository.findById(data.getJobId())
                     .orElseThrow(() -> new ResourceNotFoundException("job not found"));
             SaveJob saveJob = new SaveJob();
 
             job.setIsAvailable("false");
             jobsRepository.save(job);
-            saveJob.setDateSaved(date);
+            saveJob.setDateSaved(dateFormat.format(date));
             saveJob.setJobId(data.getJobId());
             saveJob.setPostedById(data.getPostedById());
             saveJob.setSavedById(data.getSavedById());
@@ -366,7 +370,8 @@ public class JobController {
     @PostMapping(value = "/accept-bidder")
     public ResponseEntity<?> acceptBidder(@RequestBody JobApplicants entity) throws Forbidden {
         try {
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
 
             Jobs job = jobsRepository.findById(entity.getJobId())
                     .orElseThrow(() -> new ResourceNotFoundException("job not found"));
@@ -378,7 +383,7 @@ public class JobController {
                     .orElseThrow(() -> new ResourceNotFoundException("applicant not found"));
 
             applicants.setStatus(entity.getStatus());
-            applicants.setDateAccepted(date);
+            applicants.setDateAccepted(dateFormat.format(date));
             jobApplicantRepository.save(applicants);
 
             // List<JobApplicants> accept = jobApplicantRepository.acceptBidder(jobId,
@@ -421,13 +426,14 @@ public class JobController {
     public ResponseEntity<?> assignJob(@RequestBody JobTransactionModel entity) throws ResourceNotFoundException {
         try {
             JobTransactionModel hJobsTransaction = new JobTransactionModel();
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
 
             hJobsTransaction.setJobId(entity.getJobId());
             hJobsTransaction.setOrgId(entity.getOrgId());
             hJobsTransaction.setWorkedBy(entity.getWorkedBy());
             hJobsTransaction.setPostedBy(entity.getPostedBy());
-            hJobsTransaction.setDatePosted(date);
+            hJobsTransaction.setDatePosted(dateFormat.format(date));
 
             jobsTransactionRepository.save(hJobsTransaction);
 
@@ -490,11 +496,12 @@ public class JobController {
 
     @PostMapping(value = "/deleteJob")
     public ResponseEntity<?> deleteJob(@RequestBody Jobs entity) throws ResourceNotFoundException {
-        LocalDate date = LocalDate.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
         try {
             Long id = entity.getId();
             Jobs job = jobsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
-            job.setDeleted(date);
+            job.setDeleted(dateFormat.format(date));
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
@@ -506,7 +513,8 @@ public class JobController {
             @RequestPart(value = "file") MultipartFile file) throws IOException {
         try {
             Jobs jobs = objectMapper.readValue(job, Jobs.class);
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             String tempFileName = file.getOriginalFilename();
             String filename = tempFileName.replaceAll("\\s+", "_");
 
@@ -535,7 +543,7 @@ public class JobController {
             jobs2.setPriceType(jobs.getPriceType());
             jobs2.setPostById(jobs.getPostById());
             jobs2.setFile(String.format("%d%s%s", jobs.getPostById(), date, filename));
-            jobs2.setDatePosted(date);
+            jobs2.setDatePosted(dateFormat.format(date));
             jobs2.setVisibility(jobs.getVisibility());
             jobs2.setlevelOfConfidentiality(jobs.getlevelOfConfidentiality());
             jobs2.setFixedPrice(jobs.getFixedPrice());
@@ -556,7 +564,8 @@ public class JobController {
             @RequestPart(value = "file") MultipartFile file) throws ResourceNotFoundException, IOException {
         try {
             JobApplicants jobs = objectMapper.readValue(job, JobApplicants.class);
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             String tempFileName = file.getOriginalFilename();
             String filename = tempFileName.replaceAll("\\s+", "_");
 
@@ -572,7 +581,7 @@ public class JobController {
             JobApplicants jobApplicants = jobApplicantRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishedFile(filename);
-            jobApplicants.setDateFinished(date);
+            jobApplicants.setDateFinished(dateFormat.format(date));
             jobApplicantRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
@@ -586,7 +595,8 @@ public class JobController {
             @RequestPart(value = "file") MultipartFile file) throws ResourceNotFoundException, IOException {
         try {
             JobApplicants jobs = objectMapper.readValue(job, JobApplicants.class);
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             String tempFileName = file.getOriginalFilename();
             String filename = tempFileName.replaceAll("\\s+", "_");
 
@@ -602,7 +612,7 @@ public class JobController {
             JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishFile(filename);
-            jobApplicants.setDateFinished(date);
+            jobApplicants.setDateFinished(dateFormat.format(date));
             jobsTransactionRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
@@ -616,7 +626,8 @@ public class JobController {
             @RequestPart(value = "file") MultipartFile file) throws ResourceNotFoundException, IOException {
         try {
             QuotationAssigmentModel jobs = objectMapper.readValue(job, QuotationAssigmentModel.class);
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             String tempFileName = file.getOriginalFilename();
             String filename = tempFileName.replaceAll("\\s+", "_");
 
@@ -633,7 +644,7 @@ public class JobController {
             QuotationAssigmentModel jobApplicants = quotationAssigmentRepository.findById(pid)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishedFile(filename);
-            jobApplicants.setDateFinished(date);
+            jobApplicants.setDateFinished(dateFormat.format(date));
             quotationAssigmentRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
@@ -647,7 +658,8 @@ public class JobController {
             @RequestPart(value = "file") MultipartFile file) throws ResourceNotFoundException, IOException {
         try {
             JobTransactionModel jobs = objectMapper.readValue(job, JobTransactionModel.class);
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             String tempFileName = file.getOriginalFilename();
             String filename = tempFileName.replaceAll("\\s+", "_");
 
@@ -663,7 +675,7 @@ public class JobController {
             JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
             jobApplicants.setFinishFile(filename);
-            jobApplicants.setDateFinished(date);
+            jobApplicants.setDateFinished(dateFormat.format(date));
             jobsTransactionRepository.save(jobApplicants);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
