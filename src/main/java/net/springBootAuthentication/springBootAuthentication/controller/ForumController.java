@@ -105,19 +105,20 @@ public class ForumController {
 
     // @PostMapping(value = "/getComment")
     // public ResponseEntity<?> getComment(@RequestBody CustomComment entity) {
-    //     Long id = entity.getPostId();
+    // Long id = entity.getPostId();
 
-    //     List<CustomForum> list = forumTransactionRepository.getComment(id);
+    // List<CustomForum> list = forumTransactionRepository.getComment(id);
 
-    //     return ResponseEntity.ok(list);
+    // return ResponseEntity.ok(list);
     // }
 
     @PostMapping(value = "/like")
-    public ResponseEntity<?> addLIke(@RequestBody CommentLikesModel entity)throws ResourceNotFoundException{
+    public ResponseEntity<?> addLIke(@RequestBody CommentLikesModel entity) throws ResourceNotFoundException {
         Long commentId = entity.getCommentId();
         Long likeById = entity.getLikeById();
         Long res = commentsLikesRepository.getLikes(commentId, likeById);
-        CommentsModel comments = commentsRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("not found"));
+        CommentsModel comments = commentsRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
         CommentLikesModel likes = new CommentLikesModel();
         if (res != null) {
             commentsLikesRepository.deleteById(res);
@@ -140,17 +141,21 @@ public class ForumController {
 
     // @GetMapping(value="/getLikes")
     // public ResponseEntity<?> postMethodName() {
-    //     List<CommentLikesModel> res = commentsLikesRepository.findAll();
-    //     return ResponseEntity.ok(res);
+    // List<CommentLikesModel> res = commentsLikesRepository.findAll();
+    // return ResponseEntity.ok(res);
     // }
 
     @GetMapping("/getPostwithAuth")
     public ResponseEntity<?> getPost() {
         List<CustomForum> forum = forumTransactionRepository.getPost();
-        if(forum == null){
-            return ResponseEntity.ok(null);
-        }else{
-            return ResponseEntity.ok(forum);
+        try {
+            if (forum == null) {
+                return ResponseEntity.ok(null);
+            } else {
+                return ResponseEntity.ok(forum);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -176,10 +181,10 @@ public class ForumController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping(value="/getLikeswithAuth")
+    @GetMapping(value = "/getLikeswithAuth")
     public ResponseEntity<?> postMethodName() {
         List<CommentLikesModel> res = commentsLikesRepository.findAll();
         return ResponseEntity.ok(res);
     }
-    
+
 }
