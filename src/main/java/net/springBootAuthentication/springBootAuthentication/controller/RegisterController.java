@@ -129,9 +129,7 @@ public class RegisterController {
             throws ResourceNotFoundException {
         try {
             Long id = entity.getPostId();
-            // System.out.println(id);
             List<CustomForum> details = forumTransactionRepository.getForumDetails(id);
-            // System.out.println(details);
             return ResponseEntity.ok(details);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);

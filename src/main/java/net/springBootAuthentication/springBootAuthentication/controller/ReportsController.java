@@ -53,9 +53,6 @@ public class ReportsController {
     @GetMapping("/getReports")
     public ResponseEntity<?> getMethodName() {
         List<CustomReports> list = reportsRepository.getReports();
-        for (CustomReports customReports : list) {
-            System.out.println(customReports.getEmail());
-        }
         return ResponseEntity.ok(list);
     }
     
