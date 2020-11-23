@@ -13,7 +13,7 @@ public class CustomAdminProfile {
 
     private Integer age;
 
-    private Date birthdate;
+    private String birthdate;
 
     private String email;
 
@@ -34,6 +34,10 @@ public class CustomAdminProfile {
     private String street;
     
     private String img;
+
+    private String username;
+
+    private String password;
 
     public long getId() {
         return id;
@@ -75,11 +79,11 @@ public class CustomAdminProfile {
         this.age = age;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 
@@ -167,7 +171,7 @@ public class CustomAdminProfile {
     }
 
     public CustomAdminProfile(long id, long accountId, String firstname, String lastname,
-            Integer age, Date birthdate, String email, String gender, String phonenumber, Long address_id,
+            Integer age, String birthdate, String email, String gender, String phonenumber, Long address_id,
             Integer postalcode, Integer zipcode, String city, String country,  String street,
             String img) {
         this.id = id;
@@ -186,5 +190,21 @@ public class CustomAdminProfile {
         this.country = country;
         this.street = street;
         this.img = img;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

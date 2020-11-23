@@ -20,12 +20,12 @@ public class CategoryModel {
     private String name;
 
     @Column(name = "timestamps")
-    private LocalDate timestamps;
+    private String timestamps;
 
     public CategoryModel() {
     }
 
-    public CategoryModel(long id, String name, LocalDate timestamps) {
+    public CategoryModel(long id, String name, String timestamps) {
         this.id = id;
         this.name = name;
         this.timestamps = timestamps;
@@ -47,11 +47,11 @@ public class CategoryModel {
         this.name = name;
     }
 
-    public LocalDate getTimestamps() {
+    public String getTimestamps() {
         return timestamps;
     }
 
-    public void setTimestamps(LocalDate timestamps) {
+    public void setTimestamps(String timestamps) {
         this.timestamps = timestamps;
     }
 

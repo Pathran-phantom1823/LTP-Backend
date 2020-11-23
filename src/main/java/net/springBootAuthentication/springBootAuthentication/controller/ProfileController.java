@@ -107,6 +107,7 @@ public class ProfileController {
             CustomProfiles customProfile = objectMapper.readValue(data, CustomProfiles.class);
             // LocalDate date = LocalDate.now();
             LocalDate date = LocalDate.now();
+
             String tempImageName = img.getOriginalFilename();
             String imageName = tempImageName.replaceAll("\\s+", "_");
 
@@ -126,7 +127,7 @@ public class ProfileController {
             addressRepository.saveAndFlush(addressModel);
 
             skillModel.setSkillname(customProfile.getSkillname().toString());
-            skillModel.setTimestamps(date);
+            skillModel.setTimestamps(date.toString());
             skillsRepository.saveAndFlush(skillModel);
 
             System.out.println(customProfile.getAccountId());
@@ -147,13 +148,13 @@ public class ProfileController {
             profileModel.setTimeTo(customProfile.getTimeTo());
             profileRepository.saveAndFlush(profileModel);
 
-            profileSkillsModel.setTimestamps(date);
+            profileSkillsModel.setTimestamps(date.toString());
             profileSkillsModel.setProfileid(profileModel.getId());
             profileSkillsModel.setSkillid(skillModel.getId());
             profileSkillsRepository.saveAndFlush(profileSkillsModel);
 
             categoryModel.setName(customProfile.getCategory());
-            categoryModel.setTimestamps(date);
+            categoryModel.setTimestamps(date.toString());
 
             List<Object> list = new ArrayList<>();
 
@@ -316,7 +317,7 @@ public class ProfileController {
 
         educationModel.setSchoolname(entity.getSchoolname());
         educationModel.setSchoolyear(entity.getSchoolyear());
-        educationModel.setTimestamps(date);
+        educationModel.setTimestamps(entity.getTimeStamp());
         educationRepository.saveAndFlush(educationModel);
 
         return ResponseEntity.ok("Updated");

@@ -1,6 +1,5 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
-import java.time.LocalDate;
 
 public interface CustomJobApplicant {
     
@@ -11,7 +10,7 @@ public interface CustomJobApplicant {
     String getPostedBy();
     String getFirstName();
     String getLastName();
-    LocalDate getDateAccepted();
-    LocalDate getDateFinished();
-    LocalDate getDateApplied();
+    String getDateAccepted();
+    String getDateFinished();
+    String getDateApplied();
 }

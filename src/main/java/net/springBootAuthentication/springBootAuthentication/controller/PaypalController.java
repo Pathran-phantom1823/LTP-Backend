@@ -2,7 +2,11 @@ package net.springBootAuthentication.springBootAuthentication.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.hibernate.exception.GenericJDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +22,11 @@ import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentRequestModel;
-import net.springBootAuthentication.springBootAuthentication.model.PaypalPayment;
+import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.model.Response;
 import net.springBootAuthentication.springBootAuthentication.repository.PaypalPaymentRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
 import net.springBootAuthentication.springBootAuthentication.services.PaypalService;
 
 @Controller
@@ -32,6 +38,12 @@ public class PaypalController {
 	
 	@Autowired
 	PaypalPaymentRepository payment_repository;
+	
+	@Autowired
+	RoleRepository role;
+	
+	@Autowired
+	RegisterRepository paid_account;
 	
 	@Value("${vue.address}")
 	private String address;
@@ -46,7 +58,7 @@ public class PaypalController {
 		try {
 			Payment payment = service.createPayment(order.getTotal(), order.getCurrency(), order.getMethod(),
 					order.getIntent(), order.getDescription(), address + "user",
-					address + "user/paypal/success");
+					address + "user/userSuccess");
 			for (Links link : payment.getLinks()) {
 				if (link.getRel().equals("approval_url")) {
 					ArrayList<HashMap<String, String>> data = new ArrayList<>();
@@ -77,15 +89,24 @@ public class PaypalController {
 		try {
 			Payment payment = service.executePayment(paymentId, payerId);
 			if (payment.getState().equals("approved")) {
-				PaypalPayment paypal = new PaypalPayment(
-						payment.getTransactions().get(0).getDescription(), 
-						Double.parseDouble(payment.getTransactions().get(0).getAmount().getTotal()), 
-						payment.getTransactions().get(0).getAmount().getCurrency(),
-						Integer.parseInt(id),
-						payment.toJSON());
-				payment_repository.save(paypal);
-				return ResponseEntity.ok(new Response(200, "Initializing payment", new ArrayList<>()));
+//				PaypalPayment paypal = new PaypalPayment(
+//						payment.getTransactions().get(0).getDescription(), 
+//						Double.parseDouble(payment.getTransactions().get(0).getAmount().getTotal()), 
+//						payment.getTransactions().get(0).getAmount().getCurrency(),
+//						Integer.parseInt(id),
+//						payment.toJSON());
+				payment_repository.pay(
+						Float.parseFloat(payment.getTransactions().get(0).getAmount().getTotal()), 
+						payment.getTransactions().get(0).getAmount().getCurrency(), 
+						payment.getTransactions().get(0).getDescription(),
+						payment.toJSON(),
+						Long.valueOf(Integer.parseInt(id)));
+				ArrayList<String> paidAccounts = new ArrayList<>();
+				Optional<RegisterModel> paid = paid_account.findById(Long.valueOf(Integer.parseInt(id)));
 				
+				String new_role = role.findById(paid.get().getRoleid()).get().getRoleType();
+				paidAccounts.add(new_role);
+				return ResponseEntity.ok(new Response(200, "Initializing payment", paidAccounts));
 			}
 		} catch (PayPalRESTException e) {
 			System.out.println(e.getMessage());

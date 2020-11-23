@@ -4,16 +4,19 @@ import org.springframework.http.MediaType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,8 +31,10 @@ import net.springBootAuthentication.springBootAuthentication.customModel.CustomA
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import net.springBootAuthentication.springBootAuthentication.model.AddressModel;
 import net.springBootAuthentication.springBootAuthentication.model.AdminProfileModel;
+import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.repository.AddressRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.AdminProfileRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 
 @RestController
 @RequestMapping("/ltp")
@@ -42,6 +47,9 @@ public class AdminProfileController {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private RegisterRepository registerRepository;
+
     @RequestMapping(value = "/createAdminProfile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> postJob(@RequestPart(value = "data") String data,
             @RequestPart(value = "img") final MultipartFile img) throws IOException {
@@ -53,6 +61,9 @@ public class AdminProfileController {
             LocalDate date = LocalDate.now();
 
             CustomAdminProfile customAdminProfile = objectMapper.readValue(data, CustomAdminProfile.class);
+            RegisterModel registerModel = registerRepository.findById(customAdminProfile.getAccountId())
+                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
+
             String tempImageName = img.getOriginalFilename();
             String imageName = tempImageName.replaceAll("\\s+", "_");
             File convertfile = new File("src/main/resources/img/"
@@ -67,9 +78,13 @@ public class AdminProfileController {
             addressModel.setPostal(customAdminProfile.getPostalcode());
             addressModel.setStreet(customAdminProfile.getStreet());
             addressModel.setZipcode(customAdminProfile.getZipcode());
-            
+
+            registerModel.setUsername(customAdminProfile.getUsername());
+            registerModel.setPassword(new BCryptPasswordEncoder().encode(customAdminProfile.getPassword()));
+            registerModel.setEmail(customAdminProfile.getEmail());
+            registerRepository.save(registerModel);
+
             addressRepository.saveAndFlush(addressModel);
-            // System.out.println(customAdminProfile.getBirthdate());
             adminModel.setAddressId(addressModel.getId());
             adminModel.setAccountId(customAdminProfile.getAccountId());
             adminModel.setAge(customAdminProfile.getAge());
@@ -94,18 +109,23 @@ public class AdminProfileController {
     }
 
     @PostMapping(value = "/retrieveProfile")
-    public ResponseEntity<Object> retrieveProfile(@RequestBody AdminProfileModel aModel) {
+    public ResponseEntity<Object> retrieveProfile(@RequestBody AdminProfileModel aModel)
+            throws ResourceNotFoundException {
         List<Object> val = new ArrayList<>();
         Long id = aModel.getAccountId();
         Long existed = adminProfileRepository.checkAdminId(id);
+        RegisterModel account = registerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
         List<CustomAdminInterface> ProfileId = adminProfileRepository.retrieveProfileAdmin(id);
 
         if (existed != null) {
             val.add(ProfileId);
+            val.add(account);
             val.add(true);
         } else {
-            val.add(ProfileId);
-            val.add(false);
+            val.add(account);
+            val.add(true);
+
         }
         return ResponseEntity.ok(val);
     }
@@ -122,16 +142,22 @@ public class AdminProfileController {
                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
         AdminProfileModel apModel = adminProfileRepository.findById(adminId)
                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
+        RegisterModel registerModel = registerRepository.findById(address.getAccountId())
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
 
         String tempImageName = img.getOriginalFilename();
         String imageName = tempImageName.replaceAll("\\s+", "_");
-        System.out.println(String.format("%d%s%s", address.getAccountId(), date, imageName));
         File convertfile = new File(
                 "src/main/resources/img/" + String.format("%d%s%s", address.getAccountId(), date, imageName));
         convertfile.createNewFile();
         FileOutputStream fout = new FileOutputStream(convertfile);
         fout.write(img.getBytes());
         fout.close();
+
+        registerModel.setUsername(address.getUsername());
+        registerModel.setPassword(new BCryptPasswordEncoder().encode(address.getPassword()));
+        registerModel.setEmail(address.getEmail());
+        registerRepository.save(registerModel);
 
         adModel.setCity(address.getCity());
         adModel.setCountry(address.getCountry());
@@ -160,11 +186,12 @@ public class AdminProfileController {
             Long adminId = entity.getId();
 
             AddressModel adModel = addressRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
             AdminProfileModel apModel = adminProfileRepository.findById(adminId)
-            .orElseThrow(() -> new ResourceNotFoundException("not found"));
-            
-            System.out.println(entity.getImg());
+                    .orElseThrow(() -> new ResourceNotFoundException("not found"));
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+
 
             adModel.setCity(entity.getCity());
             adModel.setCountry(entity.getCountry());
@@ -174,7 +201,7 @@ public class AdminProfileController {
             addressRepository.save(adModel);
 
             apModel.setAge(entity.getAge());
-            apModel.setBirthdate(entity.getBirthdate());
+            apModel.setBirthdate(dateFormat.format(entity.getBirthdate()));
             apModel.setEmail(entity.getEmail());
             apModel.setFirstname(entity.getFirstname());
             apModel.setGender(entity.getGender());
@@ -189,6 +216,5 @@ public class AdminProfileController {
         }
 
     }
-
 
 }

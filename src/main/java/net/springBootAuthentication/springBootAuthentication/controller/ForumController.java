@@ -1,7 +1,9 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,18 +49,18 @@ public class ForumController {
     public ResponseEntity<?> post(@RequestBody Forum entity) {
         ForumTransactionsModel fModel = new ForumTransactionsModel();
         ForumPostModel forumPostModel = new ForumPostModel();
-        LocalDate date = LocalDate.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = new Date();
 
         forumPostModel.setDescription(entity.getDescription());
         forumPostModel.setTopic(entity.getTopic());
-        forumPostModel.setDatePosted(date);
+        forumPostModel.setDatePosted(dateFormat.format(date));
         forumPostRepository.save(forumPostModel);
         forumPostRepository.flush();
 
-        // System.out.println(entity.getAccountId());
         fModel.setAccountId(entity.getAccountId());
         fModel.setPostId(forumPostModel.getId());
-        fModel.setDate(date);
+        fModel.setDate(dateFormat.format(date));
         forumTransactionRepository.save(fModel);
 
         List<Object> list = new ArrayList<>();
@@ -74,11 +76,12 @@ public class ForumController {
         Long id = entity.getPostId();
         CommentsModel comments = new CommentsModel();
         ForumTransactionsModel forum = new ForumTransactionsModel();
-        LocalDate date = LocalDate.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = new Date();
 
         comments.setComment(entity.getComment());
         comments.setCommentById(entity.getCommentedById());
-        comments.setDateCommented(date);
+        comments.setDateCommented(dateFormat.format(date));
         commentsRepository.save(comments);
         commentsRepository.flush();
 
@@ -87,19 +90,12 @@ public class ForumController {
         tModel.getCommentId();
         if (tModel.getCommentId() == null) {
             tModel.setCommentId(comments.getId());
-            // tModel.setAccountId(tModel.getAccountId());
-            // tModel.setDate(tModel.getDate());
-            // tModel.setPostId(tModel.getPostId());
-            // System.out.println(String.format("%d,%d,%d", comments.getId(),
-            // tModel.getAccountId(), tModel.getPostId()));
-            System.out.println("null");
             forumTransactionRepository.save(tModel);
         } else {
             forum.setCommentId(comments.getId());
             forum.setPostId(tModel.getPostId());
-            forum.setDate(date);
+            forum.setDate(dateFormat.format(date));
             forum.setAccountId(entity.getCommentedById());
-            System.out.println("naa");
             forumTransactionRepository.save(forum);
         }
         // forumTransactionRepository.save(forum);
@@ -109,30 +105,31 @@ public class ForumController {
 
     // @PostMapping(value = "/getComment")
     // public ResponseEntity<?> getComment(@RequestBody CustomComment entity) {
-    //     Long id = entity.getPostId();
+    // Long id = entity.getPostId();
 
-    //     List<CustomForum> list = forumTransactionRepository.getComment(id);
+    // List<CustomForum> list = forumTransactionRepository.getComment(id);
 
-    //     return ResponseEntity.ok(list);
+    // return ResponseEntity.ok(list);
     // }
 
     @PostMapping(value = "/like")
-    public ResponseEntity<?> addLIke(@RequestBody CommentLikesModel entity)throws ResourceNotFoundException{
+    public ResponseEntity<?> addLIke(@RequestBody CommentLikesModel entity) throws ResourceNotFoundException {
         Long commentId = entity.getCommentId();
         Long likeById = entity.getLikeById();
         Long res = commentsLikesRepository.getLikes(commentId, likeById);
-        CommentsModel comments = commentsRepository.findById(commentId).orElseThrow(() -> new ResourceNotFoundException("not found"));
+        CommentsModel comments = commentsRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
         CommentLikesModel likes = new CommentLikesModel();
         if (res != null) {
             commentsLikesRepository.deleteById(res);
             comments.setStatus("Null");
             commentsRepository.save(comments);
         } else {
-            System.out.println("null");
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
             likes.setCommentId(entity.getCommentId());
             likes.setLikeById(entity.getLikeById());
-            likes.setDateCommented(date);
+            likes.setDateCommented(dateFormat.format(date));
             comments.setStatus("like");
             commentsRepository.save(comments);
         }
@@ -144,17 +141,21 @@ public class ForumController {
 
     // @GetMapping(value="/getLikes")
     // public ResponseEntity<?> postMethodName() {
-    //     List<CommentLikesModel> res = commentsLikesRepository.findAll();
-    //     return ResponseEntity.ok(res);
+    // List<CommentLikesModel> res = commentsLikesRepository.findAll();
+    // return ResponseEntity.ok(res);
     // }
 
     @GetMapping("/getPostwithAuth")
     public ResponseEntity<?> getPost() {
         List<CustomForum> forum = forumTransactionRepository.getPost();
-        if(forum == null){
-            return ResponseEntity.ok(null);
-        }else{
-            return ResponseEntity.ok(forum);
+        try {
+            if (forum == null) {
+                return ResponseEntity.ok(null);
+            } else {
+                return ResponseEntity.ok(forum);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -163,9 +164,7 @@ public class ForumController {
             throws ResourceNotFoundException {
         try {
             Long id = entity.getPostId();
-            // System.out.println(id);
             List<CustomForum> details = forumTransactionRepository.getForumDetails(id);
-            // System.out.println(details);
             return ResponseEntity.ok(details);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
@@ -182,10 +181,10 @@ public class ForumController {
         return ResponseEntity.ok(list);
     }
 
-    @GetMapping(value="/getLikeswithAuth")
+    @GetMapping(value = "/getLikeswithAuth")
     public ResponseEntity<?> postMethodName() {
         List<CommentLikesModel> res = commentsLikesRepository.findAll();
         return ResponseEntity.ok(res);
     }
-    
+
 }

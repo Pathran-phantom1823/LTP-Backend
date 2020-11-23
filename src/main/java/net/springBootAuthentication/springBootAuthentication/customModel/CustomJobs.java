@@ -1,7 +1,5 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
-import java.time.LocalDate;
-
 import org.springframework.beans.factory.annotation.Value;
 
 public  interface CustomJobs {
@@ -37,7 +35,7 @@ public  interface CustomJobs {
 
      String getEmail();
 
-     LocalDate getdatePosted();
+     String getdatePosted();
 
      String getLevelOfConfidentiality();
 
