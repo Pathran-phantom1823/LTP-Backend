@@ -37,8 +37,6 @@ public class ProfileModel {
 	@Column(name = "birthdate")
 	private Date birthdate;
 
-	@Column(name = "email")
-	private String email;
 
 	@Column(name = "pricing")
 	private float pricing;
@@ -65,7 +63,7 @@ public class ProfileModel {
 	}
 
 	public ProfileModel(long id, long accountId, long addressId, String firstname, String lastname, Integer age,
-			String gender, Date birthdate, String email, float pricing, String phonenumber, String image,
+			String gender, Date birthdate, float pricing, String phonenumber, String image,
 			String dateFrom, String dateTo, String timeFrom, String timeTo) {
 		this.id = id;
 		this.accountId = accountId;
@@ -75,7 +73,6 @@ public class ProfileModel {
 		this.age = age;
 		this.gender = gender;
 		this.birthdate = birthdate;
-		this.email = email;
 		this.pricing = pricing;
 		this.phonenumber = phonenumber;
 		this.image = image;
@@ -147,14 +144,6 @@ public class ProfileModel {
 
 	public void setBirthdate(Date birthdate) {
 		this.birthdate = birthdate;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public float getPricing() {
