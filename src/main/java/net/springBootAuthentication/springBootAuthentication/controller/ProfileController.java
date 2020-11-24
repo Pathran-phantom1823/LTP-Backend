@@ -4,11 +4,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,18 +24,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.ResourceAccessException;
 
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomProfile;
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomProfileInterface;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomProfiles;
+import net.springBootAuthentication.springBootAuthentication.customModel.Register;
+import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import net.springBootAuthentication.springBootAuthentication.model.AddressModel;
 import net.springBootAuthentication.springBootAuthentication.model.CategoryModel;
 import net.springBootAuthentication.springBootAuthentication.model.EducationModel;
 import net.springBootAuthentication.springBootAuthentication.model.ProfileModel;
 import net.springBootAuthentication.springBootAuthentication.model.ProfileSkillsModel;
+import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.model.SkillsModel;
 import net.springBootAuthentication.springBootAuthentication.repository.AddressRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.CategoryRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.EducationRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.ProfileRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.ProfileSkillsRepository;
+import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.SkillsRepository;
 
 @RestController
@@ -59,10 +68,35 @@ public class ProfileController {
     @Autowired
     private ProfileSkillsRepository profileSkillsRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private RegisterRepository registerRepository;
+
+    @PostMapping(value = "/retrieveProfileDetails")
+    public ResponseEntity<?> postMethodName(@RequestBody ProfileModel entity) {
+        Long id = entity.getAccountId();
+        Long exist = profileRepository.checkAccountExisted(id);
+        List<Object> res = new ArrayList<>();
+        List<CustomProfileInterface> retrieveProfileResult = profileRepository.getProfileById(id);
+        if (exist != null) {
+            res.add(retrieveProfileResult);
+            res.add(false);
+        } else {
+            // res.add(result);
+            res.add(true);
+        }
+
+        return ResponseEntity.ok(res);
+    }
+
     @RequestMapping(value = "/createprofile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> postJob(@RequestPart(value = "data") String data,
             @RequestPart(value = "img") final MultipartFile img) throws IOException {
 
+        // System.out.println(postDetails);
+        // System.out.println(file);
         try {
             ProfileModel profileModel = new ProfileModel();
             AddressModel addressModel = new AddressModel();
@@ -72,8 +106,8 @@ public class ProfileController {
 
             CustomProfiles customProfile = objectMapper.readValue(data, CustomProfiles.class);
             // LocalDate date = LocalDate.now();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-            Date date = new Date();
+            LocalDate date = LocalDate.now();
+
             String tempImageName = img.getOriginalFilename();
             String imageName = tempImageName.replaceAll("\\s+", "_");
 
@@ -92,19 +126,20 @@ public class ProfileController {
             addressModel.setZipcode(customProfile.getZipcode());
             addressRepository.saveAndFlush(addressModel);
 
-            skillModel.setSkillname(customProfile.getSkillname());
-            skillModel.setTimestamps(dateFormat.format(date));
+            skillModel.setSkillname(customProfile.getSkillname().toString());
+            skillModel.setTimestamps(date.toString());
             skillsRepository.saveAndFlush(skillModel);
 
+            System.out.println(customProfile.getAccountId());
             profileModel.setAccountId(customProfile.getAccountId());
+            System.out.println(profileModel.getAccountId());
             profileModel.setImage(String.format("%d%s%s", customProfile.getAccountId(), date, imageName));
             profileModel.setAddressId(addressModel.getId());
             profileModel.setAge(customProfile.getAge());
-            profileModel.setBirthdate(dateFormat.format(customProfile.getBirthdate()));
+            profileModel.setBirthdate(customProfile.getBirthdate());
             profileModel.setFirstname(customProfile.getFirstname());
             profileModel.setLastname(customProfile.getLastname());
             profileModel.setPhonenumber(customProfile.getPhonenumber());
-            profileModel.setEmail(customProfile.getEmail());
             profileModel.setPricing(customProfile.getPricing());
             profileModel.setGender(customProfile.getGender());
             profileModel.setDateFrom(customProfile.getDateFrom());
@@ -113,13 +148,13 @@ public class ProfileController {
             profileModel.setTimeTo(customProfile.getTimeTo());
             profileRepository.saveAndFlush(profileModel);
 
-            profileSkillsModel.setTimestamps(dateFormat.format(date));
+            profileSkillsModel.setTimestamps(date.toString());
             profileSkillsModel.setProfileid(profileModel.getId());
             profileSkillsModel.setSkillid(skillModel.getId());
             profileSkillsRepository.saveAndFlush(profileSkillsModel);
 
             categoryModel.setName(customProfile.getCategory());
-            categoryModel.setTimestamps(dateFormat.format(date));
+            categoryModel.setTimestamps(date.toString());
 
             List<Object> list = new ArrayList<>();
 
@@ -129,6 +164,7 @@ public class ProfileController {
             list.add(profileSkillsModel);
             list.add(categoryModel);
 
+            System.out.println("Data:" + list);
             return ResponseEntity.ok(list);
 
         } catch (Exception e) {
@@ -137,13 +173,163 @@ public class ProfileController {
         }
     }
 
+    @RequestMapping(value = "/updateProfileDetails", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> updateProfile(@RequestPart(value = "data") String data)
+            throws IOException, ResourceNotFoundException {
+
+        CustomProfile entity = objectMapper.readValue(data, CustomProfile.class);
+
+        ProfileModel profileModel = profileRepository.findById(entity.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+
+        AddressModel addressModel = addressRepository.findById(entity.getAddressId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+        ;
+
+        SkillsModel skillsModel = skillsRepository.findById(entity.getSkillId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+
+        CategoryModel categoryModel = categoryRepository.findById(entity.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+
+        RegisterModel registerModel = registerRepository.findById(entity.getAccountId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+
+        registerModel.setUsername(entity.getUsername());
+        registerModel.setPassword(entity.getPassword());
+        registerRepository.saveAndFlush(registerModel);
+
+        addressModel.setCity(entity.getCity());
+        addressModel.setCountry(entity.getCountry());
+        addressModel.setZipcode(entity.getZipcode());
+        addressModel.setPostal(entity.getPostalcode());
+        addressModel.setStreet(entity.getStreet());
+        addressRepository.saveAndFlush(addressModel);
+
+        skillsModel.setSkillname(entity.getSkillname().toString());
+        skillsRepository.saveAndFlush(skillsModel);
+
+        categoryModel.setName(entity.getCategory().toString());
+        categoryRepository.saveAndFlush(categoryModel);
+
+        profileModel.setAccountId(entity.getAccountId());
+        profileModel.setImage(entity.getImage());
+        profileModel.setAddressId(addressModel.getId());
+        profileModel.setAge(entity.getAge());
+        profileModel.setBirthdate(entity.getBirthdate());
+        profileModel.setFirstname(entity.getFirstname());
+        profileModel.setLastname(entity.getLastname());
+        profileModel.setPhonenumber(entity.getPhonenumber());
+        profileModel.setPricing(entity.getPricing());
+        profileModel.setGender(entity.getGender());
+        profileModel.setDateFrom(entity.getDateFrom());
+        profileModel.setDateTo(entity.getDateTo());
+        profileModel.setTimeFrom(entity.getTimeFrom());
+        profileModel.setTimeTo(entity.getTimeTo());
+        profileRepository.saveAndFlush(profileModel);
+
+        return ResponseEntity.ok("updated");
+    }
+
+    @RequestMapping(value = "/updateProfileDetailswithImage", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> updateAgencyProfilewithImage(@RequestPart(value = "data") String data,
+            @RequestPart(value = "img") final MultipartFile img) throws IOException, ResourceNotFoundException {
+
+        LocalDate date = LocalDate.now();
+
+        CustomProfile entity = objectMapper.readValue(data, CustomProfile.class);
+        System.out.println(">>>>Data: " + entity);
+
+        ProfileModel profileModel = profileRepository.findById(entity.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+
+        AddressModel addressModel = addressRepository.findById(entity.getAddressId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+        ;
+
+        SkillsModel skillsModel = skillsRepository.findById(entity.getSkillId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+
+        CategoryModel categoryModel = categoryRepository.findById(entity.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+
+        String tempImageName = img.getOriginalFilename();
+        String imageName = tempImageName.replaceAll("\\s+", "_");
+        File convertfile = new File(
+                "src/main/resources/img/" + String.format("%d%s%s", entity.getAccountId(), date, imageName));
+        convertfile.createNewFile();
+        FileOutputStream fout = new FileOutputStream(convertfile);
+        fout.write(img.getBytes());
+        fout.close();
+
+        RegisterModel registerModel = registerRepository.findById(entity.getAccountId())
+                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
+
+        registerModel.setUsername(entity.getUsername());
+        registerModel.setPassword(entity.getPassword());
+
+        addressModel.setCity(entity.getCity());
+        addressModel.setCountry(entity.getCountry());
+        addressModel.setZipcode(entity.getZipcode());
+        addressModel.setPostal(entity.getPostalcode());
+        addressModel.setStreet(entity.getStreet());
+        addressRepository.saveAndFlush(addressModel);
+
+        skillsModel.setSkillname(entity.getSkillname().toString());
+        skillsRepository.saveAndFlush(skillsModel);
+
+        categoryModel.setName(entity.getCategory().toString());
+        categoryRepository.saveAndFlush(categoryModel);
+
+        profileModel.setAccountId(entity.getAccountId());
+        profileModel.setImage(imageName);
+        profileModel.setAddressId(addressModel.getId());
+        profileModel.setAge(entity.getAge());
+        profileModel.setBirthdate(entity.getBirthdate());
+        profileModel.setFirstname(entity.getFirstname());
+        profileModel.setLastname(entity.getLastname());
+        profileModel.setPhonenumber(entity.getPhonenumber());
+        profileModel.setPricing(entity.getPricing());
+        profileModel.setGender(entity.getGender());
+        profileModel.setDateFrom(entity.getDateFrom());
+        profileModel.setDateTo(entity.getDateTo());
+        profileModel.setTimeFrom(entity.getTimeFrom());
+        profileModel.setTimeTo(entity.getTimeTo());
+        profileRepository.saveAndFlush(profileModel);
+
+        return ResponseEntity.ok("Updated");
+    }
+
+    // Update Education Details
+    @PostMapping(value = "/updateEducationDetails")
+    public ResponseEntity<?> postEducationDetails(@RequestBody CustomProfile entity) {
+
+        AddressModel addressModel = new AddressModel();
+        EducationModel educationModel = new EducationModel();
+        LocalDate date = LocalDate.now();
+
+        addressModel.setCity(entity.getCity());
+        addressModel.setCountry(entity.getCountry());
+        addressModel.setPostal(entity.getPostalcode());
+        addressModel.setStreet(entity.getStreet());
+        addressModel.setZipcode(entity.getZipcode());
+        addressRepository.saveAndFlush(addressModel);
+
+        educationModel.setSchoolname(entity.getSchoolname());
+        educationModel.setSchoolyear(entity.getSchoolyear());
+        educationModel.setTimestamps(entity.getTimeStamp());
+        educationRepository.saveAndFlush(educationModel);
+
+        return ResponseEntity.ok("Updated");
+    }
+
+    // Create Education with Address
     @PostMapping(value = "/create_education_address")
     public ResponseEntity<?> postMethodName(@RequestBody CustomProfiles customProfile) {
 
         AddressModel addressModel = new AddressModel();
         EducationModel educationModel = new EducationModel();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-        Date date = new Date();
+        LocalDate date = LocalDate.now();
         List<Object> list = new ArrayList<>();
 
         try {
@@ -158,7 +344,7 @@ public class ProfileController {
             educationModel.setProfileId(customProfile.getId());
             educationModel.setSchoolname(customProfile.getSchoolname());
             educationModel.setSchoolyear(customProfile.getSchoolyear());
-            educationModel.setTimestamps(dateFormat.format(date));
+            educationModel.setTimestamps(date);
             educationRepository.saveAndFlush(educationModel);
 
             list.add(addressModel);
@@ -168,4 +354,5 @@ public class ProfileController {
         }
         return ResponseEntity.ok(list);
     }
+
 }
