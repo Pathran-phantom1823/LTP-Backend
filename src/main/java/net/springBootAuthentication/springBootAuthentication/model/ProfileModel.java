@@ -35,7 +35,7 @@ public class ProfileModel {
 	private String gender;
 
 	@Column(name = "birthdate")
-	private Date birthdate;
+	private String birthdate;
 
 
 	@Column(name = "pricing")
@@ -63,7 +63,7 @@ public class ProfileModel {
 	}
 
 	public ProfileModel(long id, long accountId, long addressId, String firstname, String lastname, Integer age,
-			String gender, Date birthdate, float pricing, String phonenumber, String image,
+			String gender, String birthdate, float pricing, String phonenumber, String image,
 			String dateFrom, String dateTo, String timeFrom, String timeTo) {
 		this.id = id;
 		this.accountId = accountId;
@@ -138,11 +138,11 @@ public class ProfileModel {
 		this.gender = gender;
 	}
 
-	public Date getBirthdate() {
+	public String getBirthdate() {
 		return birthdate;
 	}
 
-	public void setBirthdate(Date birthdate) {
+	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
 	}
 

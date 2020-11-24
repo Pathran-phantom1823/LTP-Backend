@@ -28,7 +28,7 @@ public class CustomProfile {
 
     private String gender;
 
-    private Date birthdate;
+    private String birthdate;
 
     private Float pricing;
 
@@ -83,7 +83,7 @@ public class CustomProfile {
 
     public CustomProfile(Long id, Long accountId, Long skillId, Long addressId, Long categoryId, Long schoolAddressId,
             String username, String password, String firstname, String lastname, Integer age, String gender,
-            Date birthdate, Float pricing, String phonenumber, String email, String image, String dateFrom,
+            String birthdate, Float pricing, String phonenumber, String email, String image, String dateFrom,
             String dateTo, String timeFrom, String timeTo, String street, String city, String country,
             Integer postalcode, Integer zipcode, String schoolname, Integer schoolyear, String schoolstreet,
             String schoolcity, String schoolcountry, String schoolPostal, String schoolzipcode, LocalDate timeStamp,
@@ -223,11 +223,11 @@ public class CustomProfile {
         this.gender = gender;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 

@@ -16,12 +16,10 @@ import net.springBootAuthentication.springBootAuthentication.customModel.CustomP
 public interface ProfileRepository extends JpaRepository<ProfileModel, Long> {
 
     @Transactional
-	@Modifying
     @Query(value = "{call getImage(:id)}", nativeQuery = true)
     String getImage(@Param("id") Long id);
 
     @Transactional
-	@Modifying
     @Query(value = "{call getAdminImage(:id)}", nativeQuery = true)
     String getAdminImage(@Param("id") Long id);
 
@@ -31,7 +29,7 @@ public interface ProfileRepository extends JpaRepository<ProfileModel, Long> {
     @Query(value = "{call retrieveProfile(:id)}", nativeQuery = true)
     List<CustomProfileInterface> getProfileById(@Param("id")Long id);
 
-    @Query(value = "{call getProfileImage(:id)}", nativeQuery = true)
-    String getProfileImage(@Param("id") Long id);
+    // @Query(value = "{call getProfileImage(:id)}", nativeQuery = true)
+    // String getProfileImage(@Param("id") Long id);
 
 }

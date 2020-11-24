@@ -48,28 +48,6 @@ public class ImageController {
         }
     }
 
-    @PostMapping(value = "/getProfileImage", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<?> getProfileImage(@RequestBody ProfileModel entity) throws IOException {
-        try {
-            Long id = entity.getAccountId();
-            String file = profileRepository.getProfileImage(id);
-
-            if (file == null) {
-                return ResponseEntity.ok(null);
-            } else {
-                ClassPathResource files = new ClassPathResource("img/" + file);
-                System.out.println(files);
-                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
-                System.out.println(bytes);
-                
-
-                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.ok(e);
-        }
-    }
-
     @PostMapping(value = "/getProfile", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<?> getProfiles(@RequestBody ProfileModel entity) throws IOException {
         try {
@@ -80,6 +58,7 @@ public class ImageController {
                 return ResponseEntity.ok(null);
             } else {
                 ClassPathResource files = new ClassPathResource("img/" + file);
+                System.out.println(files);
                 byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
 
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);

@@ -18,17 +18,14 @@ import net.springBootAuthentication.springBootAuthentication.model.AdminProfileM
 public interface AdminProfileRepository extends JpaRepository<AdminProfileModel, Long> {
 
     @Transactional
-	@Modifying
     @Query(value = "{call getImage(:id)}", nativeQuery = true)
     String getImage(@Param("id") Long id);
 
     @Transactional
-	@Modifying
     @Query(value = "{call checkAdminId(:id)}", nativeQuery = true)
     Long checkAdminId(@Param("id") Long id);
 
     @Transactional
-	@Modifying
     @Query(value = "{call retrieveProfileAdmin(:id)}", nativeQuery = true)
     List<CustomAdminInterface> retrieveProfileAdmin(@Param("id") Long id);
 }
