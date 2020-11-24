@@ -1,11 +1,9 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
-import java.time.LocalDate;
-
 public interface CustomJobHistory {
-    LocalDate getDateFinish();
+    String getDateFinish();
 
-    LocalDate getDatePosted();
+    String getDatePosted();
     
     String getWorkedByUsername();
 

@@ -1,16 +1,15 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
-import java.time.LocalDate;
 
 public class Forum {
 
     private String description;
     private String topic;
-    private LocalDate datePosted;
+    private String datePosted;
     private Long accountId;
     private Long postId;
     private Long commentId;
-    private LocalDate date;
+    private String date;
 
     public Forum() {
     }
@@ -31,11 +30,11 @@ public class Forum {
         this.topic = topic;
     }
 
-    public LocalDate getDatePosted() {
+    public String getDatePosted() {
         return datePosted;
     }
 
-    public void setDatePosted(LocalDate datePosted) {
+    public void setDatePosted(String datePosted) {
         this.datePosted = datePosted;
     }
 
@@ -63,11 +62,11 @@ public class Forum {
         this.commentId = commentId;
     }
 
-    public LocalDate getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 }

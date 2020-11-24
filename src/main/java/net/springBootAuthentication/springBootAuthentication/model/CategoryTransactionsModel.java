@@ -23,12 +23,12 @@ public class CategoryTransactionsModel {
     private long profileId;
 
     @Column(name = "timestamps")
-    private LocalDate timestamps;
+    private String timestamps;
 
     public CategoryTransactionsModel() {
     }
 
-    public CategoryTransactionsModel(long id, long categoryId, long profileId, LocalDate timestamps) {
+    public CategoryTransactionsModel(long id, long categoryId, long profileId, String timestamps) {
         this.id = id;
         this.categoryId = categoryId;
         this.profileId = profileId;
@@ -59,11 +59,11 @@ public class CategoryTransactionsModel {
         this.profileId = profileId;
     }
 
-    public LocalDate getTimestamps() {
+    public String getTimestamps() {
         return timestamps;
     }
 
-    public void setTimestamps(LocalDate timestamps) {
+    public void setTimestamps(String timestamps) {
         this.timestamps = timestamps;
     }
 

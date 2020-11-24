@@ -1,14 +1,14 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
-import java.time.LocalDate;
+
 
 public interface CustomQuotationAssigned {
     
     Long getJobId();
 
-    LocalDate getDatePosted();
+    String getDatePosted();
 
-    LocalDate getDateAssigned();
+    String getDateAssigned();
     
     String getTitle();
 

@@ -33,10 +33,10 @@ public class JobTransactionModel {
     private String finishFile;
 
     @Column(name = "dateFinished")
-    private LocalDate dateFinished;
+    private String dateFinished;
 
     @Column(name = "datePosted")
-    private LocalDate datePosted;
+    private String datePosted;
 
     @Column(name = "orgId")
     private Long orgId;
@@ -45,7 +45,7 @@ public class JobTransactionModel {
     }
 
     public JobTransactionModel(Long id, Long postedBy, Long workedBy, String finishFile,
-            LocalDate dateFinished, LocalDate datePosted) {
+    String dateFinished, String datePosted) {
         this.id = id;
         this.postedBy = postedBy;
         this.workedBy = workedBy;
@@ -86,19 +86,19 @@ public class JobTransactionModel {
         this.finishFile = finishFile;
     }
 
-    public LocalDate getDateFinished() {
+    public String getDateFinished() {
         return dateFinished;
     }
 
-    public void setDateFinished(LocalDate dateFinished) {
+    public void setDateFinished(String dateFinished) {
         this.dateFinished = dateFinished;
     }
 
-    public LocalDate getDatePosted() {
+    public String getDatePosted() {
         return datePosted;
     }
 
-    public void setDatePosted(LocalDate datePosted) {
+    public void setDatePosted(String datePosted) {
         this.datePosted = datePosted;
     }
 

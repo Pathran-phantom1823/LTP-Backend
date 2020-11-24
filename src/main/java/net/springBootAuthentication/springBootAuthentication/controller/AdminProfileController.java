@@ -4,10 +4,12 @@ import org.springframework.http.MediaType;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -83,7 +85,6 @@ public class AdminProfileController {
             registerRepository.save(registerModel);
 
             addressRepository.saveAndFlush(addressModel);
-            // System.out.println(customAdminProfile.getBirthdate());
             adminModel.setAddressId(addressModel.getId());
             adminModel.setAccountId(customAdminProfile.getAccountId());
             adminModel.setAge(customAdminProfile.getAge());
@@ -146,7 +147,6 @@ public class AdminProfileController {
 
         String tempImageName = img.getOriginalFilename();
         String imageName = tempImageName.replaceAll("\\s+", "_");
-        System.out.println(String.format("%d%s%s", address.getAccountId(), date, imageName));
         File convertfile = new File(
                 "src/main/resources/img/" + String.format("%d%s%s", address.getAccountId(), date, imageName));
         convertfile.createNewFile();
@@ -190,7 +190,8 @@ public class AdminProfileController {
             AdminProfileModel apModel = adminProfileRepository.findById(adminId)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
 
-            System.out.println(entity.getImg());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+
 
             adModel.setCity(entity.getCity());
             adModel.setCountry(entity.getCountry());
@@ -200,7 +201,7 @@ public class AdminProfileController {
             addressRepository.save(adModel);
 
             apModel.setAge(entity.getAge());
-            apModel.setBirthdate(entity.getBirthdate());
+            apModel.setBirthdate(dateFormat.format(entity.getBirthdate()));
             apModel.setEmail(entity.getEmail());
             apModel.setFirstname(entity.getFirstname());
             apModel.setGender(entity.getGender());

@@ -22,18 +22,18 @@ public class JobApplicants {
 
     private String status;
 
-    private LocalDate dateApplied;
+    private String dateApplied;
 
-    private LocalDate dateAccepted;
+    private String dateAccepted;
 
-    private LocalDate dateFinished;
+    private String dateFinished;
 
     private String finishedFile;
 
     public JobApplicants() {
     }
 
-    public JobApplicants(Long id, Long applicantId, Long jobId, String status, LocalDate dateApplied) {
+    public JobApplicants(Long id, Long applicantId, Long jobId, String status, String dateApplied) {
         this.id = id;
         this.applicantId = applicantId;
         this.jobId = jobId;
@@ -73,27 +73,27 @@ public class JobApplicants {
         this.status = status;
     }
 
-    public LocalDate getDateApplied() {
+    public String getDateApplied() {
         return dateApplied;
     }
 
-    public void setDateApplied(LocalDate dateApplied) {
+    public void setDateApplied(String dateApplied) {
         this.dateApplied = dateApplied;
     }
 
-    public LocalDate getDateAccepted() {
+    public String getDateAccepted() {
         return dateAccepted;
     }
 
-    public void setDateAccepted(LocalDate dateAccepted) {
+    public void setDateAccepted(String dateAccepted) {
         this.dateAccepted = dateAccepted;
     }
 
-    public LocalDate getDateFinished() {
+    public String getDateFinished() {
         return dateFinished;
     }
 
-    public void setDateFinished(LocalDate dateFinished) {
+    public void setDateFinished(String dateFinished) {
         this.dateFinished = dateFinished;
     }
 

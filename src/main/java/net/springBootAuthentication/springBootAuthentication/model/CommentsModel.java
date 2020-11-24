@@ -27,7 +27,7 @@ public class CommentsModel {
     private Long commentById;
 
     @Column(name = "dateCommented")
-    private LocalDate dateCommented;
+    private String dateCommented;
 
     @Column(name = "status")
     private String status;
@@ -36,7 +36,7 @@ public class CommentsModel {
     public CommentsModel() {
     }
 
-    public CommentsModel(Long id, String comment, Long commentById, LocalDate dateCommented) {
+    public CommentsModel(Long id, String comment, Long commentById, String dateCommented) {
         this.id = id;
         this.comment = comment;
         this.commentById = commentById;
@@ -67,11 +67,11 @@ public class CommentsModel {
         this.commentById = commentById;
     }
 
-    public LocalDate getDateCommented() {
+    public String getDateCommented() {
         return dateCommented;
     }
 
-    public void setDateCommented(LocalDate dateCommented) {
+    public void setDateCommented(String dateCommented) {
         this.dateCommented = dateCommented;
     }
 

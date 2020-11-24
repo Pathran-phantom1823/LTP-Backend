@@ -1,6 +1,7 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ import net.springBootAuthentication.springBootAuthentication.exception.ResourceN
 import net.springBootAuthentication.springBootAuthentication.model.ReportsModel;
 import net.springBootAuthentication.springBootAuthentication.repository.ReportsRepository;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -28,11 +29,12 @@ public class ReportsController {
     @PostMapping("/report")
     public ResponseEntity<?> post(@RequestBody ReportsModel entity) {
         ReportsModel rModel = new ReportsModel();
-        LocalDate date = LocalDate.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = new Date();
         rModel.setAccountId(entity.getAccountId());
         rModel.setTopic(entity.getTopic());
         rModel.setDescription(entity.getDescription());
-        rModel.setReportTimestamp(date);
+        rModel.setReportTimestamp(dateFormat.format(date));
         rModel.setDateResolve(entity.getDateResolve());
         rModel.setResolve(entity.getResolve());
 
@@ -53,9 +55,6 @@ public class ReportsController {
     @GetMapping("/getReports")
     public ResponseEntity<?> getMethodName() {
         List<CustomReports> list = reportsRepository.getReports();
-        for (CustomReports customReports : list) {
-            System.out.println(customReports.getEmail());
-        }
         return ResponseEntity.ok(list);
     }
     

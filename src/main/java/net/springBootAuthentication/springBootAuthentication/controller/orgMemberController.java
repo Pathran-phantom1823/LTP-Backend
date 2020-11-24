@@ -1,26 +1,17 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
-import java.io.IOException;
-import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-import javax.management.relation.Role;
-import javax.persistence.EntityManager;
-import javax.persistence.StoredProcedureQuery;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.aspectj.weaver.MemberKind;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,9 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
-import net.bytebuddy.asm.Advice.Local;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomAssignedQuotation;
-import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobApplicant;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomOrgMember;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomQuotationAssignment;
@@ -47,11 +36,7 @@ import net.springBootAuthentication.springBootAuthentication.repository.RoleRepo
 import net.springBootAuthentication.springBootAuthentication.repository.orgMemberRepository;
 // import net.springBootAuthentication.springBootAuthentication.services.orgMemberService;
 
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/ltp")
@@ -72,9 +57,6 @@ public class orgMemberController {
     QuotationAssigmentRepository quotationAssigmentRepository;
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     RegisterRepository registerRepository;
 
     @Autowired
@@ -84,11 +66,10 @@ public class orgMemberController {
     public ResponseEntity<?> createMembers(@RequestBody CustomOrgMember entity) throws BadRequest {
         try {
             RegisterModel registerModel = new RegisterModel();
-            // RoleModel roleModel = new RoleModel();
-            // System.out.println(entity.getRoleType());
             Integer roleModel = registerRepository.getRoleIdByType(entity.getRoleType());
             OrgMembers orgMembers = new OrgMembers();
-            LocalDate date = LocalDate.now();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            Date date = new Date();
 
             registerModel.setEmail(entity.getEmail());
             registerModel.setUsername(entity.getUsername());
@@ -97,10 +78,10 @@ public class orgMemberController {
             registerModel.setExpired("false");
             registerModel.setIsDisabled("false");
             registerModel.setIsMember("false");
-            registerModel.setDateCreated(date);
+            registerModel.setDateCreated(dateFormat.format(date));
             registerRepository.saveAndFlush(registerModel);
 
-            orgMembers.setCreateAt(date);
+            orgMembers.setCreateAt(dateFormat.format(date));
             orgMembers.setAccountId(registerModel.getId());
             orgMembers.setOrgId(entity.getOrgId());
             orgMemberRepository.save(orgMembers);
@@ -173,10 +154,6 @@ public class orgMemberController {
         try {
             Long id = entity.getId();
             List<CustomJobs> list = orgMemberRepository.getMyAssignedJobs(id);
-            for (CustomJobs customJobs : list) {
-                System.out.println(customJobs.getToPrice());
-            }
-
             return ResponseEntity.ok(list);
         } catch (Exception e) {
             return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
@@ -194,11 +171,12 @@ public class orgMemberController {
     @PostMapping(value = "/assignQuote")
     public ResponseEntity<?> assignQuote(@RequestBody QuotationAssigmentModel entity) {
         QuotationAssigmentModel model = new QuotationAssigmentModel();
-        LocalDate date = LocalDate.now();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = new Date();
         try {
             model.setAccountId(entity.getAccountId());
             model.setJobId(entity.getJobId());
-            model.setDateAssigned(date);
+            model.setDateAssigned(dateFormat.format(date));
             model.setStatus(entity.getStatus());
             model.setAssignedById(entity.getAssignedById());
 

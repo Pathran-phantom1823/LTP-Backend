@@ -1,6 +1,7 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
 import java.io.IOException;
+import java.nio.file.Files;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -28,7 +29,6 @@ public class ImageController {
     @Autowired
     private ProfileRepository profileRepository;
 
-    
     @PostMapping(value = "/getAgencyImage", produces = MediaType.IMAGE_JPEG_VALUE)
     public ResponseEntity<?> getAdminProfiles(@RequestBody AgencyProfileModel entity) throws IOException {
         try {
@@ -58,6 +58,7 @@ public class ImageController {
                 return ResponseEntity.ok(null);
             } else {
                 ClassPathResource files = new ClassPathResource("img/" + file);
+                System.out.println(files);
                 byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
 
                 return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);

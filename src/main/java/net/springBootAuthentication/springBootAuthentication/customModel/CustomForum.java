@@ -11,15 +11,15 @@ public interface CustomForum {
     String getLastName();
     String getComment();
     Long getNumberOfComments();
-    LocalDate getDatePosted();
+    String getDatePosted();
     Long getAccountId() ;
     Long getLikes();
-    LocalDate getDateCommented();
+    String getDateCommented();
     Long getTransactionId();
     Long getPostId();
     Long getCommentId();
     Long getId();
-    LocalDate getDate();
+    String getDate();
     String getStatus();
     Long getLikeById();
 }

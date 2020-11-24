@@ -1,7 +1,5 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
-import java.time.LocalDate;
-
 public class CustomOrgMember {
     private long id;
 
@@ -13,7 +11,7 @@ public class CustomOrgMember {
 
     private String isDisabled;
 
-    private LocalDate dateCreated;
+    private String dateCreated;
 
     private String isMember;
 
@@ -29,7 +27,7 @@ public class CustomOrgMember {
     }
 
     public CustomOrgMember(long id, String username, String password, String email, String isDisabled,
-            LocalDate dateCreated, String isMember, long roleId, String roleType, String expired, Long orgId) {
+            String dateCreated, String isMember, long roleId, String roleType, String expired, Long orgId) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -83,11 +81,11 @@ public class CustomOrgMember {
         this.isDisabled = isDisabled;
     }
 
-    public LocalDate getDateCreated() {
+    public String getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDate dateCreated) {
+    public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 

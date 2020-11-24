@@ -35,7 +35,7 @@ public class AdminProfileModel {
 	private String gender;
 
 	@Column(name = "birthdate")
-	private Date birthdate;
+	private String birthdate;
 
 	@Column(name = "email")
 	private String email;
@@ -102,11 +102,11 @@ public class AdminProfileModel {
         this.gender = gender;
     }
 
-    public Date getBirthdate() {
+    public String getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 
@@ -135,7 +135,7 @@ public class AdminProfileModel {
     }
 
     public AdminProfileModel(long id, long accountId, long addressId, String firstname, String lastname, Integer age,
-            String gender, Date birthdate, String email, float pricing, String phonenumber, String image) {
+            String gender, String birthdate, String email, float pricing, String phonenumber, String image) {
         this.id = id;
         this.accountId = accountId;
         this.addressId = addressId;
