@@ -15,17 +15,14 @@ import net.springBootAuthentication.springBootAuthentication.customModel.CustomT
 public interface JobsTransactionRepository extends JpaRepository<JobTransactionModel, Long> {
     
     @Transactional
-	@Modifying
     @Query(value = "{call getAssignedJobs(:id)}", nativeQuery = true)
     List<CustomTransactionJobs> getAssignedJobs(@Param("id") Long id);
 
     @Transactional
-	@Modifying
     @Query(value = "{call getAssignedJobsById(:id)}", nativeQuery = true)
     List<CustomTransactionJobs> getAssignedJobsById(@Param("id") Long id);
 
     @Transactional
-	@Modifying
     @Query(value = "{call getJobHistory(:id)}", nativeQuery = true)
     List<CustomJobHistory> getJobHistory(@Param("id") Long id);
 }

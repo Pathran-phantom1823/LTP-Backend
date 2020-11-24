@@ -14,12 +14,10 @@ import net.springBootAuthentication.springBootAuthentication.model.RoomModel;
 public interface RoomRespository extends JpaRepository<RoomModel, Long>{
 
     @Transactional
-	@Modifying
     @Query(value = "{call getMyRooms(:id)}", nativeQuery = true)
     List<CustomRooms> getMyRooms(@Param("id") Long id);
 
     @Transactional
-	@Modifying
     @Query(value = "{call getEndpoints()}", nativeQuery = true)
     List<String> getEndpoints();
     

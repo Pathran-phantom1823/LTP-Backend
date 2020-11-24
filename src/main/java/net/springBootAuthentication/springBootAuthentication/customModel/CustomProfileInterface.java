@@ -25,7 +25,7 @@ public interface CustomProfileInterface {
 
     Integer getAge();
 
-    Date getBirthdate();
+    String getBirthdate();
 
     String getEmail();
 

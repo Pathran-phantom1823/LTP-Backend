@@ -15,7 +15,6 @@ import net.springBootAuthentication.springBootAuthentication.model.SaveJob;
 public interface SaveJobRepository extends JpaRepository<SaveJob, Long>{
     
     @Transactional
-	@Modifying
     @Query(value = "{call getSaveJobs(:id)}", nativeQuery = true)
     List<CustomJobs> getSaveJobs(@Param("id") Long id);
 }

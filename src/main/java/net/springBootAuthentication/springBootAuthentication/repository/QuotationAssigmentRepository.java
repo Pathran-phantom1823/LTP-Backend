@@ -16,7 +16,6 @@ import net.springBootAuthentication.springBootAuthentication.model.QuotationAssi
 public interface QuotationAssigmentRepository extends JpaRepository<QuotationAssigmentModel, Long> {
 
     @Transactional
-	@Modifying
     @Query(value = "{call getMyAssignedQuote(:id)}", nativeQuery = true)
     List<CustomAssignedQuotation> getMyAssignedQuotations(@Param("id") Long id);   
 
