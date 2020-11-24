@@ -313,7 +313,6 @@ public class ProfileController {
 
                 AddressModel addressModel = new AddressModel();
                 EducationModel educationModel = new EducationModel();
-                LocalDate date = LocalDate.now();
 
                 addressModel.setCity(entity.getCity());
                 addressModel.setCountry(entity.getCountry());
