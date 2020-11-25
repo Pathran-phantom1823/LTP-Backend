@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,7 +82,7 @@ public class ProfileController {
                 Long exist = profileRepository.checkAccountExisted(id);
                 List<Object> res = new ArrayList<>();
                 RegisterModel account = registerRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("not found"));
+                                .orElseThrow(() -> new ResourceNotFoundException("not found"));
                 List<CustomProfileInterface> retrieveProfileResult = profileRepository.getProfileById(id);
                 if (exist != null) {
                         res.add(account);
@@ -109,7 +110,10 @@ public class ProfileController {
                         CategoryModel categoryModel = new CategoryModel();
 
                         CustomProfiles customProfile = objectMapper.readValue(data, CustomProfiles.class);
-                        // LocalDate date = LocalDate.now();
+
+                        RegisterModel registerModel = registerRepository.findById(customProfile.getAccountId())
+                                        .orElseThrow(() -> new ResourceNotFoundException("not found"));
+
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
                         Date date = new Date();
 
@@ -134,6 +138,11 @@ public class ProfileController {
                         skillModel.setSkillname(customProfile.getSkillname().toString());
                         skillModel.setTimestamps(date.toString());
                         skillsRepository.saveAndFlush(skillModel);
+
+                        registerModel.setUsername(customProfile.getUsername());
+                        registerModel.setPassword(new BCryptPasswordEncoder().encode(customProfile.getPassword()));
+                        registerModel.setEmail(customProfile.getEmail());
+                        registerRepository.save(registerModel);
 
                         System.out.println(customProfile.getAccountId());
                         profileModel.setAccountId(customProfile.getAccountId());
