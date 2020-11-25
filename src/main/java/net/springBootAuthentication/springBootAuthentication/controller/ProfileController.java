@@ -76,16 +76,19 @@ public class ProfileController {
         private RegisterRepository registerRepository;
 
         @PostMapping(value = "/retrieveProfileDetails")
-        public ResponseEntity<?> postMethodName(@RequestBody ProfileModel entity) {
+        public ResponseEntity<?> postMethodName(@RequestBody ProfileModel entity) throws ResourceNotFoundException {
                 Long id = entity.getAccountId();
                 Long exist = profileRepository.checkAccountExisted(id);
                 List<Object> res = new ArrayList<>();
+                RegisterModel account = registerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("not found"));
                 List<CustomProfileInterface> retrieveProfileResult = profileRepository.getProfileById(id);
                 if (exist != null) {
+                        res.add(account);
                         res.add(retrieveProfileResult);
                         res.add(false);
                 } else {
-                        // res.add(result);
+                        res.add(account);
                         res.add(true);
                 }
 
