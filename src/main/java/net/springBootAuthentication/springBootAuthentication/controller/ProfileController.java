@@ -85,8 +85,8 @@ public class ProfileController {
                                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
                 List<CustomProfileInterface> retrieveProfileResult = profileRepository.getProfileById(id);
                 if (exist != null) {
-                        res.add(account);
                         res.add(retrieveProfileResult);
+                        res.add(account);
                         res.add(false);
                 } else {
                         res.add(account);
@@ -99,9 +99,6 @@ public class ProfileController {
         @RequestMapping(value = "/createprofile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         public ResponseEntity<Object> postJob(@RequestPart(value = "data") String data,
                         @RequestPart(value = "img") final MultipartFile img) throws IOException {
-
-                // System.out.println(postDetails);
-                // System.out.println(file);
                 try {
                         ProfileModel profileModel = new ProfileModel();
                         AddressModel addressModel = new AddressModel();
@@ -144,9 +141,11 @@ public class ProfileController {
                         registerModel.setEmail(customProfile.getEmail());
                         registerRepository.save(registerModel);
 
-                        System.out.println(customProfile.getAccountId());
+                        categoryModel.setName(customProfile.getCategory());
+                        categoryModel.setTimestamps(date.toString());
+                        categoryRepository.save(categoryModel);
+
                         profileModel.setAccountId(customProfile.getAccountId());
-                        System.out.println(profileModel.getAccountId());
                         profileModel.setImage(String.format("%d%s%s", customProfile.getAccountId(), date, imageName));
                         profileModel.setAddressId(addressModel.getId());
                         profileModel.setAge(customProfile.getAge());
@@ -160,6 +159,7 @@ public class ProfileController {
                         profileModel.setDateTo(customProfile.getDateTo());
                         profileModel.setTimeFrom(customProfile.getTimeFrom());
                         profileModel.setTimeTo(customProfile.getTimeTo());
+                        profileModel.setCategoryId(categoryModel.getId());
                         profileRepository.saveAndFlush(profileModel);
 
                         profileSkillsModel.setTimestamps(date.toString());
@@ -167,8 +167,6 @@ public class ProfileController {
                         profileSkillsModel.setSkillid(skillModel.getId());
                         profileSkillsRepository.saveAndFlush(profileSkillsModel);
 
-                        categoryModel.setName(customProfile.getCategory());
-                        categoryModel.setTimestamps(date.toString());
 
                         List<Object> list = new ArrayList<>();
 
@@ -177,12 +175,9 @@ public class ProfileController {
                         list.add(profileModel);
                         list.add(profileSkillsModel);
                         list.add(categoryModel);
-
-                        System.out.println("Data:" + list);
                         return ResponseEntity.ok(list);
 
                 } catch (Exception e) {
-                        // TODO: handle exception
                         return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
                 }
         }
