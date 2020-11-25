@@ -20,7 +20,6 @@ public interface QuotationAssigmentRepository extends JpaRepository<QuotationAss
     List<CustomAssignedQuotation> getMyAssignedQuotations(@Param("id") Long id);   
 
     @Transactional
-	@Modifying
     @Query(value = "{call  getQuotationPrimaryId(:id)}", nativeQuery = true)
     Long  getQuotationPrimaryId(@Param("id") Long id);
 }
