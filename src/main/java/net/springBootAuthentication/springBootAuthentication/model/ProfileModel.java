@@ -59,6 +59,9 @@ public class ProfileModel {
 	@Column(name = "time_to")
 	private String timeTo;
 
+	@Column(name = "categoryId")
+	private Long categoryId;
+
 	public ProfileModel() {
 	}
 
@@ -200,6 +203,14 @@ public class ProfileModel {
 
 	public void setTimeTo(String timeTo) {
 		this.timeTo = timeTo;
+	}
+
+	public Long getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Long categoryId) {
+		this.categoryId = categoryId;
 	}
 
 }
