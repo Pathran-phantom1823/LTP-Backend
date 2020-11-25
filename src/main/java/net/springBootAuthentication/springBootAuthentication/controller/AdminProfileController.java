@@ -121,7 +121,7 @@ public class AdminProfileController {
         if (existed != null) {
             val.add(ProfileId);
             val.add(account);
-            val.add(true);
+            val.add(false);
         } else {
             val.add(account);
             val.add(true);
