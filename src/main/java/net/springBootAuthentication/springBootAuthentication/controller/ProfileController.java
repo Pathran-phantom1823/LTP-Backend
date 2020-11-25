@@ -121,7 +121,7 @@ public class ProfileController {
                         String imageName = tempImageName.replaceAll("\\s+", "_");
 
                         File convertfile = new File("src/main/resources/img/"
-                                        + String.format("%d%s%s", customProfile.getAccountId(), date, imageName));
+                                        + String.format("%d%s%s", customProfile.getAccountId(), dateFormat.format(date), imageName));
 
                         convertfile.createNewFile();
                         FileOutputStream fout = new FileOutputStream(convertfile);
@@ -252,10 +252,8 @@ public class ProfileController {
                         @RequestPart(value = "img") final MultipartFile img)
                         throws IOException, ResourceNotFoundException {
 
-                LocalDate date = LocalDate.now();
 
                 CustomProfile entity = objectMapper.readValue(data, CustomProfile.class);
-                System.out.println(">>>>Data: " + entity);
 
                 ProfileModel profileModel = profileRepository.findById(entity.getId())
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
@@ -271,11 +269,12 @@ public class ProfileController {
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                Date date = new Date();
 
                 String tempImageName = img.getOriginalFilename();
                 String imageName = tempImageName.replaceAll("\\s+", "_");
                 File convertfile = new File("src/main/resources/img/"
-                                + String.format("%d%s%s", entity.getAccountId(), date, imageName));
+                                + String.format("%d%s%s", entity.getAccountId(), dateFormat.format(date), imageName));
                 convertfile.createNewFile();
                 FileOutputStream fout = new FileOutputStream(convertfile);
                 fout.write(img.getBytes());
