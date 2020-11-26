@@ -68,7 +68,7 @@ public class orgMemberController {
             RegisterModel registerModel = new RegisterModel();
             Integer roleModel = registerRepository.getRoleIdByType(entity.getRoleType());
             OrgMembers orgMembers = new OrgMembers();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
 
             registerModel.setEmail(entity.getEmail());
@@ -171,7 +171,7 @@ public class orgMemberController {
     @PostMapping(value = "/assignQuote")
     public ResponseEntity<?> assignQuote(@RequestBody QuotationAssigmentModel entity) {
         QuotationAssigmentModel model = new QuotationAssigmentModel();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         try {
             model.setAccountId(entity.getAccountId());

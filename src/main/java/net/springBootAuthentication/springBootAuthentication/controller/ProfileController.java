@@ -111,7 +111,7 @@ public class ProfileController {
                         RegisterModel registerModel = registerRepository.findById(customProfile.getAccountId())
                                         .orElseThrow(() -> new ResourceNotFoundException("not found"));
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Date date = new Date();
 
                         String tempImageName = img.getOriginalFilename();
@@ -204,7 +204,7 @@ public class ProfileController {
                 RegisterModel registerModel = registerRepository.findById(entity.getAccountId())
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
                 registerModel.setUsername(entity.getUsername());
                 registerModel.setPassword(entity.getPassword());
@@ -263,7 +263,7 @@ public class ProfileController {
                 CategoryModel categoryModel = categoryRepository.findById(entity.getCategoryId())
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = new Date();
 
                 String tempImageName = img.getOriginalFilename();
