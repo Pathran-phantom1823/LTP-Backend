@@ -78,7 +78,7 @@ public class AgencyProfileController {
         CategoryModel categoryModel = new CategoryModel();
         ProfileSkillsModel profileSkillsModel = new ProfileSkillsModel();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
 
         CustomAgencyProfile entity = objectMapper.readValue(data, CustomAgencyProfile.class);

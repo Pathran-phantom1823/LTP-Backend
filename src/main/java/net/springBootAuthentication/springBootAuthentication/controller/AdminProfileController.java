@@ -190,7 +190,7 @@ public class AdminProfileController {
             AdminProfileModel apModel = adminProfileRepository.findById(adminId)
                     .orElseThrow(() -> new ResourceNotFoundException("not found"));
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
             adModel.setCity(entity.getCity());
