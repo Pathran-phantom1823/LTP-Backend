@@ -146,7 +146,7 @@ public class ProfileController {
                         categoryRepository.save(categoryModel);
 
                         profileModel.setAccountId(customProfile.getAccountId());
-                        profileModel.setImage(String.format("%d%s%s", customProfile.getAccountId(), date, imageName));
+                        profileModel.setImage(String.format("%d%s%s", customProfile.getAccountId(), dateFormat.format(date), imageName));
                         profileModel.setAddressId(addressModel.getId());
                         profileModel.setAge(customProfile.getAge());
                         profileModel.setBirthdate(dateFormat.format(customProfile.getBirthdate()));
@@ -295,7 +295,7 @@ public class ProfileController {
                 categoryRepository.saveAndFlush(categoryModel);
 
                 profileModel.setAccountId(entity.getAccountId());
-                profileModel.setImage(imageName);
+                profileModel.setImage(String.format("%d%s%s", entity.getAccountId(), dateFormat.format(date), imageName));
                 profileModel.setAddressId(addressModel.getId());
                 profileModel.setAge(entity.getAge());
                 profileModel.setBirthdate(dateFormat.format(entity.getBirthdate()));
