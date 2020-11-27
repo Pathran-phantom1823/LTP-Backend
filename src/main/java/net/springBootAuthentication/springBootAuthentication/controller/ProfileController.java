@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,16 +77,19 @@ public class ProfileController {
         private RegisterRepository registerRepository;
 
         @PostMapping(value = "/retrieveProfileDetails")
-        public ResponseEntity<?> postMethodName(@RequestBody ProfileModel entity) {
+        public ResponseEntity<?> postMethodName(@RequestBody ProfileModel entity) throws ResourceNotFoundException {
                 Long id = entity.getAccountId();
                 Long exist = profileRepository.checkAccountExisted(id);
                 List<Object> res = new ArrayList<>();
+                RegisterModel account = registerRepository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException("not found"));
                 List<CustomProfileInterface> retrieveProfileResult = profileRepository.getProfileById(id);
                 if (exist != null) {
                         res.add(retrieveProfileResult);
+                        res.add(account);
                         res.add(false);
                 } else {
-                        // res.add(result);
+                        res.add(account);
                         res.add(true);
                 }
 
@@ -95,9 +99,6 @@ public class ProfileController {
         @RequestMapping(value = "/createprofile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
         public ResponseEntity<Object> postJob(@RequestPart(value = "data") String data,
                         @RequestPart(value = "img") final MultipartFile img) throws IOException {
-
-                // System.out.println(postDetails);
-                // System.out.println(file);
                 try {
                         ProfileModel profileModel = new ProfileModel();
                         AddressModel addressModel = new AddressModel();
@@ -106,15 +107,18 @@ public class ProfileController {
                         CategoryModel categoryModel = new CategoryModel();
 
                         CustomProfiles customProfile = objectMapper.readValue(data, CustomProfiles.class);
-                        // LocalDate date = LocalDate.now();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+
+                        RegisterModel registerModel = registerRepository.findById(customProfile.getAccountId())
+                                        .orElseThrow(() -> new ResourceNotFoundException("not found"));
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Date date = new Date();
 
                         String tempImageName = img.getOriginalFilename();
                         String imageName = tempImageName.replaceAll("\\s+", "_");
 
                         File convertfile = new File("src/main/resources/img/"
-                                        + String.format("%d%s%s", customProfile.getAccountId(), date, imageName));
+                                        + String.format("%d%s%s", customProfile.getAccountId(), dateFormat.format(date), imageName));
 
                         convertfile.createNewFile();
                         FileOutputStream fout = new FileOutputStream(convertfile);
@@ -132,10 +136,17 @@ public class ProfileController {
                         skillModel.setTimestamps(date.toString());
                         skillsRepository.saveAndFlush(skillModel);
 
-                        System.out.println(customProfile.getAccountId());
+                        registerModel.setUsername(customProfile.getUsername());
+                        registerModel.setPassword(new BCryptPasswordEncoder().encode(customProfile.getPassword()));
+                        registerModel.setEmail(customProfile.getEmail());
+                        registerRepository.save(registerModel);
+
+                        categoryModel.setName(customProfile.getCategory());
+                        categoryModel.setTimestamps(date.toString());
+                        categoryRepository.save(categoryModel);
+
                         profileModel.setAccountId(customProfile.getAccountId());
-                        System.out.println(profileModel.getAccountId());
-                        profileModel.setImage(String.format("%d%s%s", customProfile.getAccountId(), date, imageName));
+                        profileModel.setImage(String.format("%d%s%s", customProfile.getAccountId(), dateFormat.format(date), imageName));
                         profileModel.setAddressId(addressModel.getId());
                         profileModel.setAge(customProfile.getAge());
                         profileModel.setBirthdate(dateFormat.format(customProfile.getBirthdate()));
@@ -148,6 +159,7 @@ public class ProfileController {
                         profileModel.setDateTo(customProfile.getDateTo());
                         profileModel.setTimeFrom(customProfile.getTimeFrom());
                         profileModel.setTimeTo(customProfile.getTimeTo());
+                        profileModel.setCategoryId(categoryModel.getId());
                         profileRepository.saveAndFlush(profileModel);
 
                         profileSkillsModel.setTimestamps(date.toString());
@@ -155,8 +167,6 @@ public class ProfileController {
                         profileSkillsModel.setSkillid(skillModel.getId());
                         profileSkillsRepository.saveAndFlush(profileSkillsModel);
 
-                        categoryModel.setName(customProfile.getCategory());
-                        categoryModel.setTimestamps(date.toString());
 
                         List<Object> list = new ArrayList<>();
 
@@ -165,12 +175,9 @@ public class ProfileController {
                         list.add(profileModel);
                         list.add(profileSkillsModel);
                         list.add(categoryModel);
-
-                        System.out.println("Data:" + list);
                         return ResponseEntity.ok(list);
 
                 } catch (Exception e) {
-                        // TODO: handle exception
                         return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
                 }
         }
@@ -197,7 +204,7 @@ public class ProfileController {
                 RegisterModel registerModel = registerRepository.findById(entity.getAccountId())
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
                 registerModel.setUsername(entity.getUsername());
                 registerModel.setPassword(entity.getPassword());
@@ -240,10 +247,8 @@ public class ProfileController {
                         @RequestPart(value = "img") final MultipartFile img)
                         throws IOException, ResourceNotFoundException {
 
-                LocalDate date = LocalDate.now();
 
                 CustomProfile entity = objectMapper.readValue(data, CustomProfile.class);
-                System.out.println(">>>>Data: " + entity);
 
                 ProfileModel profileModel = profileRepository.findById(entity.getId())
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
@@ -258,12 +263,13 @@ public class ProfileController {
                 CategoryModel categoryModel = categoryRepository.findById(entity.getCategoryId())
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date();
 
                 String tempImageName = img.getOriginalFilename();
                 String imageName = tempImageName.replaceAll("\\s+", "_");
                 File convertfile = new File("src/main/resources/img/"
-                                + String.format("%d%s%s", entity.getAccountId(), date, imageName));
+                                + String.format("%d%s%s", entity.getAccountId(), dateFormat.format(date), imageName));
                 convertfile.createNewFile();
                 FileOutputStream fout = new FileOutputStream(convertfile);
                 fout.write(img.getBytes());
@@ -289,7 +295,7 @@ public class ProfileController {
                 categoryRepository.saveAndFlush(categoryModel);
 
                 profileModel.setAccountId(entity.getAccountId());
-                profileModel.setImage(imageName);
+                profileModel.setImage(String.format("%d%s%s", entity.getAccountId(), dateFormat.format(date), imageName));
                 profileModel.setAddressId(addressModel.getId());
                 profileModel.setAge(entity.getAge());
                 profileModel.setBirthdate(dateFormat.format(entity.getBirthdate()));

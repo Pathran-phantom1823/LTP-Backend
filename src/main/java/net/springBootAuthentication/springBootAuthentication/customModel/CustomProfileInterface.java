@@ -15,10 +15,6 @@ public interface CustomProfileInterface {
     
     Long getSkillId();
 
-    String getUsername();
-
-    String getPassword();
-
     String getFirstname();
 
     String getLastname();
@@ -26,8 +22,6 @@ public interface CustomProfileInterface {
     Integer getAge();
 
     String getBirthdate();
-
-    String getEmail();
 
     String getGender();
 

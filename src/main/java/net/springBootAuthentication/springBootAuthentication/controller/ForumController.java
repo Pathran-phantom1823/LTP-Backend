@@ -49,7 +49,7 @@ public class ForumController {
     public ResponseEntity<?> post(@RequestBody Forum entity) {
         ForumTransactionsModel fModel = new ForumTransactionsModel();
         ForumPostModel forumPostModel = new ForumPostModel();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
 
         forumPostModel.setDescription(entity.getDescription());
@@ -76,7 +76,7 @@ public class ForumController {
         Long id = entity.getPostId();
         CommentsModel comments = new CommentsModel();
         ForumTransactionsModel forum = new ForumTransactionsModel();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
 
         comments.setComment(entity.getComment());
@@ -125,7 +125,7 @@ public class ForumController {
             comments.setStatus("Null");
             commentsRepository.save(comments);
         } else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
             likes.setCommentId(entity.getCommentId());
             likes.setLikeById(entity.getLikeById());

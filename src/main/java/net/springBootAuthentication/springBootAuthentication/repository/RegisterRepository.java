@@ -22,7 +22,6 @@ public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
     public Optional<RegisterModel> findById(long id);
 
     @Transactional
-	@Modifying
     @Query (value =  "{call spRetrieveRoleIdByRoleType(:roletype)}", nativeQuery = true)
     Integer getRoleIdByType(@Param("roletype") String roletype);
 
@@ -35,7 +34,6 @@ public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
     List<RegisterModel> getOwnerofJobs(@Param("id") Long id);
 
     @Transactional
-	@Modifying
     @Query(value = "{call getEmail(:email)}", nativeQuery = true)
     Long getEmail(@Param("email") String email);
 

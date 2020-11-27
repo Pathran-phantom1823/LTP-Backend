@@ -53,8 +53,10 @@ public class RegisterController {
         try {
             RegisterModel account = new RegisterModel();
             Integer roleId = registerRepository.getRoleIdByType(entity.getRoleType());
+            System.out.println(entity.getRoleType());
+            System.out.println(roleId);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
 
             account.setUsername(entity.getUsername());

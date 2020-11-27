@@ -11,7 +11,6 @@ import net.springBootAuthentication.springBootAuthentication.model.CommentLikesM
 public interface CommentLikesRepository extends JpaRepository<CommentLikesModel, Long>{
     
     @Transactional
-	@Modifying
     @Query(value = "{call getLikes(:commentId, :likeById)}", nativeQuery = true)
     Long getLikes(@Param("commentId") Long commentId, @Param("likeById") Long likeById);
 }
