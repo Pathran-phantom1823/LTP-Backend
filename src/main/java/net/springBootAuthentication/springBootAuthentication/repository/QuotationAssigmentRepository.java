@@ -15,11 +15,11 @@ import net.springBootAuthentication.springBootAuthentication.model.QuotationAssi
 @Repository
 public interface QuotationAssigmentRepository extends JpaRepository<QuotationAssigmentModel, Long> {
 
-    @Transactional
+    
     @Query(value = "{call getMyAssignedQuote(:id)}", nativeQuery = true)
     List<CustomAssignedQuotation> getMyAssignedQuotations(@Param("id") Long id);   
 
-    @Transactional
+    
     @Query(value = "{call  getQuotationPrimaryId(:id)}", nativeQuery = true)
     Long  getQuotationPrimaryId(@Param("id") Long id);
 }

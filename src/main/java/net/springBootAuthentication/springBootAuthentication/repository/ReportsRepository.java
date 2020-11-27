@@ -13,7 +13,7 @@ import net.springBootAuthentication.springBootAuthentication.model.ReportsModel;
 
 @Repository
 public interface ReportsRepository  extends JpaRepository<ReportsModel, Long>{
-    @Transactional
+    
     @Query(value = "{call getReports()}", nativeQuery = true)
     public List<CustomReports> getReports();
 }
