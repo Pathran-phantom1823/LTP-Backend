@@ -17,26 +17,26 @@ import net.springBootAuthentication.springBootAuthentication.model.OrgMembers;
 @Repository
 public interface orgMemberRepository extends JpaRepository<OrgMembers, Long>{
 
-    @Transactional
+    
     @Query(value = "{call getMembers(:id)}", nativeQuery = true)
     List<OrgMembers> getMembers(@Param("id") Long id);
 
-    @Transactional
+    
 	
     @Query(value = "{call deleteMemberById(:id)}" , nativeQuery = true)
     void deleteMemberByid(@Param("id") Long id);
 
-    @Transactional
+    
 	
     @Query(value = "{call getRoleType()}", nativeQuery = true)
     Long getRoleType();
 
-    @Transactional
+    
 	
     @Query(value = "call updateMember(:id, :username, :email, :account_type, :expired, :is_member)", nativeQuery = true)
     void updateMembers(@Param("id") long id, @Param("username") String username, @Param("email") String email, @Param("account_type") String account_type, @Param("expired") Boolean expired, @Param("is_member") Boolean is_member);
 
-    @Transactional
+    
     @Query(value = "{call getMyAssignedJobs(:id)}", nativeQuery = true)
     List<CustomJobs> getMyAssignedJobs(@Param("id") Long id);
 }

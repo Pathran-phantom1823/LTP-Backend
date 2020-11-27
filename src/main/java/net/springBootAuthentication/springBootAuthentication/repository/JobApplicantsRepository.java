@@ -17,15 +17,15 @@ import net.springBootAuthentication.springBootAuthentication.model.JobApplicants
 @Repository
 public interface JobApplicantsRepository extends JpaRepository<JobApplicants, Long> {
     
-    @Transactional
+    
     @Query(value = "{call getAcceptedJobs(:id)}", nativeQuery = true)
     List<CustomJobs> getAcceptedJobs(@Param("id") Long id);
 
-    @Transactional
+    
     @Query(value = "{call getMyJobHistory(:id)}", nativeQuery = true)
     List<CustomJobApplicant> getMyJobHistory(@Param("id") Long id);
 
-    @Transactional
+    
     @Query(value = "{call getMembersAccount(:roleType)}", nativeQuery = true)
     List<CustomQuotationAssignment> getMembersAccount(@Param("roleType") String roleType);
 

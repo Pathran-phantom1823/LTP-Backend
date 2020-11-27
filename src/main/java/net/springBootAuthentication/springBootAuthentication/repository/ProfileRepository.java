@@ -15,11 +15,11 @@ import net.springBootAuthentication.springBootAuthentication.customModel.CustomP
 @Repository
 public interface ProfileRepository extends JpaRepository<ProfileModel, Long> {
 
-    @Transactional
+    
     @Query(value = "{call getImage(:id)}", nativeQuery = true)
     String getImage(@Param("id") Long id);
 
-    @Transactional
+    
     @Query(value = "{call getAdminImage(:id)}", nativeQuery = true)
     String getAdminImage(@Param("id") Long id);
 
