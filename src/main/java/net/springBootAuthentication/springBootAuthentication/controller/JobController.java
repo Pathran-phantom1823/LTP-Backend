@@ -694,7 +694,6 @@ public class JobController {
     @GetMapping(value = "/getQuotation")
     public ResponseEntity<?> getQuotation() {
         List<CustomQuotationAssigned> list = jobsRepository.getQuotationAdmin();
-
         return ResponseEntity.ok(list);
 
     }
