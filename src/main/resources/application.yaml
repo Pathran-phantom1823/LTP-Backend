@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: ltpbackend
+  datasource:
+    driverClassName: com.mysql.jdbc.Driver
+    url: "jdbc:mysql//google/ltp?cloudsqlinstance=ltp-backend-296917:us-central1:ltpbackend&socket=com.google.sql.mysql.SocketFactory&user=newusername&password=mypassword"
+    password: "mypassword"
+    username: "newusername"
