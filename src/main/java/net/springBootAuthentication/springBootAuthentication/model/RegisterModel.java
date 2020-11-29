@@ -90,7 +90,7 @@ public class RegisterModel {
         this.dateCreated = dateCreated;
     }
 
-    public String isDisabled() {
+    public String getIsDisabled() {
         return isDisabled;
     }
 

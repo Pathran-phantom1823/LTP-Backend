@@ -723,6 +723,16 @@ public class JobController {
             return ResponseEntity.ok(e);
         }
     }
+
+    @GetMapping(value = "/getTotalJobs")
+    public ResponseEntity<?> getTotalJobs(){
+        try {
+            List<Object> list = jobsRepository.totalJobs();
+            return ResponseEntity.ok(list);
+        }catch (Exception e){
+            return ResponseEntity.ok(e);
+        }
+    }
     
 
 }
