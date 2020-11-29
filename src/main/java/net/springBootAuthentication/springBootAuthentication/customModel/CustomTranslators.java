@@ -9,5 +9,7 @@ public interface CustomTranslators {
     String getTimeFrom();
     String getTimeTo();
     String getRoleType();
+    String getLanguages();
+    String getCategories();
     String geLastName();
 }

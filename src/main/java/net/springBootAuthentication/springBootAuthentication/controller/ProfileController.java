@@ -149,7 +149,7 @@ public class ProfileController {
                         profileModel.setImage(String.format("%d%s%s", customProfile.getAccountId(), dateFormat.format(date), imageName));
                         profileModel.setAddressId(addressModel.getId());
                         profileModel.setAge(customProfile.getAge());
-                        profileModel.setBirthdate(dateFormat.format(customProfile.getBirthdate()));
+                        profileModel.setBirthdate(customProfile.getBirthdate());
                         profileModel.setFirstname(customProfile.getFirstname());
                         profileModel.setLastname(customProfile.getLastname());
                         profileModel.setPhonenumber(customProfile.getPhonenumber());
@@ -205,6 +205,7 @@ public class ProfileController {
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                System.out.println(entity.getBirthdate());
 
                 registerModel.setUsername(entity.getUsername());
                 registerModel.setPassword(entity.getPassword());
@@ -227,7 +228,7 @@ public class ProfileController {
                 profileModel.setImage(entity.getImage());
                 profileModel.setAddressId(addressModel.getId());
                 profileModel.setAge(entity.getAge());
-                profileModel.setBirthdate(dateFormat.format(entity.getBirthdate()));
+                profileModel.setBirthdate(entity.getBirthdate());
                 profileModel.setFirstname(entity.getFirstname());
                 profileModel.setLastname(entity.getLastname());
                 profileModel.setPhonenumber(entity.getPhonenumber());
