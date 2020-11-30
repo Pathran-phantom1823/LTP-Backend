@@ -61,4 +61,6 @@ public  interface CustomJobs {
 
      String getCountry();
 
+     String getAssigned();
+
 }
