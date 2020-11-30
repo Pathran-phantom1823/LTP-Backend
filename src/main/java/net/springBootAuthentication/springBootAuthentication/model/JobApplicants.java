@@ -28,7 +28,17 @@ public class JobApplicants {
 
     private String dateFinished;
 
+    public String getAssigned() {
+        return assigned;
+    }
+
+    public void setAssigned(String assigned) {
+        this.assigned = assigned;
+    }
+
     private String finishedFile;
+
+    private String assigned;
 
     public JobApplicants() {
     }
