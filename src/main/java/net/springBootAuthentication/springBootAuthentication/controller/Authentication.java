@@ -54,7 +54,7 @@ public class Authentication {
 		final Long id;
 		final String roleName;
 		try {
-			RegisterModel info = check.findByusername(authenticationRequest.getUsername());
+			RegisterModel info = check.findByUsername(authenticationRequest.getUsername());
 			Long roleId = info.getRoleid();
 			RoleModel role = rolerepository.findById(roleId).orElseThrow(() -> new ResourceAccessException("not Found"));
 			roleName = role.getRoleType();
@@ -86,7 +86,7 @@ public class Authentication {
 	 public ResponseEntity<?> postMethodName(@RequestBody AuthenticationRequest entity) {
 	 	final String roleName;
 	 	try {
-	 		RegisterModel info = check.findByusername(entity.getUsername());
+	 		RegisterModel info = check.findByUsername(entity.getUsername());
 	 		Long roleId = info.getRoleid();
 	 		RoleModel role = rolerepository.findById(roleId).orElseThrow(() -> new ResourceAccessException("not Found"));
 	 		roleName = role.getRoleType();

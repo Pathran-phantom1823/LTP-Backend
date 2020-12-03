@@ -39,6 +39,9 @@ public class RegisterModel {
 
     @Column(name = "isMember")
     private String isMember;
+    
+    @Column( name = "expirationDate")
+    private String expirationDate;
 
     public long getId() {
         return id;
@@ -113,13 +116,21 @@ public class RegisterModel {
     public void setIsMember(String isMember) {
         this.isMember = isMember;
     }
+    
+    public String getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(String expirationDate) {
+        this.expirationDate = expirationDate;
+    }
 
     public RegisterModel() {
         
     }
 
     public RegisterModel(long id, String username, String email, String password, long roleid, String isDisabled,
-            String expired, String dateCreated, String isMember) {
+            String expired, String dateCreated, String isMember, String expirationDate) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -129,8 +140,6 @@ public class RegisterModel {
         this.expired = expired;
         this.dateCreated = dateCreated;
         this.isMember = isMember;
+        this.expirationDate = expirationDate;
     }
-
-    
-
 }
