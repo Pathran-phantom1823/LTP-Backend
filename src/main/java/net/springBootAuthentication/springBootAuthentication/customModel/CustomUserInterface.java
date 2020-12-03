@@ -6,5 +6,6 @@ public interface CustomUserInterface {
     String getUsername();
     String getRoleType();
     String getEmail();
+    String getIsDisabled();
     String getDateCreated();
 }

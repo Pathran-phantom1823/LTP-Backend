@@ -3,6 +3,7 @@ package net.springBootAuthentication.springBootAuthentication.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.springBootAuthentication.springBootAuthentication.customModel.JobCountInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -100,4 +101,16 @@ public class SummaryController {
 		}
 		return ResponseEntity.ok(new Response(200, "reports_years_summary", sum));
 	}
+
+	@GetMapping("/job-summary")
+	public ResponseEntity<?> jobsummary(){
+			ArrayList<JobCountInterface> count = null;
+			try {
+				count = summary.countJobs();
+			}catch (Exception e){
+				return  ResponseEntity.ok(e);
+			}
+			return ResponseEntity.ok(count);
+	}
+
 }

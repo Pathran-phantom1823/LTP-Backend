@@ -63,7 +63,6 @@ public interface JobsRepository extends JpaRepository<Jobs, Long>{
     @Query(value = "{call getQuotationAdmin()}", nativeQuery = true)
     List<CustomQuotationAssigned> getQuotationAdmin();
 
-
-
-    
+    @Query(value = "{call totalJobs()}", nativeQuery = true)
+    List<Object> totalJobs();
 }

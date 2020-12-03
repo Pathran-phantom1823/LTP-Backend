@@ -109,7 +109,6 @@ public class JobController {
 
             File convertfile = new File(
                     "src/main/resources/files/" + String.format("%d%s%s", jobs.getPostById(), dateFormat.format(date), filename));
-
             convertfile.createNewFile();
             FileOutputStream fout = new FileOutputStream(convertfile);
             fout.write(file.getBytes());
@@ -266,6 +265,7 @@ public class JobController {
             applicants.setDateApplied(dateFormat.format(date));
             applicants.setJobId(data.getJobId());
             applicants.setStatus("pending");
+            applicants.setAssigned("false");
 
             jobApplicantRepository.save(applicants);
 
@@ -323,6 +323,24 @@ public class JobController {
             Long id = data.getSavedById();
 
             List<CustomJobs> acceptedJobs = jobApplicantRepository.getAcceptedJobs(id);
+            if (acceptedJobs == null) {
+                return ResponseEntity.ok(null);
+            } else {
+                return ResponseEntity.ok(acceptedJobs);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
+        }
+
+    }
+
+    @PostMapping(value = "/get-not-assigned-jobs")
+    public ResponseEntity<?> getNotAssignedJobs(@RequestBody SaveJob data) {
+        try {
+            Long id = data.getSavedById();
+
+            List<CustomJobs> acceptedJobs = jobApplicantRepository.getNotAssignedJobs(id);
             if (acceptedJobs == null) {
                 return ResponseEntity.ok(null);
             } else {
@@ -425,6 +443,7 @@ public class JobController {
     @PostMapping(value = "/assign-job")
     public ResponseEntity<?> assignJob(@RequestBody JobTransactionModel entity) throws ResourceNotFoundException {
         try {
+
             JobTransactionModel hJobsTransaction = new JobTransactionModel();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
@@ -436,6 +455,9 @@ public class JobController {
             hJobsTransaction.setDatePosted(dateFormat.format(date));
 
             jobsTransactionRepository.save(hJobsTransaction);
+
+            Long id = entity.getJobId();
+            jobApplicantRepository.updateAplicantAssigned(id);
 
             return ResponseEntity.ok(hJobsTransaction);
 
@@ -720,6 +742,16 @@ public class JobController {
             List<CustomJobs> list = jobsRepository.searchJobTitle(title, id);
             return ResponseEntity.ok(list);
         } catch (Exception e) {
+            return ResponseEntity.ok(e);
+        }
+    }
+
+    @GetMapping(value = "/getTotalJobs")
+    public ResponseEntity<?> getTotalJobs(){
+        try {
+            List<Object> list = jobsRepository.totalJobs();
+            return ResponseEntity.ok(list);
+        }catch (Exception e){
             return ResponseEntity.ok(e);
         }
     }

@@ -2,6 +2,7 @@ package net.springBootAuthentication.springBootAuthentication.controller;
 
 import java.util.List;
 
+import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -73,6 +74,21 @@ public class UsersController {
     public List<CustomUserInterface> getAllUsers() {
         List<CustomUserInterface> list = registerRepository.getAllUser();
         return list;
+    }
+
+    @PostMapping(value = "/disableUser")
+    public ResponseEntity<?>disableUser(@RequestBody RegisterModel entity)throws  ResourceNotFoundException{
+        try {
+            String username = entity.getUsername();
+            String disable = entity.getIsDisabled();
+            System.out.println(username);
+            System.out.println(disable);
+            registerRepository.accountDisableEnable(username, disable);
+        }catch (Exception e){
+            return ResponseEntity.ok(e);
+        }
+        return ResponseEntity.ok("account disabled");
+
     }
     
     

@@ -3,6 +3,7 @@ package net.springBootAuthentication.springBootAuthentication.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.springBootAuthentication.springBootAuthentication.customModel.JobCountInterface;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -58,4 +59,8 @@ public interface AdminProfileRepository extends JpaRepository<AdminProfileModel,
     @Transactional
     @Query(value = "{call spSalesChart(:month, :year)}", nativeQuery = true)
     ArrayList<SalesChartModel> salesChartSummary(@Param("month") int month, @Param("year") int year);
+
+    @Transactional
+    @Query(value = "{call spCountJobs()}" , nativeQuery = true)
+    ArrayList<JobCountInterface> countJobs();
 }
