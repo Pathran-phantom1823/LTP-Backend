@@ -2,6 +2,7 @@ package net.springBootAuthentication.springBootAuthentication.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +57,13 @@ public class RegisterController {
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
+//            Date expiration = new Date();
 
+            Calendar c = Calendar.getInstance();
+            c.setTime(new Date());
+            c.add(Calendar.MONTH, 1);
+            String expiration = dateFormat.format(c.getTime());
+            
             account.setUsername(entity.getUsername());
             account.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
             account.setEmail(entity.getEmail());
@@ -65,6 +72,7 @@ public class RegisterController {
             account.setExpired("false");
             account.setIsMember("false");
             account.setRoleid(roleId);
+            account.setExpirationDate(expiration);
 
             registerRepository.save(account);
 

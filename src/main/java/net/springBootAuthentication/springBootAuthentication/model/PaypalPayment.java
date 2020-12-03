@@ -31,8 +31,15 @@ public class PaypalPayment {
 	@Lob
 	@Column(name = "paymentDetails", columnDefinition = "LONGTEXT")
 	private String paymentDetails;
+	
+	@Column(name = "planID")
+	private int planID;
+	
+	@Column(name = "dateCreated")
+	private String dateCreated;
 
-	public PaypalPayment(long id, String subscriptionPlan, double amount, String currency, int payerAccountID, String paymentDetails) {
+	public PaypalPayment(long id, String subscriptionPlan, double amount, String currency, int payerAccountID,
+			String paymentDetails, int planID, String dateCreated) {
 		super();
 		this.id = id;
 		this.subscriptionPlan = subscriptionPlan;
@@ -40,18 +47,13 @@ public class PaypalPayment {
 		this.currency = currency;
 		this.payerAccountID = payerAccountID;
 		this.paymentDetails = paymentDetails;
+		this.planID = planID;
+		this.dateCreated = dateCreated;
 	}
-	
-	public PaypalPayment(String subscriptionPlan, double amount, String currency, int payerAccountID, String paymentDetails) {
+
+	public PaypalPayment() {
 		super();
-		this.subscriptionPlan = subscriptionPlan;
-		this.amount = amount;
-		this.currency = currency;
-		this.payerAccountID = payerAccountID;
-		this.paymentDetails = paymentDetails;
 	}
-	
-	public PaypalPayment() {}
 
 	public long getId() {
 		return id;
@@ -76,6 +78,7 @@ public class PaypalPayment {
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
+
 	public String getCurrency() {
 		return currency;
 	}
@@ -99,5 +102,22 @@ public class PaypalPayment {
 	public void setPaymentDetails(String paymentDetails) {
 		this.paymentDetails = paymentDetails;
 	}
+
+	public int getPlanID() {
+		return planID;
+	}
+
+	public void setPlanID(int planID) {
+		this.planID = planID;
+	}
+
+	public String getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+	
 	
 }

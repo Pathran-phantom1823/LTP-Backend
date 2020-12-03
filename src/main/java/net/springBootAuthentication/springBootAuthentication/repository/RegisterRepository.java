@@ -64,6 +64,11 @@ public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
     
     @Query(value = "{call getAllUser()}", nativeQuery = true)
     List<CustomUserInterface> getAllUser();
+    
+    @Transactional
+	@Modifying
+    @Query(value = "{call spUpdateExpiration()}", nativeQuery = true)
+    void updateExpiration();
 
     @Query(value = "{call accountDisableEnable(:username, :disable)}", nativeQuery = true)
     void accountDisableEnable(@Param("username") String username, @Param("disable") String disable);

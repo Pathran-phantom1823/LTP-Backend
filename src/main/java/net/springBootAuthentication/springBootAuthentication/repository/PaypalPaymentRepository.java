@@ -12,12 +12,14 @@ public interface PaypalPaymentRepository extends JpaRepository<PaypalPayment, Lo
 
 	@Transactional
 	@Modifying
-	@Query(value = "{call spPaypalPayment(:amount, :currency, :plan, :details, :id)}" , nativeQuery = true)
+	@Query(value = "{call spPaypalPayment(:amount, :currency, :plan, :details, :id, :planID, :dateCreated)}" , nativeQuery = true)
     void pay(
     		@Param("amount") float amount, 
     		@Param("currency") String currency,
     		@Param("plan") String plan,
     		@Param("details") String details,
-    		@Param("id") Long id
+    		@Param("id") Long id,
+    		@Param("planID") Long planID,
+    		@Param("dateCreated") String dateCreated
     		);
 }

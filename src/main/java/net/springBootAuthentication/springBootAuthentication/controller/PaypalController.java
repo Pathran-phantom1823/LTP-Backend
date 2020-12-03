@@ -22,6 +22,7 @@ import com.paypal.api.payments.Payment;
 import com.paypal.base.rest.PayPalRESTException;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentRequestModel;
+import net.springBootAuthentication.springBootAuthentication.customModel.PaymentSuccessModel;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.model.Response;
 import net.springBootAuthentication.springBootAuthentication.repository.PaypalPaymentRepository;
@@ -58,7 +59,7 @@ public class PaypalController {
 		try {
 			Payment payment = service.createPayment(order.getTotal(), order.getCurrency(), order.getMethod(),
 					order.getIntent(), order.getDescription(), address + "user",
-					address + "user/userSuccess");
+					address + "paypal/success/" + order.getPlanID());
 			for (Links link : payment.getLinks()) {
 				if (link.getRel().equals("approval_url")) {
 					ArrayList<HashMap<String, String>> data = new ArrayList<>();
@@ -81,39 +82,75 @@ public class PaypalController {
 //		return ResponseEntity.ok("cancelled");
 //	}
 
-	@GetMapping("/success/{id}/{paymentId}/{PayerID}")
-	public ResponseEntity<Response> successPay(
-			@PathVariable(value = "id") String id, 
-			@PathVariable(value = "paymentId") String paymentId, 
-			@PathVariable(value = "PayerID") String payerId) {
+//	@GetMapping("/success/{id}/{paymentId}/{PayerID}")
+//	public ResponseEntity<Response> successPay(
+//			@PathVariable(value = "id") String id, 
+//			@PathVariable(value = "paymentId") String paymentId, 
+//			@PathVariable(value = "PayerID") String payerId) {
+//		try {
+//			Payment payment = service.executePayment(paymentId, payerId);
+//			if (payment.getState().equals("approved")) {
+////				PaypalPayment paypal = new PaypalPayment(
+////						payment.getTransactions().get(0).getDescription(), 
+////						Double.parseDouble(payment.getTransactions().get(0).getAmount().getTotal()), 
+////						payment.getTransactions().get(0).getAmount().getCurrency(),
+////						Integer.parseInt(id),
+////						payment.toJSON());
+//				payment_repository.pay(
+//						Float.parseFloat(payment.getTransactions().get(0).getAmount().getTotal()), 
+//						payment.getTransactions().get(0).getAmount().getCurrency(), 
+//						payment.getTransactions().get(0).getDescription(),
+//						payment.toJSON(),
+//						Long.valueOf(Integer.parseInt(id)));
+//				ArrayList<String> paidAccounts = new ArrayList<>();
+//				Optional<RegisterModel> paid = paid_account.findById(Long.valueOf(Integer.parseInt(id)));
+//				
+//				String new_role = role.findById(paid.get().getRoleid()).get().getRoleType();
+//				paidAccounts.add(new_role);
+//				return ResponseEntity.ok(new Response(200, "Initializing payment", paidAccounts));
+//			}
+//		} catch (PayPalRESTException e) {
+//			System.out.println(e.getMessage());
+//		} catch (Exception e) {
+//			System.out.println(e.getMessage());
+//		}
+//		return ResponseEntity.ok(new Response(200, "Initializing payment", new ArrayList<>()));
+//	}
+	
+	@PostMapping("/success")
+	public ResponseEntity<Response> successPay(@RequestBody PaymentSuccessModel successful_pay){
+		String message = "";
+		int status = 0;
+		ArrayList<String> paidAccounts = new ArrayList<>();
 		try {
-			Payment payment = service.executePayment(paymentId, payerId);
+			Payment payment = service.executePayment(successful_pay.getPaymentID(), successful_pay.getPayerID());
 			if (payment.getState().equals("approved")) {
-//				PaypalPayment paypal = new PaypalPayment(
-//						payment.getTransactions().get(0).getDescription(), 
-//						Double.parseDouble(payment.getTransactions().get(0).getAmount().getTotal()), 
-//						payment.getTransactions().get(0).getAmount().getCurrency(),
-//						Integer.parseInt(id),
-//						payment.toJSON());
 				payment_repository.pay(
 						Float.parseFloat(payment.getTransactions().get(0).getAmount().getTotal()), 
 						payment.getTransactions().get(0).getAmount().getCurrency(), 
 						payment.getTransactions().get(0).getDescription(),
 						payment.toJSON(),
-						Long.valueOf(Integer.parseInt(id)));
-				ArrayList<String> paidAccounts = new ArrayList<>();
-				Optional<RegisterModel> paid = paid_account.findById(Long.valueOf(Integer.parseInt(id)));
-				
+						Long.valueOf(Integer.parseInt(successful_pay.getUserID())),
+						Long.valueOf(Integer.parseInt(successful_pay.getPlanID())),
+						successful_pay.getDateCreated());
+				Optional<RegisterModel> paid = paid_account.findById(Long.valueOf(Integer.parseInt(successful_pay.getUserID())));
+				System.out.println("====user id===== " + paid.get().getRoleid());
 				String new_role = role.findById(paid.get().getRoleid()).get().getRoleType();
 				paidAccounts.add(new_role);
-				return ResponseEntity.ok(new Response(200, "Initializing payment", paidAccounts));
+				status = 200;
+				message = "Paid Succesfully";
 			}
 		} catch (PayPalRESTException e) {
 			System.out.println(e.getMessage());
+			message = "PayPayRestException";
+			status = 500;
+			paidAccounts.add(e.toString());
 		} catch (Exception e) {
+			message = "Internal Server Error";
+			status = 500;
+			paidAccounts.add(e.toString());
 			System.out.println(e.getMessage());
 		}
-		return ResponseEntity.ok(new Response(200, "Initializing payment", new ArrayList<>()));
+		return ResponseEntity.ok(new Response(status, message, paidAccounts));
 	}
-
 }
