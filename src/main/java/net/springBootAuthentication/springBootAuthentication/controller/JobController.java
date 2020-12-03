@@ -108,8 +108,7 @@ public class JobController {
             String filename = tempFileName.replaceAll("\\s+", "_");
 
             File convertfile = new File(
-                    "src/main/resources/files/" + String.format("%d%s%s", jobs.getPostById(), date, filename));
-
+                    "src/main/resources/files/" + String.format("%d%s%s", jobs.getPostById(), dateFormat.format(date), filename));
             convertfile.createNewFile();
             FileOutputStream fout = new FileOutputStream(convertfile);
             fout.write(file.getBytes());
@@ -519,7 +518,7 @@ public class JobController {
             String filename = tempFileName.replaceAll("\\s+", "_");
 
             File convertfile = new File(
-                    "src/main/resources/files/" + String.format("%d%s%s", jobs.getPostById(), date, filename));
+                    "src/main/resources/files/" + String.format("%d%s%s", jobs.getPostById(), dateFormat.format(date), filename));
 
             convertfile.createNewFile();
             FileOutputStream fout = new FileOutputStream(convertfile);
