@@ -193,9 +193,7 @@ public class orgMemberController {
     public ResponseEntity<?> getmyAssignedQuotations(@RequestBody RegisterModel entity) {
         try {
             Long id = entity.getId();
-
         List<CustomAssignedQuotation> list = quotationAssigmentRepository.getMyAssignedQuotations(id);
-        
         return ResponseEntity.ok(list);
         } catch (Exception e) { 
             return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
