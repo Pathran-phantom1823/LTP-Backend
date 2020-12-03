@@ -21,58 +21,50 @@ public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
     public RegisterModel findByUsername(String username);
     public Optional<RegisterModel> findById(long id);
 
-    @Transactional
-	@Modifying
+    
     @Query (value =  "{call spRetrieveRoleIdByRoleType(:roletype)}", nativeQuery = true)
     Integer getRoleIdByType(@Param("roletype") String roletype);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getMembers(:id)}", nativeQuery = true)
     List<RegisterModel> getMembers(@Param("id") Long id);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getJobById(:id)}", nativeQuery = true)
     List<RegisterModel> getOwnerofJobs(@Param("id") Long id);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getEmail(:email)}", nativeQuery = true)
     Long getEmail(@Param("email") String email);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getAllTranslators(:id)}", nativeQuery = true)
     List<CustomTranslators> getAllTranslators(@Param("id") Long id);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getAgencyTranslators(:id)}", nativeQuery = true)
     List<CustomTranslators> getAgencyTranslators(@Param("id") Long id);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getCurrentUser(:id)}", nativeQuery = true)
     CustomUser getCurrentUser(@Param("id") Long id);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call checkUsernameExist(:username)}", nativeQuery = true)
     String checkUsernameExist(@Param("username") String username);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call checkEmailExist(:email)}", nativeQuery = true)
     String checkEmailExist(@Param("email") String email);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getAgents()}", nativeQuery = true)
     List<RegisterModel> getAgents();
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getAllUser()}", nativeQuery = true)
     List<CustomUserInterface> getAllUser();
+
+    @Query(value = "{call accountDisableEnable(:username, :disable)}", nativeQuery = true)
+    void accountDisableEnable(@Param("username") String username, @Param("disable") String disable);
 }

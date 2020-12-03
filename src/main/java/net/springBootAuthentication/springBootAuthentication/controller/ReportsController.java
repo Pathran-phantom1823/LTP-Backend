@@ -29,7 +29,7 @@ public class ReportsController {
     @PostMapping("/report")
     public ResponseEntity<?> post(@RequestBody ReportsModel entity) {
         ReportsModel rModel = new ReportsModel();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         rModel.setAccountId(entity.getAccountId());
         rModel.setTopic(entity.getTopic());

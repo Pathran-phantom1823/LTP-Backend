@@ -23,19 +23,19 @@ public class EducationModel {
     private String schoolname;
 
     @Column(name = "schoolyear")
-    private int schoolyear;
+    private Integer schoolyear;
 
     @Column(name = "addressId")
     private long addressId;
 
     @Column(name = "timestamps")
-    private String timestamps;
+    private LocalDate timestamps;
 
     public EducationModel() {
     }
 
-    public EducationModel(long id, long profileId, String schoolname, int schoolyear, long addressId,
-    String timestamps) {
+    public EducationModel(long id, long profileId, String schoolname, Integer schoolyear, long addressId,
+    LocalDate timestamps) {
         this.id = id;
         this.profileId = profileId;
         this.schoolname = schoolname;
@@ -68,11 +68,11 @@ public class EducationModel {
         this.schoolname = schoolname;
     }
 
-    public int getSchoolyear() {
+    public Integer getSchoolyear() {
         return schoolyear;
     }
 
-    public void setSchoolyear(int schoolyear) {
+    public void setSchoolyear(Integer schoolyear) {
         this.schoolyear = schoolyear;
     }
 
@@ -84,11 +84,11 @@ public class EducationModel {
         this.addressId = addressId;
     }
 
-    public String getTimestamps() {
+    public LocalDate getTimestamps() {
         return timestamps;
     }
 
-    public void setTimestamps(String timestamps) {
+    public void setTimestamps(LocalDate timestamps) {
         this.timestamps = timestamps;
     }
 

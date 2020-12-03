@@ -29,7 +29,6 @@ import net.springBootAuthentication.springBootAuthentication.repository.ForumTra
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
 
-
 @RestController
 @RequestMapping("/api")
 public class RegisterController {
@@ -46,15 +45,16 @@ public class RegisterController {
     @Autowired
     private CommentLikesRepository commentsLikesRepository;
 
-
     @PostMapping("/register")
 
     public ResponseEntity<?> addAccount(@RequestBody Register entity) throws BadRequest {
         try {
             RegisterModel account = new RegisterModel();
             Integer roleId = registerRepository.getRoleIdByType(entity.getRoleType());
+            System.out.println(entity.getRoleType());
+            System.out.println(roleId);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date();
 
             account.setUsername(entity.getUsername());
@@ -88,35 +88,47 @@ public class RegisterController {
         return ResponseEntity.ok(roles);
     }
 
-    @PostMapping(value="/checUsername")
-    public String checkUsernameExist(@RequestBody RegisterModel entity) {
+    @PostMapping(value = "/checUsername")
+    public ResponseEntity<?> checkUsernameExist(@RequestBody RegisterModel entity) {
         String username = entity.getUsername();
         String res = registerRepository.checkUsernameExist(username);
-        if(res != null){
-            return "Username is Unavailable";
-        }else{
-            return "Username is available";
+        try {
+            if (res != null) {
+                return ResponseEntity.ok("Username is Unavailable");
+            } else {
+                return ResponseEntity.ok("Username is Available");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.ok(e);
         }
     }
 
-    @PostMapping(value="/checkEmail")
-    public String checkEmailExist(@RequestBody RegisterModel entity) {
+    @PostMapping(value = "/checkEmail")
+    public ResponseEntity<?> checkEmailExist(@RequestBody RegisterModel entity) {
         String email = entity.getEmail();
         String res = registerRepository.checkEmailExist(email);
-        if(res != null){
-            return "Email is Unavailable";
-        }else{
-            return "Email is available";
+        try {
+            if (res != null) {
+                return ResponseEntity.ok("Email is Unavailable");
+            } else {
+                return ResponseEntity.ok("Email is Available");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.ok(e);
         }
     }
 
     @GetMapping("/getPost")
     public ResponseEntity<?> getPost() {
         List<CustomForum> forum = forumTransactionRepository.getPost();
-        if(forum == null){
-            return ResponseEntity.ok(null);
-        }else{
-            return ResponseEntity.ok(forum);
+        try {
+            if (forum == null) {
+                return ResponseEntity.ok(null);
+            } else {
+                return ResponseEntity.ok(forum);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.ok(e);
         }
     }
 
@@ -135,14 +147,16 @@ public class RegisterController {
 
     @PostMapping(value = "/getComment")
     public ResponseEntity<?> getComment(@RequestBody CustomComment entity) {
-        Long id = entity.getPostId();
-
-        List<CustomForum> list = forumTransactionRepository.getComment(id);
-
-        return ResponseEntity.ok(list);
+        try {
+            Long id = entity.getPostId();
+            List<CustomForum> list = forumTransactionRepository.getComment(id);
+            return ResponseEntity.ok(list);
+        } catch (Exception e) {
+            return ResponseEntity.ok(e);
+        }
     }
 
-    @GetMapping(value="/getLikes")
+    @GetMapping(value = "/getLikes")
     public ResponseEntity<?> postMethodName() {
         List<CommentLikesModel> res = commentsLikesRepository.findAll();
         return ResponseEntity.ok(res);

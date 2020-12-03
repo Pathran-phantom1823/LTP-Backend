@@ -14,8 +14,7 @@ import net.springBootAuthentication.springBootAuthentication.model.AddressModel;
 @Repository
 public interface AddressRepository extends JpaRepository <AddressModel, Long>{
     AddressModel addressModel = new AddressModel();
-    @Transactional
-	@Modifying
+
     @Query(value = "{ call spInsertAddress(:a_city, :a_country, :a_street, :a_postalcode, :a_zipcode)}", nativeQuery = true)
     List<?> insertAddress(@Param("a_city") String city, @Param("a_street") String street,
             @Param("a_postalcode") Integer postalcode, @Param("a_zipcode") Integer zipcode);

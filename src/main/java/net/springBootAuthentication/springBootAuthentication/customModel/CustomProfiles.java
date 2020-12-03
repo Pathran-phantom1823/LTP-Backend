@@ -7,6 +7,10 @@ public class CustomProfiles {
 
     private long accountId;
 
+    private String username;
+
+    private String password;
+
     private String firstname;
 
     private String middlename;
@@ -15,7 +19,7 @@ public class CustomProfiles {
 
     private Integer age;
 
-    private Date birthdate;
+    private String birthdate;
 
     private String email;
 
@@ -67,7 +71,7 @@ public class CustomProfiles {
     }
 
     public CustomProfiles(long id, long accountId, String firstname, String middlename, String lastname, Integer age,
-            Date birthdate, String email, String gender, String phonenumber, Float pricing, String dateFrom,
+            String birthdate, String email, String gender, String phonenumber, Float pricing, String dateFrom,
             String dateTo, String timeFrom, String timeTo, Long address_id, Integer postalcode, Integer zipcode,
             String city, String country, String address, String street, String schoolname, String schooladdress,
             Integer schoolyear, String skillname, String category, String timestamps, Integer categoryid, String img) {
@@ -115,6 +119,8 @@ public class CustomProfiles {
         return accountId;
     }
 
+    public String getBirthdate() { return birthdate; }
+
     public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
@@ -151,11 +157,7 @@ public class CustomProfiles {
         this.age = age;
     }
 
-    public Date getBirthdate() {
-        return birthdate;
-    }
-
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
     }
 
@@ -341,6 +343,22 @@ public class CustomProfiles {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
 }

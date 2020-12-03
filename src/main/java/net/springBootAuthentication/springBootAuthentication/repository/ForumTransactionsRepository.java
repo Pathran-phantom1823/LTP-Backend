@@ -13,18 +13,15 @@ import net.springBootAuthentication.springBootAuthentication.customModel.CustomF
 import net.springBootAuthentication.springBootAuthentication.model.ForumTransactionsModel;
 
 public interface ForumTransactionsRepository extends JpaRepository<ForumTransactionsModel, Long>{
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getPost()}", nativeQuery = true)
     public List<CustomForum> getPost();
     
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getForumDetails(:id)}", nativeQuery = true)
     List<CustomForum> getForumDetails(@Param("id") Long id);
 
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getComment(:id)}", nativeQuery = true)
     List<CustomForum> getComment(@Param("id") Long id);
 

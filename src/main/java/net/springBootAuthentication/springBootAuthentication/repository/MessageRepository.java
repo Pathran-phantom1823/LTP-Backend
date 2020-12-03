@@ -12,8 +12,7 @@ import net.springBootAuthentication.springBootAuthentication.customModel.CustomC
 import net.springBootAuthentication.springBootAuthentication.model.MessageModel;
 
 public interface MessageRepository extends JpaRepository<MessageModel, Long> {
-    @Transactional
-	@Modifying
+    
     @Query(value = "{call getRoomsById(:id)}", nativeQuery = true)
     List<CustomChats> getRoomsById(@Param("id") Long id);
 }
