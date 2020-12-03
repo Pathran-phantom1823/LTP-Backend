@@ -109,7 +109,6 @@ public class JobController {
 
             File convertfile = new File(
                     "src/main/resources/files/" + String.format("%d%s%s", jobs.getPostById(), dateFormat.format(date), filename));
-
             convertfile.createNewFile();
             FileOutputStream fout = new FileOutputStream(convertfile);
             fout.write(file.getBytes());
