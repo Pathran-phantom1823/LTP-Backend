@@ -299,7 +299,7 @@ public class ProfileController {
                 profileModel.setImage(String.format("%d%s%s", entity.getAccountId(), dateFormat.format(date), imageName));
                 profileModel.setAddressId(addressModel.getId());
                 profileModel.setAge(entity.getAge());
-                profileModel.setBirthdate(dateFormat.format(entity.getBirthdate()));
+                profileModel.setBirthdate(entity.getBirthdate());
                 profileModel.setFirstname(entity.getFirstname());
                 profileModel.setLastname(entity.getLastname());
                 profileModel.setPhonenumber(entity.getPhonenumber());
