@@ -78,6 +78,7 @@ public class ProfileController {
 
         @PostMapping(value = "/retrieveProfileDetails")
         public ResponseEntity<?> postMethodName(@RequestBody ProfileModel entity) throws ResourceNotFoundException {
+                try {
                 Long id = entity.getAccountId();
                 Long exist = profileRepository.checkAccountExisted(id);
                 List<Object> res = new ArrayList<>();
@@ -92,8 +93,11 @@ public class ProfileController {
                         res.add(account);
                         res.add(true);
                 }
+                        return ResponseEntity.ok(res);
+                }catch (Exception e){
+                        return ResponseEntity.ok(e);
+                }
 
-                return ResponseEntity.ok(res);
         }
 
         @RequestMapping(value = "/createprofile", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
