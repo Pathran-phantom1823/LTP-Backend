@@ -15,8 +15,7 @@ import net.springBootAuthentication.springBootAuthentication.model.ForumTransact
 
 public interface ForumTransactionsRepository extends JpaRepository<ForumTransactionsModel, Long>{
 
-    @Transactional
-    @Procedure(procedureName = "getPost")
+    @Query(value = "{call getPost()}", nativeQuery = true)
     public List<CustomForum> getPost();
     
     
