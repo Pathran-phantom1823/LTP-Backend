@@ -16,6 +16,7 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 
+import net.springBootAuthentication.springBootAuthentication.customModel.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,13 +29,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.web.multipart.MultipartFile;
 
-import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobApplicant;
-import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobHistory;
-import net.springBootAuthentication.springBootAuthentication.customModel.CustomJobs;
-import net.springBootAuthentication.springBootAuthentication.customModel.CustomQuotationAssigned;
-import net.springBootAuthentication.springBootAuthentication.customModel.CustomTransactionJobs;
-import net.springBootAuthentication.springBootAuthentication.customModel.CustomUser;
-import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import net.springBootAuthentication.springBootAuthentication.model.AdminProfileModel;
 import net.springBootAuthentication.springBootAuthentication.model.JobApplicants;
@@ -136,6 +130,7 @@ public class JobController {
             jobs2.setFixedPrice(jobs.getFixedPrice());
             jobs2.setType(jobs.getType());
             jobs2.setIsAvailable("true");
+            jobs2.setIsPaid(jobs.getIsPaid());
             // jobs2.setPostById(user.getId());
             jobsRepository.save(jobs2);
 
@@ -795,6 +790,15 @@ public class JobController {
             return ResponseEntity.ok(e);
         }
     }
-    
+
+    @GetMapping(value = "getWorkedJobs")
+    public ResponseEntity<?>getWorkedJobs(){
+        try {
+            List<CustomWorkedJobs> list = jobApplicantRepository.getWorkedJobs();
+            return ResponseEntity.ok(list);
+        }catch (Exception e){
+            return ResponseEntity.ok(e);
+        }
+    }
 
 }

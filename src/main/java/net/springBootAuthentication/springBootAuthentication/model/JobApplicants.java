@@ -28,6 +28,16 @@ public class JobApplicants {
 
     private String dateFinished;
 
+    private String isConfirmed;
+
+    public String getIsConfirmed() {
+        return isConfirmed;
+    }
+
+    public void setIsConfirmed(String isConfirmed) {
+        this.isConfirmed = isConfirmed;
+    }
+
     public String getAssigned() {
         return assigned;
     }

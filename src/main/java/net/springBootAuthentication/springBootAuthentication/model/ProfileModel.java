@@ -62,6 +62,17 @@ public class ProfileModel {
 	@Column(name = "categoryId")
 	private Long categoryId;
 
+	@Column(name = "billingEmail")
+	private String billingEmail;
+
+	public String getBillingEmail() {
+		return billingEmail;
+	}
+
+	public void setBillingEmail(String billingEmail) {
+		this.billingEmail = billingEmail;
+	}
+
 	public ProfileModel() {
 	}
 
