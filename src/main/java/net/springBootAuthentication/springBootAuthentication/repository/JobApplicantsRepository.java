@@ -5,6 +5,8 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomWorkedJobs;
+import net.springBootAuthentication.springBootAuthentication.customModel.GetPaymentDetailsModel;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -39,5 +41,8 @@ public interface JobApplicantsRepository extends JpaRepository<JobApplicants, Lo
 
     @Query(value = "{call getWorkedJobs()}", nativeQuery = true)
     List<CustomWorkedJobs> getWorkedJobs();
+    
+    @Query(value = "{call spGetPaymentDetails(:id, :jobId)}", nativeQuery = true)
+    List<GetPaymentDetailsModel> getPaymentDetails(@Param("id") Long id, @Param("jobId") Long jobId);
 
 }
