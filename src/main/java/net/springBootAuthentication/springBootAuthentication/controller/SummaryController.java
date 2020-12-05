@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import net.springBootAuthentication.springBootAuthentication.customModel.ChartSummaryRequestModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentSummaryModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentYearsSummary;
+import net.springBootAuthentication.springBootAuthentication.customModel.QuotationChartModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.QuotationsYearsSummary;
+import net.springBootAuthentication.springBootAuthentication.customModel.ReportsChartModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.ReportsYearsSummary;
 import net.springBootAuthentication.springBootAuthentication.customModel.SalesChartModel;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
@@ -95,6 +97,30 @@ public class SummaryController {
 		ArrayList<SalesChartModel> sum = null;
 		try {
 			sum = summary.salesChartSummary(request.getMonth(), request.getYear());
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "sales_years_summary", sum));
+	}
+	
+	@PostMapping("/reports_chart")
+	public ResponseEntity<Response> reportsChartSummary(@RequestBody ChartSummaryRequestModel request) {
+		ArrayList<ReportsChartModel> sum = null;
+		try {
+			sum = summary.reportsChartSummary(request.getMonth(), request.getYear());
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "reports_years_summary", sum));
+	}
+	
+	@PostMapping("/quotations_chart")
+	public ResponseEntity<Response> quotationsChartSummary(@RequestBody ChartSummaryRequestModel request) {
+		ArrayList<QuotationChartModel> sum = null;
+		try {
+			sum = summary.quotationChartSummary(request.getMonth(), request.getYear());
 		}catch(Exception e) {
 			System.out.println(e);
 			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));

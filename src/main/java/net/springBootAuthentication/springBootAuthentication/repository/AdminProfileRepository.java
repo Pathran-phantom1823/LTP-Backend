@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomAdminInterface;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentSummaryModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentYearsSummary;
+import net.springBootAuthentication.springBootAuthentication.customModel.QuotationChartModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.QuotationsYearsSummary;
+import net.springBootAuthentication.springBootAuthentication.customModel.ReportsChartModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.ReportsYearsSummary;
 import net.springBootAuthentication.springBootAuthentication.customModel.SalesChartModel;
 import net.springBootAuthentication.springBootAuthentication.model.AdminProfileModel;
@@ -59,6 +61,14 @@ public interface AdminProfileRepository extends JpaRepository<AdminProfileModel,
     @Transactional
     @Query(value = "{call spSalesChart(:month, :year)}", nativeQuery = true)
     ArrayList<SalesChartModel> salesChartSummary(@Param("month") int month, @Param("year") int year);
+    
+    @Transactional
+    @Query(value = "{call spReportsChart(:month, :year)}", nativeQuery = true)
+    ArrayList<ReportsChartModel> reportsChartSummary(@Param("month") int month, @Param("year") int year);
+    
+    @Transactional
+    @Query(value = "{call spQuotationsChart(:month, :year)}", nativeQuery = true)
+    ArrayList<QuotationChartModel> quotationChartSummary(@Param("month") int month, @Param("year") int year);
 
     @Transactional
     @Query(value = "{call spCountJobs()}" , nativeQuery = true)
