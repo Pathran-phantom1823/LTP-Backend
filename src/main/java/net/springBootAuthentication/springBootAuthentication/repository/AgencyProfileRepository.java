@@ -1,5 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.repository;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,5 +25,5 @@ public interface AgencyProfileRepository extends JpaRepository<AgencyProfileMode
 
     
     @Query(value = "{call getAgencyImage(:id)}", nativeQuery = true)
-    String getAgencyImage(@Param("id") Long id);
+    File getAgencyImage(@Param("id") Long id);
 }

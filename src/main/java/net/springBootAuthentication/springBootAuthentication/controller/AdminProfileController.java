@@ -94,7 +94,7 @@ public class AdminProfileController {
             adminModel.setGender(customAdminProfile.getGender());
             adminModel.setEmail(customAdminProfile.getEmail());
             adminModel.setPhonenumber(customAdminProfile.getPhonenumber());
-            adminModel.setImage(String.format("%d%s%s", customAdminProfile.getAccountId(), date, imageName));
+            adminModel.setImage("src/main/resources/img/" + String.format("%d%s%s", customAdminProfile.getAccountId(), date, imageName));
             adminProfileRepository.saveAndFlush(adminModel);
 
             List<Object> lists = new ArrayList<>();
@@ -173,7 +173,7 @@ public class AdminProfileController {
         apModel.setGender(address.getGender());
         apModel.setLastname(address.getLastname());
         apModel.setPhonenumber(address.getPhonenumber());
-        apModel.setImage(String.format("%d%s%s", address.getAccountId(), date, imageName));
+        apModel.setImage("src/main/resources/img/" + String.format("%d%s%s", address.getAccountId(), date, imageName));
         adminProfileRepository.save(apModel);
         return ResponseEntity.ok("Profile Updated!");
 

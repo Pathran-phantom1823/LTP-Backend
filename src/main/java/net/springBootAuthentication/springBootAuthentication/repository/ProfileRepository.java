@@ -1,5 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.repository;
 
+import java.io.File;
 import java.util.List;
 import javax.transaction.Transactional;
 
@@ -17,11 +18,11 @@ public interface ProfileRepository extends JpaRepository<ProfileModel, Long> {
 
     
     @Query(value = "{call getImage(:id)}", nativeQuery = true)
-    String getImage(@Param("id") Long id);
+    File getImage(@Param("id") Long id);
 
     
     @Query(value = "{call getAdminImage(:id)}", nativeQuery = true)
-    String getAdminImage(@Param("id") Long id);
+    File getAdminImage(@Param("id") Long id);
 
     @Query(value = "{call spCheckAccountExisted(:id)}", nativeQuery = true)
     Long checkAccountExisted(@Param("id") Long id);
