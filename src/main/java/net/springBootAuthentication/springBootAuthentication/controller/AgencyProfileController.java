@@ -117,7 +117,7 @@ public class AgencyProfileController {
         agencyProfileModel.setAbout(entity.getAbout());
         agencyProfileModel.setEffectDate(entity.getEffectDate());
         agencyProfileModel.setName(entity.getName());
-        agencyProfileModel.setImage(String.format("%d%s%s", entity.getAccountId(), date, imageName));
+        agencyProfileModel.setImage("src/main/resources/img/" + String.format("%d%s%s", entity.getAccountId(), date, imageName));
         agencyProfileModel.setPhoneNumber(entity.getPhoneNumber());
         agencyProfileModel.setPricing(entity.getPricing());
         agencyProfileModel.setWebsite(entity.getWebsite());
@@ -223,7 +223,7 @@ public class AgencyProfileController {
         agencyProfileModel.setAbout(entity.getAbout());
         agencyProfileModel.setEffectDate(entity.getEffectDate());
         agencyProfileModel.setName(entity.getName());
-        agencyProfileModel.setImage(String.format("%d%s%s", entity.getAccountId(), date, imageName));
+        agencyProfileModel.setImage("src/main/resources/img/" + String.format("%d%s%s", entity.getAccountId(), date, imageName));
         agencyProfileModel.setPhoneNumber(entity.getPhoneNumber());
         agencyProfileModel.setPricing(entity.getPricing());
         agencyProfileModel.setWebsite(entity.getWebsite());

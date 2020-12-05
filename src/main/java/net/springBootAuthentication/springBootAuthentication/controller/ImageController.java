@@ -1,9 +1,13 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,34 +38,39 @@ public class ImageController {
         try {
             Long id = entity.getAccountId();
             // System.out.println(id);
-            String file = agencyProfileRepository.getAgencyImage(id);
+            File file = agencyProfileRepository.getAgencyImage(id);
             if (file == null) {
                 return ResponseEntity.ok(null);
             } else {
-                ClassPathResource files = new ClassPathResource("img/" + file);
-                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
+                Path path = Paths.get(file.getAbsolutePath());
+                System.out.println(path);
+                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
-                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+                return ResponseEntity.ok().contentLength(file.length()).contentType(MediaType.IMAGE_JPEG).body(resource);
             }
         } catch (Exception e) {
             return ResponseEntity.ok(e);
         }
     }
 
-    @PostMapping(value = "/getProfile", produces = MediaType.IMAGE_JPEG_VALUE)
+    @PostMapping(value = "/getProfile")
     public ResponseEntity<?> getProfiles(@RequestBody ProfileModel entity) throws IOException {
         try {
             Long id = entity.getAccountId();
             // System.out.println(id);
-            String file = profileRepository.getImage(id);
+            File file = profileRepository.getImage(id);
             if (file == null) {
                 return ResponseEntity.ok(null);
             } else {
-                ClassPathResource files = new ClassPathResource("img/" + file);
-                System.out.println(files);
-                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
+                Path path = Paths.get(file.getAbsolutePath());
+                System.out.println(path);
+                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+//                ClassPathResource files = new ClassPathResource("img/" + file);
+//                System.out.println(files);
+//                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
+//                System.out.println(bytes);
 
-                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+                return ResponseEntity.ok().contentLength(file.length()).contentType(MediaType.IMAGE_JPEG).body(resource);
             }
         } catch (Exception e) {
             return ResponseEntity.ok(e);
@@ -73,14 +82,15 @@ public class ImageController {
         try {
             Long id = entity.getAccountId();
             // System.out.println(id);
-            String file = profileRepository.getAdminImage(id);
+            File file = profileRepository.getAdminImage(id);
             if (file == null) {
                 return ResponseEntity.ok(null);
             } else {
-                ClassPathResource files = new ClassPathResource("img/" + file);
-                byte[] bytes = StreamUtils.copyToByteArray(files.getInputStream());
+                Path path = Paths.get(file.getAbsolutePath());
+                System.out.println(path);
+                ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 
-                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
+                return ResponseEntity.ok().contentLength(file.length()).contentType(MediaType.IMAGE_JPEG).body(resource);
             }
         } catch (Exception e) {
             return ResponseEntity.ok(e);
