@@ -29,5 +29,6 @@ public interface CustomAgencyProfileInterface {
     String getToTime();
     String getUsername();
     String getPassword();
+    String getBillingEmail();
     
 }

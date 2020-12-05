@@ -30,6 +30,16 @@ public class CustomAgencyProfile {
 	private String username;
 	private String password;
 
+	public String getBillingEmail() {
+		return billingEmail;
+	}
+
+	public void setBillingEmail(String billingEmail) {
+		this.billingEmail = billingEmail;
+	}
+
+	private String billingEmail;
+
     public CustomAgencyProfile() {
     }
 

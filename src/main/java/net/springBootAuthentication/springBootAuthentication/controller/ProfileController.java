@@ -164,6 +164,7 @@ public class ProfileController {
                         profileModel.setTimeFrom(customProfile.getTimeFrom());
                         profileModel.setTimeTo(customProfile.getTimeTo());
                         profileModel.setCategoryId(categoryModel.getId());
+                        profileModel.setBillingEmail(customProfile.getBillingEmail());
                         profileRepository.saveAndFlush(profileModel);
 
                         profileSkillsModel.setTimestamps(date.toString());
@@ -242,6 +243,7 @@ public class ProfileController {
                         profileModel.setDateTo(entity.getDateTo());
                         profileModel.setTimeFrom(entity.getTimeFrom());
                         profileModel.setTimeTo(entity.getTimeTo());
+                        profileModel.setBillingEmail(entity.getBillingEmail());
                         profileRepository.save(profileModel);
                 }catch (Exception e){
                         ResponseEntity.ok(e);
@@ -315,6 +317,7 @@ public class ProfileController {
                         profileModel.setDateTo(entity.getDateTo());
                         profileModel.setTimeFrom(entity.getTimeFrom());
                         profileModel.setTimeTo(entity.getTimeTo());
+                        profileModel.setBillingEmail(entity.getBillingEmail());
                         profileRepository.save(profileModel);
                 }catch (Exception e){
                       return  ResponseEntity.ok(e);

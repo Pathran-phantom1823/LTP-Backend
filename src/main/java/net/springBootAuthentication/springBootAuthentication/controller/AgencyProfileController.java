@@ -128,6 +128,7 @@ public class AgencyProfileController {
         agencyProfileModel.setFromTime(entity.getFromTime());
         agencyProfileModel.setToDay(entity.getToDay());
         agencyProfileModel.setToTime(entity.getToTime());
+        agencyProfileModel.setBillingEmail(entity.getBillingEmail());
         agencyProfileRepository.saveAndFlush(agencyProfileModel);
 
         profileSkillsModel.setProfileid(agencyProfileModel.getId());
@@ -231,6 +232,7 @@ public class AgencyProfileController {
         agencyProfileModel.setFromTime(entity.getFromTime());
         agencyProfileModel.setToDay(entity.getToDay());
         agencyProfileModel.setToTime(entity.getToTime());
+        agencyProfileModel.setBillingEmail(entity.getBillingEmail());
         agencyProfileRepository.saveAndFlush(agencyProfileModel);
 
         return ResponseEntity.ok("Updated");
@@ -282,6 +284,7 @@ public class AgencyProfileController {
         agencyProfileModel.setFromTime(entity.getFromTime());
         agencyProfileModel.setToDay(entity.getToDay());
         agencyProfileModel.setToTime(entity.getToTime());
+        agencyProfileModel.setBillingEmail(entity.getBillingEmail());
         agencyProfileRepository.saveAndFlush(agencyProfileModel);
 
         return ResponseEntity.ok("updated");

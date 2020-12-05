@@ -58,7 +58,17 @@ public class AgencyProfileModel {
 
     @Column(name = "toTime")
     private String toTime;
-    
+
+    @Column(name = "billingEmail")
+    private  String billingEmail;
+
+    public String getBillingEmail() {
+        return billingEmail;
+    }
+
+    public void setBillingEmail(String billingEmail) {
+        this.billingEmail = billingEmail;
+    }
 
     public AgencyProfileModel() {
     }

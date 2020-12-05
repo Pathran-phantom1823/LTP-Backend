@@ -95,8 +95,18 @@ public class Jobs {
         @Column(name = "deleted")
         private String deleted;
 
-        
-        private String isAvailable;
+        @Column(name = "isPaid")
+        private String isPaid;
+
+    public String getIsPaid() {
+        return isPaid;
+    }
+
+    public void setIsPaid(String isPaid) {
+        this.isPaid = isPaid;
+    }
+
+    private String isAvailable;
 
     public Jobs(Long id, String title, String description, String category, String languageFrom,
             String languageTo, String fromDate, String toDate, String priceType,

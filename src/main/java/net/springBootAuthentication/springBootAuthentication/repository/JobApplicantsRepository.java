@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import net.springBootAuthentication.springBootAuthentication.customModel.CustomWorkedJobs;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,5 +36,8 @@ public interface JobApplicantsRepository extends JpaRepository<JobApplicants, Lo
     
     @Query(value = "{call getMembersAccount(:roleType)}", nativeQuery = true)
     List<CustomQuotationAssignment> getMembersAccount(@Param("roleType") String roleType);
+
+    @Query(value = "{call getWorkedJobs()}", nativeQuery = true)
+    List<CustomWorkedJobs> getWorkedJobs();
 
 }

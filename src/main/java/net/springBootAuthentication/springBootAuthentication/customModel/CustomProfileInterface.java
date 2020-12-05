@@ -67,4 +67,6 @@ public interface CustomProfileInterface {
 
     String getServices();
 
+    String getBillingEmail();
+
 }

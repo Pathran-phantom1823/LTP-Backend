@@ -67,6 +67,16 @@ public class CustomProfiles {
 
     private String img;
 
+    public String getBillingEmail() {
+        return billingEmail;
+    }
+
+    public void setBillingEmail(String billingEmail) {
+        this.billingEmail = billingEmail;
+    }
+
+    private String billingEmail;
+
     public CustomProfiles() {
     }
 

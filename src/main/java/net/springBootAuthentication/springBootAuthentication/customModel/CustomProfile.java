@@ -78,6 +78,16 @@ public class CustomProfile {
 
     private String category;
 
+    private String billingEmail;
+
+    public String getBillingEmail() {
+        return billingEmail;
+    }
+
+    public void setBillingEmail(String billingEmail) {
+        this.billingEmail = billingEmail;
+    }
+
     public CustomProfile() {
     }
 
