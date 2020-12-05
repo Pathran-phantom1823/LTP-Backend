@@ -581,6 +581,45 @@ public class JobController {
         }
 
     }
+    @RequestMapping(value = "/updatewithoutfilechange", method = RequestMethod.POST)
+    public ResponseEntity<Object> UpdateFil(@RequestPart(value = "job") String job) throws IOException {
+        try {
+            Jobs jobs = objectMapper.readValue(job, Jobs.class);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date();
+
+            Long id = jobs.getId();
+            Jobs jobs2 = jobsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            // objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+            jobs2.setTitle(jobs.getTitle());
+            jobs2.setDescription(jobs.getDescription());
+            jobs2.setCategory(jobs.getCategory());
+            jobs2.setSubject(jobs.getSubject());
+            jobs2.setLanguageFrom(jobs.getLanguageFrom().toString());
+            jobs2.setLanguageTo(jobs.getLanguageTo().toString());
+            jobs2.setFromDate(jobs.getFromDate());
+            jobs2.setToDate(jobs.getToDate());
+            jobs2.setFromPrice(jobs.getFromPrice());
+            jobs2.setToPrice(jobs.getToPrice());
+            jobs2.setPriceType(jobs.getPriceType());
+            jobs2.setPostById(jobs.getPostById());
+            jobs2.setDatePosted(dateFormat.format(date));
+            jobs2.setVisibility(jobs.getVisibility());
+            jobs2.setlevelOfConfidentiality(jobs.getlevelOfConfidentiality());
+            jobs2.setFixedPrice(jobs.getFixedPrice());
+            jobs2.setType(jobs.getType());
+            jobs2.setFile(jobs.getFile());
+            jobs2.setIsAvailable("true");
+            // jobs2.setPostById(user.getId());
+            jobsRepository.save(jobs2);
+
+            return ResponseEntity.ok(jobs2);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
+        }
+
+    }
 
     @RequestMapping(value = "/finish-file", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFinishFile(@RequestPart(value = "job") String job,
