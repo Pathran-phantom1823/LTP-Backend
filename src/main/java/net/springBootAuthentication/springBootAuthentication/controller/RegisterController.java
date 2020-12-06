@@ -30,6 +30,8 @@ import net.springBootAuthentication.springBootAuthentication.repository.ForumTra
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
 
+import javax.persistence.NonUniqueResultException;
+
 @RestController
 @RequestMapping("/api")
 public class RegisterController {
@@ -81,8 +83,11 @@ public class RegisterController {
             list.add(account);
 
             return ResponseEntity.ok(list);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
+        }catch (NonUniqueResultException e){
+            return  ResponseEntity.ok(e);
+        }
+        catch (Exception e) {
+            return ResponseEntity.ok(e);
         }
 
     }

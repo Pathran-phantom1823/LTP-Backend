@@ -1,10 +1,14 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+import net.springBootAuthentication.springBootAuthentication.customModel.JobPaymentRequestModel;
+import net.springBootAuthentication.springBootAuthentication.customModel.JobPaymentSuccessModel;
+import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
+import net.springBootAuthentication.springBootAuthentication.model.Jobs;
+import net.springBootAuthentication.springBootAuthentication.model.ServicePayment;
+import net.springBootAuthentication.springBootAuthentication.repository.*;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.hibernate.exception.GenericJDBCException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +29,6 @@ import net.springBootAuthentication.springBootAuthentication.customModel.Payment
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentSuccessModel;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.model.Response;
-import net.springBootAuthentication.springBootAuthentication.repository.PaypalPaymentRepository;
-import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
-import net.springBootAuthentication.springBootAuthentication.repository.RoleRepository;
 import net.springBootAuthentication.springBootAuthentication.services.PaypalService;
 
 @Controller
@@ -45,6 +46,12 @@ public class PaypalController {
 	
 	@Autowired
 	RegisterRepository paid_account;
+
+	@Autowired
+	ServicePaymentRepository servicePaymentRepository;
+
+	@Autowired
+	JobsRepository jobsRepository;
 	
 	@Value("${vue.address}")
 	private String address;
@@ -152,5 +159,58 @@ public class PaypalController {
 			System.out.println(e.getMessage());
 		}
 		return ResponseEntity.ok(new Response(status, message, paidAccounts));
+	}
+
+		@PostMapping("/pay-job")
+	public ResponseEntity<Response> jobPayment(@RequestBody JobPaymentRequestModel order) {
+
+		try {
+			Payment payment = service.createPayment(order.getTotal(), order.getCurrency(), order.getMethod(),
+					order.getIntent(), order.getDescription(), address + order.getAccountType(),
+					address + "paypal/jobpaymentsuccess/" + Long.toString(order.getJobId()));
+			for (Links link : payment.getLinks()) {
+				if (link.getRel().equals("approval_url")) {
+					ArrayList<HashMap<String, String>> data = new ArrayList<>();
+					HashMap<String, String> url = new HashMap<String, String>();
+					url.put("url", link.getHref());
+					data.add(url);
+					return ResponseEntity.ok(new Response(200, "Redirecting", data));
+				}
+			}
+
+		} catch (PayPalRESTException e) {
+
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok(new Response(200, "Initializing payment", new ArrayList<>()));
+	}
+
+	@PostMapping("/success-payjob")
+	public  ResponseEntity<?> payJob(@RequestBody JobPaymentSuccessModel entity){
+		ServicePayment servicePayment = new ServicePayment();
+		try {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+			Date date = new Date();
+			Payment payment = service.executePayment(entity.getPaymentID(), entity.getPayerID());
+			Jobs jobs = jobsRepository.findById(entity.getJobId()).orElseThrow(() -> new ResourceNotFoundException("not Found"));
+			Float price = Float.parseFloat(payment.getTransactions().get(0).getAmount().getTotal());
+			Long payerId = Long.valueOf(Integer.parseInt(entity.getUserID()));
+
+
+
+			Long jobId = entity.getJobId();
+			servicePayment.setJobId(jobId);
+			servicePayment.setPayerId(payerId);
+			servicePayment.setPrice(price);
+			servicePayment.setDateCreated(dateFormat.format(date));
+			servicePayment.setTransferred(false);
+			jobs.setIsPaid("true");
+			jobsRepository.save(jobs);
+			servicePaymentRepository.save(servicePayment);
+
+		}catch (Exception e) {
+			return ResponseEntity.ok(e);
+		}
+		return  ResponseEntity.ok("Payment is SuccessFull");
 	}
 }
