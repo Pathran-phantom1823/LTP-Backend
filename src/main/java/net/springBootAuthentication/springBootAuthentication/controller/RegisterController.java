@@ -98,10 +98,10 @@ public class RegisterController {
 
     @PostMapping(value = "/checUsername")
     public ResponseEntity<?> checkUsernameExist(@RequestBody RegisterModel entity) {
-        String username = entity.getUsername();
-        String res = registerRepository.checkUsernameExist(username);
         try {
-            if (res != null) {
+        	String username = entity.getUsername();
+            List<String> res = registerRepository.checkUsernameExist(username);
+            if (!res.isEmpty()) {
                 return ResponseEntity.ok("Username is Unavailable");
             } else {
                 return ResponseEntity.ok("Username is Available");
@@ -113,10 +113,10 @@ public class RegisterController {
 
     @PostMapping(value = "/checkEmail")
     public ResponseEntity<?> checkEmailExist(@RequestBody RegisterModel entity) {
-        String email = entity.getEmail();
-        String res = registerRepository.checkEmailExist(email);
         try {
-            if (res != null) {
+        	String email = entity.getEmail();
+            List<String> res = registerRepository.checkEmailExist(email);
+            if (!res.isEmpty()) {
                 return ResponseEntity.ok("Email is Unavailable");
             } else {
                 return ResponseEntity.ok("Email is Available");

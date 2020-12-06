@@ -51,11 +51,11 @@ public interface RegisterRepository  extends JpaRepository<RegisterModel, Long>{
 
     
     @Query(value = "{call checkUsernameExist(:username)}", nativeQuery = true)
-    String checkUsernameExist(@Param("username") String username);
+    List<String> checkUsernameExist(@Param("username") String username);
 
     
     @Query(value = "{call checkEmailExist(:email)}", nativeQuery = true)
-    String checkEmailExist(@Param("email") String email);
+    List<String> checkEmailExist(@Param("email") String email);
 
     
     @Query(value = "{call getAgents()}", nativeQuery = true)

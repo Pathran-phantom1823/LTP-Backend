@@ -51,8 +51,8 @@ public class UsersController {
     @PostMapping(value="/checkUsernameExistence")
     public String checkUsernameExist(@RequestBody RegisterModel entity) {
         String username = entity.getUsername();
-        String res = registerRepository.checkUsernameExist(username);
-        if(res != null){
+        List<String> res = registerRepository.checkUsernameExist(username);
+        if(!res.isEmpty()){
             return "Username is Unavailable";
         }else{
             return "Username is available";
@@ -62,8 +62,8 @@ public class UsersController {
     @PostMapping(value="/checkEmailExistence")
     public String checkEmailExist(@RequestBody RegisterModel entity) {
         String email = entity.getEmail();
-        String res = registerRepository.checkEmailExist(email);
-        if(res != null){
+        List<String> res = registerRepository.checkEmailExist(email);
+        if(!res.isEmpty()){
             return "Email is Unavailable";
         }else{
             return "Email is available";

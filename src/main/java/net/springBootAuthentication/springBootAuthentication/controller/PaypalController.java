@@ -72,7 +72,7 @@ public class PaypalController {
 
 		} catch (PayPalRESTException e) {
 
-			e.printStackTrace();
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<>()));
 		}
 		return ResponseEntity.ok(new Response(200, "Initializing payment", new ArrayList<>()));
 	}
