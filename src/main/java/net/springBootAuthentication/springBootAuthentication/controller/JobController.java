@@ -38,6 +38,7 @@ import net.springBootAuthentication.springBootAuthentication.model.JobsTransacti
 import net.springBootAuthentication.springBootAuthentication.model.ProfileModel;
 import net.springBootAuthentication.springBootAuthentication.model.QuotationAssigmentModel;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
+import net.springBootAuthentication.springBootAuthentication.model.Response;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ResourceUtils;
@@ -808,8 +809,18 @@ public class JobController {
 					.getPaymentDetails(Long.valueOf(request.getTranslator()), Long.valueOf(request.getJob()));
 			return ResponseEntity.ok(list);
 		} catch (Exception e) {
-			return ResponseEntity.ok(e);
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<>()));
 		}
 	}
 
+	@PostMapping(value = "/confirmPaymentDetails")
+	public ResponseEntity<?> confirmDetails(@RequestBody PaymentDetailsRequestModel request) {
+		try {
+			jobApplicantRepository.updateIsConfirm(Long.valueOf(request.getTranslator()),
+					Long.valueOf(request.getJob()));
+			return ResponseEntity.ok(new Response(200, "PaidSuccessFully", new ArrayList<>()));
+		} catch (Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<>()));
+		}
+	}
 }

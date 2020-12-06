@@ -6,4 +6,5 @@ public interface GetPaymentDetailsModel {
 	public Long getJobId();
 	public double getAmount();
 	public String getTitle();
+	public String getBillingEmail();
 }
