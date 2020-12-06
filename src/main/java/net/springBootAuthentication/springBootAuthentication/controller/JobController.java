@@ -628,21 +628,22 @@ public class JobController {
 			String filename = tempFileName.replaceAll("\\s+", "_");
 
 			File convertfile = new File(
-					"src/main/resources/files/" + String.format("%d%s%s", jobs.getApplicantId(), date, filename));
+					"src/main/resources/files/" + String.format("%d%s%s", jobs.getApplicantId(), dateFormat.format(date), filename));
 
 			convertfile.createNewFile();
 			FileOutputStream fout = new FileOutputStream(convertfile);
 			fout.write(file.getBytes());
 			fout.close();
 
-			Long id = jobs.getId();
-			JobApplicants jobApplicants = jobApplicantRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("not found"));
-			jobApplicants.setFinishedFile(filename);
-			jobApplicants.setDateFinished(dateFormat.format(date));
-			jobApplicantRepository.save(jobApplicants);
+			Long applicantId = jobs.getApplicantId();
+			Long jobId = jobs.getJobId();
+			String finishedFile = String.format("%d%s%s", jobs.getApplicantId(), dateFormat.format(date), filename);
+			String dates = dateFormat.format(date);
+
+			jobApplicantRepository.uploadFinishedFile(applicantId, jobId, finishedFile, dates);
+
 		} catch (Exception e) {
-			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e, HttpStatus.OK);
 		}
 
 		return ResponseEntity.ok("Uploaded");
@@ -821,6 +822,16 @@ public class JobController {
 			return ResponseEntity.ok(new Response(200, "PaidSuccessFully", new ArrayList<>()));
 		} catch (Exception e) {
 			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<>()));
+		}
+	}
+
+	@PostMapping("/getMyFinishedFile")
+	public ResponseEntity<?> getMyFinishedFile(@RequestBody JobApplicants entity){
+		try {
+			String file = jobApplicantRepository.getMyFinishedFile(entity.getApplicantId(), entity.getJobId());
+			return  ResponseEntity.ok(file);
+		}catch (Exception e){
+			return ResponseEntity.ok(e);
 		}
 	}
 }
