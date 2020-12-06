@@ -1,8 +1,9 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
 public interface CustomWorkedJobs {
+	Long getId();
     Long getJobId();
-    Long getApplicantId();
+    Long getWorkedById();
     String getJobTitle();
     String getPostedByUsername();
     String getPostedByEmail();
