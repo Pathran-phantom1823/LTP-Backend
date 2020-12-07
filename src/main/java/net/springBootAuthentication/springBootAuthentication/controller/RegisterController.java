@@ -94,19 +94,23 @@ public class RegisterController {
 
     @PostMapping("/addRole")
     public ResponseEntity<?> addRole(@RequestBody RoleModel data) {
-        RoleModel roles = new RoleModel();
-        roles.setRoleType(data.getRoleType());
-        roleRepository.save(roles);
-
-        return ResponseEntity.ok(roles);
+    	try {
+	        RoleModel roles = new RoleModel();
+	        roles.setRoleType(data.getRoleType());
+	        roleRepository.save(roles);
+	
+	        return ResponseEntity.ok(roles);
+    	}catch(Exception e) {
+    		return ResponseEntity.ok(e);
+    	}
     }
 
     @PostMapping(value = "/checUsername")
     public ResponseEntity<?> checkUsernameExist(@RequestBody RegisterModel entity) {
-        String username = entity.getUsername();
-        String res = registerRepository.checkUsernameExist(username);
         try {
-            if (res != null) {
+        	String username = entity.getUsername();
+            List<String> res = registerRepository.checkUsernameExist(username);
+            if (!res.isEmpty()) {
                 return ResponseEntity.ok("Username is Unavailable");
             } else {
                 return ResponseEntity.ok("Username is Available");
@@ -118,10 +122,10 @@ public class RegisterController {
 
     @PostMapping(value = "/checkEmail")
     public ResponseEntity<?> checkEmailExist(@RequestBody RegisterModel entity) {
-        String email = entity.getEmail();
-        String res = registerRepository.checkEmailExist(email);
         try {
-            if (res != null) {
+        	String email = entity.getEmail();
+            List<String> res = registerRepository.checkEmailExist(email);
+            if (!res.isEmpty()) {
                 return ResponseEntity.ok("Email is Unavailable");
             } else {
                 return ResponseEntity.ok("Email is Available");
@@ -133,8 +137,8 @@ public class RegisterController {
 
     @GetMapping("/getPost")
     public ResponseEntity<?> getPost() {
-        List<CustomForum> forum = forumTransactionRepository.getPost();
         try {
+        	List<CustomForum> forum = forumTransactionRepository.getPost();
             if (forum == null) {
                 return ResponseEntity.ok(null);
             } else {
