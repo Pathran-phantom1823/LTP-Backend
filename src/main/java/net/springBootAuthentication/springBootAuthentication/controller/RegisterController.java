@@ -94,11 +94,15 @@ public class RegisterController {
 
     @PostMapping("/addRole")
     public ResponseEntity<?> addRole(@RequestBody RoleModel data) {
-        RoleModel roles = new RoleModel();
-        roles.setRoleType(data.getRoleType());
-        roleRepository.save(roles);
-
-        return ResponseEntity.ok(roles);
+    	try {
+	        RoleModel roles = new RoleModel();
+	        roles.setRoleType(data.getRoleType());
+	        roleRepository.save(roles);
+	
+	        return ResponseEntity.ok(roles);
+    	}catch(Exception e) {
+    		return ResponseEntity.ok(e);
+    	}
     }
 
     @PostMapping(value = "/checUsername")
@@ -133,8 +137,8 @@ public class RegisterController {
 
     @GetMapping("/getPost")
     public ResponseEntity<?> getPost() {
-        List<CustomForum> forum = forumTransactionRepository.getPost();
         try {
+        	List<CustomForum> forum = forumTransactionRepository.getPost();
             if (forum == null) {
                 return ResponseEntity.ok(null);
             } else {
