@@ -287,7 +287,7 @@ public class ProfileController {
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
 
                         registerModel.setUsername(entity.getUsername());
-                        registerModel.setPassword(entity.getPassword());
+                        registerModel.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
                         registerRepository.save(registerModel);
 
                         addressModel.setCity(entity.getCity());
