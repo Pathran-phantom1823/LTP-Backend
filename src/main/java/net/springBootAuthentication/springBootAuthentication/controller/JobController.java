@@ -691,7 +691,7 @@ public class JobController {
 			String filename = tempFileName.replaceAll("\\s+", "_");
 
 			File convertfile = new File(
-					"src/main/resources/files/" + String.format("%d%s%s", jobs.getAccountId(), date, filename));
+					"src/main/resources/files/" + String.format("%d%s%s", jobs.getAccountId(), dateFormat.format(date), filename));
 
 			convertfile.createNewFile();
 			FileOutputStream fout = new FileOutputStream(convertfile);
@@ -702,7 +702,7 @@ public class JobController {
 			Long pid = quotationAssigmentRepository.getQuotationPrimaryId(id);
 			QuotationAssigmentModel jobApplicants = quotationAssigmentRepository.findById(pid)
 					.orElseThrow(() -> new ResourceNotFoundException("not found"));
-			jobApplicants.setFinishedFile(filename);
+			jobApplicants.setFinishedFile(String.format("%d%s%s", jobs.getAccountId(), dateFormat.format(date), filename));
 			jobApplicants.setDateFinished(dateFormat.format(date));
 			quotationAssigmentRepository.save(jobApplicants);
 		} catch (Exception e) {
