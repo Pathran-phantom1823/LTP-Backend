@@ -14,8 +14,6 @@ public class CustomProfile {
 
     private Long categoryId;
 
-    private Long schoolAddressId;
-
     private String username;
 
     private String password;
@@ -56,20 +54,6 @@ public class CustomProfile {
 
     private Integer zipcode;
 
-    private String schoolname;
-
-    private Integer schoolyear;
-
-    private String schoolstreet;
-
-    private String schoolcity;
-
-    private String schoolcountry;
-
-    private String schoolPostal;
-
-    private String schoolzipcode;
-
     private LocalDate timeStamp;
 
     private LocalDate timestamps;
@@ -91,19 +75,17 @@ public class CustomProfile {
     public CustomProfile() {
     }
 
-    public CustomProfile(Long id, Long accountId, Long skillId, Long addressId, Long categoryId, Long schoolAddressId,
+    public CustomProfile(Long id, Long accountId, Long skillId, Long addressId, Long categoryId,
             String username, String password, String firstname, String lastname, Integer age, String gender,
             String birthdate, Float pricing, String phonenumber, String email, String image, String dateFrom,
             String dateTo, String timeFrom, String timeTo, String street, String city, String country,
-            Integer postalcode, Integer zipcode, String schoolname, Integer schoolyear, String schoolstreet,
-            String schoolcity, String schoolcountry, String schoolPostal, String schoolzipcode, LocalDate timeStamp,
+            Integer postalcode, Integer zipcode, LocalDate timeStamp,
             LocalDate timestamps, String skillname, String category) {
         this.id = id;
         this.accountId = accountId;
         this.skillId = skillId;
         this.addressId = addressId;
         this.categoryId = categoryId;
-        this.schoolAddressId = schoolAddressId;
         this.username = username;
         this.password = password;
         this.firstname = firstname;
@@ -124,13 +106,6 @@ public class CustomProfile {
         this.country = country;
         this.postalcode = postalcode;
         this.zipcode = zipcode;
-        this.schoolname = schoolname;
-        this.schoolyear = schoolyear;
-        this.schoolstreet = schoolstreet;
-        this.schoolcity = schoolcity;
-        this.schoolcountry = schoolcountry;
-        this.schoolPostal = schoolPostal;
-        this.schoolzipcode = schoolzipcode;
         this.timeStamp = timeStamp;
         this.timestamps = timestamps;
         this.skillname = skillname;
@@ -175,14 +150,6 @@ public class CustomProfile {
 
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
-    }
-
-    public Long getSchoolAddressId() {
-        return schoolAddressId;
-    }
-
-    public void setSchoolAddressId(Long schoolAddressId) {
-        this.schoolAddressId = schoolAddressId;
     }
 
     public String getUsername() {
@@ -343,62 +310,6 @@ public class CustomProfile {
 
     public void setZipcode(Integer zipcode) {
         this.zipcode = zipcode;
-    }
-
-    public String getSchoolname() {
-        return schoolname;
-    }
-
-    public void setSchoolname(String schoolname) {
-        this.schoolname = schoolname;
-    }
-
-    public Integer getSchoolyear() {
-        return schoolyear;
-    }
-
-    public void setSchoolyear(Integer schoolyear) {
-        this.schoolyear = schoolyear;
-    }
-
-    public String getSchoolstreet() {
-        return schoolstreet;
-    }
-
-    public void setSchoolstreet(String schoolstreet) {
-        this.schoolstreet = schoolstreet;
-    }
-
-    public String getSchoolcity() {
-        return schoolcity;
-    }
-
-    public void setSchoolcity(String schoolcity) {
-        this.schoolcity = schoolcity;
-    }
-
-    public String getSchoolcountry() {
-        return schoolcountry;
-    }
-
-    public void setSchoolcountry(String schoolcountry) {
-        this.schoolcountry = schoolcountry;
-    }
-
-    public String getSchoolPostal() {
-        return schoolPostal;
-    }
-
-    public void setSchoolPostal(String schoolPostal) {
-        this.schoolPostal = schoolPostal;
-    }
-
-    public String getSchoolzipcode() {
-        return schoolzipcode;
-    }
-
-    public void setSchoolzipcode(String schoolzipcode) {
-        this.schoolzipcode = schoolzipcode;
     }
 
     public LocalDate getTimeStamp() {

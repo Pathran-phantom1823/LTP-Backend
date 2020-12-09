@@ -77,12 +77,6 @@ public class Jobs {
         @Column(name = "file")
         private String file;
 
-        @Column(name = "visibility")
-        private String visibility;
-
-        @Column(name = "levelOfConfidentiality")
-        private String levelOfConfidentiality;
-
         @Column(name = "type")
         private String type;
 
@@ -110,7 +104,7 @@ public class Jobs {
 
     public Jobs(Long id, String title, String description, String category, String languageFrom,
             String languageTo, String fromDate, String toDate, String priceType,
-            Integer fromPrice, Integer toPrice, String visibility, String levelOfConfidentiality, String file) {
+            Integer fromPrice, Integer toPrice, String file) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -123,8 +117,6 @@ public class Jobs {
         this.fromPrice = fromPrice;
         this.toPrice = toPrice;
         this.file = file;
-        this.visibility = visibility;
-        this.levelOfConfidentiality = levelOfConfidentiality;
     }
 
     public Jobs() {
@@ -216,22 +208,6 @@ public class Jobs {
 
     public void setFile(String file) {
         this.file = file;
-    }
-
-    public String getVisibility() {
-        return visibility;
-    }
-
-    public void setVisibility(String visibility) {
-        this.visibility = visibility;
-    }
-
-    public String getlevelOfConfidentiality() {
-        return levelOfConfidentiality;
-    }
-
-    public void setlevelOfConfidentiality(String levelOfConfidentiality) {
-        this.levelOfConfidentiality = levelOfConfidentiality;
     }
 
     public Long getPostById() {

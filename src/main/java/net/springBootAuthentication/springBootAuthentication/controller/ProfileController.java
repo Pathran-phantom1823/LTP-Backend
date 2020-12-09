@@ -4,14 +4,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,23 +23,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.ResourceAccessException;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomProfile;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomProfileInterface;
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomProfiles;
-import net.springBootAuthentication.springBootAuthentication.customModel.Register;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import net.springBootAuthentication.springBootAuthentication.model.AddressModel;
 import net.springBootAuthentication.springBootAuthentication.model.CategoryModel;
-import net.springBootAuthentication.springBootAuthentication.model.EducationModel;
 import net.springBootAuthentication.springBootAuthentication.model.ProfileModel;
 import net.springBootAuthentication.springBootAuthentication.model.ProfileSkillsModel;
 import net.springBootAuthentication.springBootAuthentication.model.RegisterModel;
 import net.springBootAuthentication.springBootAuthentication.model.SkillsModel;
 import net.springBootAuthentication.springBootAuthentication.repository.AddressRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.CategoryRepository;
-import net.springBootAuthentication.springBootAuthentication.repository.EducationRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.ProfileRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.ProfileSkillsRepository;
 import net.springBootAuthentication.springBootAuthentication.repository.RegisterRepository;
@@ -60,9 +53,6 @@ public class ProfileController {
 
         @Autowired
         private AddressRepository addressRepository;
-
-        @Autowired
-        private EducationRepository educationRepository;
 
         @Autowired
         private SkillsRepository skillsRepository;
@@ -325,60 +315,6 @@ public class ProfileController {
                 return ResponseEntity.ok("Updated");
         }
 
-        // Update Education Details
-        @PostMapping(value = "/updateEducationDetails")
-        public ResponseEntity<?> postEducationDetails(@RequestBody CustomProfile entity) {
-                try{
-                        AddressModel addressModel = new AddressModel();
-                        EducationModel educationModel = new EducationModel();
 
-                        addressModel.setCity(entity.getCity());
-                        addressModel.setCountry(entity.getCountry());
-                        addressModel.setPostal(entity.getPostalcode());
-                        addressModel.setStreet(entity.getStreet());
-                        addressModel.setZipcode(entity.getZipcode());
-                        addressRepository.saveAndFlush(addressModel);
-
-                        educationModel.setSchoolname(entity.getSchoolname());
-                        educationModel.setSchoolyear(entity.getSchoolyear());
-                        educationModel.setTimestamps(entity.getTimeStamp());
-                        educationRepository.saveAndFlush(educationModel);
-                }catch (Exception e){
-                        return ResponseEntity.ok(e);
-                }
-                return ResponseEntity.ok("Updated");
-        }
-
-        // Create Education with Address
-        @PostMapping(value = "/create_education_address")
-        public ResponseEntity<?> postMethodName(@RequestBody CustomProfiles customProfile) {
-
-                AddressModel addressModel = new AddressModel();
-                EducationModel educationModel = new EducationModel();
-                LocalDate date = LocalDate.now();
-                List<Object> list = new ArrayList<>();
-
-                try {
-                        addressModel.setCity(customProfile.getCity());
-                        addressModel.setCountry(customProfile.getCountry());
-                        addressModel.setPostal(customProfile.getPostalcode());
-                        addressModel.setStreet(customProfile.getStreet());
-                        addressModel.setZipcode(customProfile.getZipcode());
-                        addressRepository.saveAndFlush(addressModel);
-
-                        educationModel.setAddressId(addressModel.getId());
-                        educationModel.setProfileId(customProfile.getId());
-                        educationModel.setSchoolname(customProfile.getSchoolname());
-                        educationModel.setSchoolyear(customProfile.getSchoolyear());
-                        educationModel.setTimestamps(date);
-                        educationRepository.saveAndFlush(educationModel);
-
-                        list.add(addressModel);
-                        list.add(educationModel);
-                } catch (Exception e) {
-                        return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
-                }
-                return ResponseEntity.ok(list);
-        }
 
 }
