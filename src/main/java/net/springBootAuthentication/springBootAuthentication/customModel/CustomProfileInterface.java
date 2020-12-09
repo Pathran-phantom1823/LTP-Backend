@@ -9,8 +9,6 @@ public interface CustomProfileInterface {
 
     Long getAddressId();
 
-    Long getSchoolAddressId();
-
     Long getCategoryId();
     
     Long getSkillId();
@@ -48,20 +46,6 @@ public interface CustomProfileInterface {
     String getStreet();
 
     String getImage();
-    
-    String getSchoolname();
-
-    Integer getSchoolyear();
-
-    String getSchoolcity();
-
-    String getSchoolcountry();
-
-    String getSchoolstreet();
-
-    String getSchoolPostal();
-
-    Integer getSchoolzipcode();
 
     String getSkillname();
 

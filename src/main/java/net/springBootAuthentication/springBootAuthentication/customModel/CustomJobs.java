@@ -37,10 +37,6 @@ public  interface CustomJobs {
 
      String getdatePosted();
 
-     String getLevelOfConfidentiality();
-
-     String getVisibility();
-
      String getPriceType();
 
      Integer getBids();

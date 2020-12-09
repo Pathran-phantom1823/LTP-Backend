@@ -125,8 +125,6 @@ public class JobController {
 			jobs2.setPostById(jobs.getPostById());
 			jobs2.setFile(String.format("%d%s%s", jobs.getPostById(), dateFormat.format(date), filename));
 			jobs2.setDatePosted(dateFormat.format(date));
-			jobs2.setVisibility(jobs.getVisibility());
-			jobs2.setlevelOfConfidentiality(jobs.getlevelOfConfidentiality());
 			jobs2.setFixedPrice(jobs.getFixedPrice());
 			jobs2.setType(jobs.getType());
 			jobs2.setIsAvailable("true");
@@ -562,8 +560,6 @@ public class JobController {
 			jobs2.setPostById(jobs.getPostById());
 			jobs2.setFile(String.format("%d%s%s", jobs.getPostById(), dateFormat.format(date), filename));
 			jobs2.setDatePosted(dateFormat.format(date));
-			jobs2.setVisibility(jobs.getVisibility());
-			jobs2.setlevelOfConfidentiality(jobs.getlevelOfConfidentiality());
 			jobs2.setFixedPrice(jobs.getFixedPrice());
 			jobs2.setType(jobs.getType());
 			jobs2.setIsAvailable("true");
@@ -601,8 +597,6 @@ public class JobController {
 			jobs2.setPriceType(jobs.getPriceType());
 			jobs2.setPostById(jobs.getPostById());
 			jobs2.setDatePosted(dateFormat.format(date));
-			jobs2.setVisibility(jobs.getVisibility());
-			jobs2.setlevelOfConfidentiality(jobs.getlevelOfConfidentiality());
 			jobs2.setFixedPrice(jobs.getFixedPrice());
 			jobs2.setType(jobs.getType());
 			jobs2.setFile(jobs.getFile());
