@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.ChartSummaryRequestModel;
+import net.springBootAuthentication.springBootAuthentication.customModel.FinishedJobsYearsSummary;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentSummaryModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentYearsSummary;
 import net.springBootAuthentication.springBootAuthentication.customModel.QuotationChartModel;
@@ -20,6 +21,8 @@ import net.springBootAuthentication.springBootAuthentication.customModel.Quotati
 import net.springBootAuthentication.springBootAuthentication.customModel.ReportsChartModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.ReportsYearsSummary;
 import net.springBootAuthentication.springBootAuthentication.customModel.SalesChartModel;
+import net.springBootAuthentication.springBootAuthentication.customModel.finishedJobModel;
+import net.springBootAuthentication.springBootAuthentication.customModel.finishedJobsChartModel;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import net.springBootAuthentication.springBootAuthentication.model.Response;
 import net.springBootAuthentication.springBootAuthentication.model.UsersSummaryModel;
@@ -92,6 +95,18 @@ public class SummaryController {
 		return ResponseEntity.ok(new Response(200, "reports_years_summary", sum));
 	}
 	
+	@GetMapping("/finishedJobs_years")
+	public ResponseEntity<Response> finishedJobsYearsSummary() throws ResourceNotFoundException {
+		ArrayList<FinishedJobsYearsSummary> sum = null;
+		try {
+			sum = summary.finishedJobsYearsSummary();
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "finishedJobs_years_summary", sum));
+	}
+	
 	@PostMapping("/sales_chart")
 	public ResponseEntity<Response> salesChartSummary(@RequestBody ChartSummaryRequestModel request) {
 		ArrayList<SalesChartModel> sum = null;
@@ -102,6 +117,18 @@ public class SummaryController {
 			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));
 		}
 		return ResponseEntity.ok(new Response(200, "sales_years_summary", sum));
+	}
+	
+	@PostMapping("/finishedJobs_chart")
+	public ResponseEntity<Response> finishedJobsChartSummary(@RequestBody ChartSummaryRequestModel request) {
+		ArrayList<finishedJobsChartModel> sum = null;
+		try {
+			sum = summary.finishedJobsChartSummary(request.getMonth(), request.getYear());
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "finishedJobs_summary", sum));
 	}
 	
 	@PostMapping("/reports_chart")
@@ -126,6 +153,54 @@ public class SummaryController {
 			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));
 		}
 		return ResponseEntity.ok(new Response(200, "reports_years_summary", sum));
+	}
+	
+	@GetMapping("/finishedJobs_summary")
+	public ResponseEntity<Response> finishedJobsSummary() {
+		ArrayList<finishedJobModel> sum = null;
+		try {
+			sum = summary.finishedJobsSummary();
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "finishedJobs_summary", sum));
+	}
+	
+	@GetMapping("/quotationsTable_summary")
+	public ResponseEntity<Response> quotationsTableSummary() {
+		ArrayList<finishedJobModel> sum = null;
+		try {
+			sum = summary.quotationsSummaryTable();
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "finishedJobs_summary", sum));
+	}
+	
+	@GetMapping("/finishedQuotations_size")
+	public ResponseEntity<Response> finishedQuotation() {
+		ArrayList<Integer> sum = null;
+		try {
+			sum = summary.finishedQuotationsSize();
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "finishedQuotation_size", sum));
+	}
+	
+	@GetMapping("/finishedJob_size")
+	public ResponseEntity<Response> finishedJobSize() {
+		ArrayList<Integer> sum = null;
+		try {
+			sum = summary.finishedJobSize();
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "finishedJobs_size", sum));
 	}
 
 	@GetMapping("/job-summary")
