@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import net.springBootAuthentication.springBootAuthentication.customModel.CustomAdminInterface;
+import net.springBootAuthentication.springBootAuthentication.customModel.FinishedJobsYearsSummary;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentSummaryModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentYearsSummary;
 import net.springBootAuthentication.springBootAuthentication.customModel.QuotationChartModel;
@@ -18,6 +19,8 @@ import net.springBootAuthentication.springBootAuthentication.customModel.Quotati
 import net.springBootAuthentication.springBootAuthentication.customModel.ReportsChartModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.ReportsYearsSummary;
 import net.springBootAuthentication.springBootAuthentication.customModel.SalesChartModel;
+import net.springBootAuthentication.springBootAuthentication.customModel.finishedJobModel;
+import net.springBootAuthentication.springBootAuthentication.customModel.finishedJobsChartModel;
 import net.springBootAuthentication.springBootAuthentication.model.AdminProfileModel;
 import net.springBootAuthentication.springBootAuthentication.model.UsersSummaryModel;
 
@@ -59,6 +62,10 @@ public interface AdminProfileRepository extends JpaRepository<AdminProfileModel,
     ArrayList<QuotationsYearsSummary> quotationsYearsSummary();
     
     @Transactional
+    @Query(value = "{call spFinishedJobsYears()}", nativeQuery = true)
+    ArrayList<FinishedJobsYearsSummary> finishedJobsYearsSummary();
+    
+    @Transactional
     @Query(value = "{call spSalesChart(:month, :year)}", nativeQuery = true)
     ArrayList<SalesChartModel> salesChartSummary(@Param("month") int month, @Param("year") int year);
     
@@ -69,6 +76,26 @@ public interface AdminProfileRepository extends JpaRepository<AdminProfileModel,
     @Transactional
     @Query(value = "{call spQuotationsChart(:month, :year)}", nativeQuery = true)
     ArrayList<QuotationChartModel> quotationChartSummary(@Param("month") int month, @Param("year") int year);
+    
+    @Transactional
+    @Query(value = "{call spFinishedJobsChart(:month, :year)}", nativeQuery = true)
+    ArrayList<finishedJobsChartModel> finishedJobsChartSummary(@Param("month") int month, @Param("year") int year);
+    
+    @Transactional
+    @Query(value = "{call spJobsSummaryTable()}", nativeQuery = true)
+    ArrayList<finishedJobModel> finishedJobsSummary();
+    
+    @Transactional
+    @Query(value = "{call spQuotationsSummaryTable()}", nativeQuery = true)
+    ArrayList<finishedJobModel> quotationsSummaryTable();
+    
+    @Transactional
+    @Query(value = "{call spFinishedQuotationSize()}", nativeQuery = true)
+    ArrayList<Integer> finishedQuotationsSize();
+    
+    @Transactional
+    @Query(value = "{call spFinishedJobSize()}", nativeQuery = true)
+    ArrayList<Integer> finishedJobSize();
 
     @Transactional
     @Query(value = "{call spCountJobs()}" , nativeQuery = true)
