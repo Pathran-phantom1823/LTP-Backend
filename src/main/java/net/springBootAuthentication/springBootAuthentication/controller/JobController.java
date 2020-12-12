@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -826,6 +827,20 @@ public class JobController {
 			return  ResponseEntity.ok(file);
 		}catch (Exception e){
 			return ResponseEntity.ok(e);
+		}
+	}
+
+	@PostMapping("/checkIfApplied")
+	public  Boolean checkIfApplied(@RequestBody JobApplicants entity){
+		Long applicantId = entity.getApplicantId();
+		Long jobId = entity.getJobId();
+		List<?> list = jobApplicantRepository.checIfApplied(applicantId, jobId);
+		if(list.isEmpty()){
+			System.out.println(list);
+			return false;
+		}else{
+			System.out.println(list);
+			return  true;
 		}
 	}
 }
