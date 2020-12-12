@@ -1,5 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -58,4 +59,6 @@ public interface JobApplicantsRepository extends JpaRepository<JobApplicants, Lo
     @Query(value = "{call uploadFinishedFile(:applicantId, :jobId, :finishedFile, :date)}", nativeQuery = true)
     void uploadFinishedFile(@Param("applicantId") Long applicantId, @Param("jobId") Long jobId, @Param("finishedFile") String finishedFile, @Param("date") String date);
 
+    @Query(value = "{call checkIfApplied(:applicantId, :jobId)}", nativeQuery = true)
+    List<?> checIfApplied(@Param("applicantId") Long applicantId, @Param("jobId") Long jobId);
 }
