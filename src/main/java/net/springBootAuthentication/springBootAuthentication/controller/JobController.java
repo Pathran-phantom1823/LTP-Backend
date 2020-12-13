@@ -519,8 +519,9 @@ public class JobController {
 			Long id = entity.getId();
 			Jobs job = jobsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
 			job.setDeleted(dateFormat.format(date));
+			jobsRepository.save(job);
 		} catch (Exception e) {
-			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(e, HttpStatus.OK);
 		}
 		return ResponseEntity.ok("Deleted");
 	}
