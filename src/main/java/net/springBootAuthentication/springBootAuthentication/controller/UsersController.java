@@ -5,6 +5,7 @@ import java.util.List;
 import net.springBootAuthentication.springBootAuthentication.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -89,6 +90,54 @@ public class UsersController {
         }
         return ResponseEntity.ok("account disabled");
 
+    }
+
+    @PostMapping("/updateaccount")
+    public ResponseEntity<?> updateAccount(@RequestBody RegisterModel entity)throws  ResourceNotFoundException{
+        try {
+            Long id = entity.getId();
+            RegisterModel register = registerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
+            register.setUsername(entity.getUsername());
+            register.setEmail(entity.getEmail());
+            registerRepository.save(register);
+            return  ResponseEntity.ok("Account  Updated");
+        }
+        catch (Exception e){
+            return  ResponseEntity.ok(e);
+        }
+    }
+
+    @PostMapping("/checkIfPasswordCorrect")
+    public ResponseEntity<?> PasswordCorrect(@RequestBody RegisterModel entity)throws  ResourceNotFoundException{
+        try {
+            Long id = entity.getId();
+            RegisterModel register = registerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
+            String currentPass = register.getPassword();
+            String comparePass = entity.getPassword();
+            if(new BCryptPasswordEncoder().matches(comparePass, currentPass)){
+                ResponseEntity.ok(true);
+            }else{
+                ResponseEntity.ok(false);
+            }
+            return  ResponseEntity.ok("Account  Updated");
+        }
+        catch (Exception e){
+            return  ResponseEntity.ok(e);
+        }
+    }
+
+    @PostMapping("/updatepassword")
+    public ResponseEntity<?> updatePassword(@RequestBody RegisterModel entity)throws  ResourceNotFoundException{
+        try {
+            Long id = entity.getId();
+            RegisterModel register = registerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not Found"));
+            register.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
+            registerRepository.save(register);
+            return  ResponseEntity.ok("Account  Updated");
+        }
+        catch (Exception e){
+            return  ResponseEntity.ok(e);
+        }
     }
     
     
