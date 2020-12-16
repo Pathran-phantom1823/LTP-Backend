@@ -211,7 +211,17 @@ public class JobController {
 			List<CustomJobs> jobs = jobsRepository.getAllJobs(id);
 			return ResponseEntity.ok(jobs);
 		} catch (Exception e) {
-			return new ResponseEntity<>(e, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e, HttpStatus.OK);
+		}
+	}
+
+	@GetMapping(value = "getAllQuotations")
+	public ResponseEntity<?> getAllQuotation() throws BadRequest {
+		try {
+			List<CustomJobs> jobs = jobsRepository.getAllQuotations();
+			return ResponseEntity.ok(jobs);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.OK);
 		}
 	}
 

@@ -102,9 +102,6 @@ public class ProfileController {
 
                         CustomProfiles customProfile = objectMapper.readValue(data, CustomProfiles.class);
 
-                        RegisterModel registerModel = registerRepository.findById(customProfile.getAccountId())
-                                        .orElseThrow(() -> new ResourceNotFoundException("not found"));
-
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Date date = new Date();
 
@@ -129,11 +126,6 @@ public class ProfileController {
                         skillModel.setSkillname(customProfile.getSkillname().toString());
                         skillModel.setTimestamps(date.toString());
                         skillsRepository.saveAndFlush(skillModel);
-
-                        registerModel.setUsername(customProfile.getUsername());
-                        registerModel.setPassword(new BCryptPasswordEncoder().encode(customProfile.getPassword()));
-                        registerModel.setEmail(customProfile.getEmail());
-                        registerRepository.save(registerModel);
 
                         categoryModel.setName(customProfile.getCategory());
                         categoryModel.setTimestamps(date.toString());
@@ -196,15 +188,8 @@ public class ProfileController {
                         CategoryModel categoryModel = categoryRepository.findById(entity.getCategoryId())
                                 .orElseThrow(() -> new ResourceNotFoundException("notfound"));
 
-                        RegisterModel registerModel = registerRepository.findById(entity.getAccountId())
-                                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
-
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         System.out.println(entity.getBirthdate());
-
-                        registerModel.setUsername(entity.getUsername());
-                        registerModel.setPassword(entity.getPassword());
-                        registerRepository.save(registerModel);
 
                         addressModel.setCity(entity.getCity());
                         addressModel.setCountry(entity.getCountry());
@@ -272,13 +257,6 @@ public class ProfileController {
                         FileOutputStream fout = new FileOutputStream(convertfile);
                         fout.write(img.getBytes());
                         fout.close();
-
-                        RegisterModel registerModel = registerRepository.findById(entity.getAccountId())
-                                .orElseThrow(() -> new ResourceNotFoundException("notfound"));
-
-                        registerModel.setUsername(entity.getUsername());
-                        registerModel.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
-                        registerRepository.save(registerModel);
 
                         addressModel.setCity(entity.getCity());
                         addressModel.setCountry(entity.getCountry());
