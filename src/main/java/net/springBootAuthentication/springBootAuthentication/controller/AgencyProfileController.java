@@ -82,13 +82,13 @@ public class AgencyProfileController {
         Date date = new Date();
 
         CustomAgencyProfile entity = objectMapper.readValue(data, CustomAgencyProfile.class);
-
         RegisterModel registerModel = registerRepository.findById(entity.getAccountId())
                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
         String tempImageName = img.getOriginalFilename();
         String imageName = tempImageName.replaceAll("\\s+", "_");
         File convertfile = new File(
                 "src/main/resources/img/" + String.format("%d%s%s", entity.getAccountId(), date, imageName));
+
         convertfile.createNewFile();
         FileOutputStream fout = new FileOutputStream(convertfile);
         fout.write(img.getBytes());
@@ -191,9 +191,6 @@ public class AgencyProfileController {
                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
         CategoryModel categoryModel = categoryRepository.findById(entity.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
-        RegisterModel registerModel = registerRepository.findById(entity.getAccountId())
-                .orElseThrow(() -> new ResourceNotFoundException("not Found"));
-
         String tempImageName = img.getOriginalFilename();
         String imageName = tempImageName.replaceAll("\\s+", "_");
         File convertfile = new File(
@@ -215,11 +212,6 @@ public class AgencyProfileController {
 
         categoryModel.setName(entity.getCategory().toString());
         categoryRepository.saveAndFlush(categoryModel);
-
-        registerModel.setUsername(entity.getUsername());
-        registerModel.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
-        registerModel.setEmail(entity.getEmail());
-        registerRepository.save(registerModel);
 
         agencyProfileModel.setAbout(entity.getAbout());
         agencyProfileModel.setEffectDate(entity.getEffectDate());
@@ -252,8 +244,6 @@ public class AgencyProfileController {
                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
         CategoryModel categoryModel = categoryRepository.findById(entity.getCategoryId())
                 .orElseThrow(() -> new ResourceNotFoundException("not found"));
-        RegisterModel registerModel = registerRepository.findById(entity.getAccountId())
-                .orElseThrow(() -> new ResourceNotFoundException("not Found"));
 
         addressModel.setCity(entity.getCity());
         addressModel.setCountry(entity.getCountry());
@@ -267,11 +257,6 @@ public class AgencyProfileController {
 
         categoryModel.setName(entity.getCategory().toString());
         categoryRepository.saveAndFlush(categoryModel);
-
-        registerModel.setUsername(entity.getUsername());
-        registerModel.setPassword(new BCryptPasswordEncoder().encode(entity.getPassword()));
-        registerModel.setEmail(entity.getEmail());
-        registerRepository.save(registerModel);
 
         agencyProfileModel.setAbout(entity.getAbout());
         agencyProfileModel.setEffectDate(entity.getEffectDate());
