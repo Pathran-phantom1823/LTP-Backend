@@ -509,6 +509,18 @@ public class JobController {
 		}
 	}
 
+	@PostMapping(value = "/getAgencyFinishedJobs")
+	public ResponseEntity<?> getAgencyFinishedJobs(@RequestBody JobTransactionModel entity) throws ResourceNotFoundException {
+		try {
+			Long id = entity.getOrgId();
+			List<CustomJobHistory> list = jobsTransactionRepository.getJobHistory(id);
+
+			return ResponseEntity.ok(list);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.NO_CONTENT);
+		}
+	}
+
 	@PostMapping(value = "/getMyJobHistory")
 	public ResponseEntity<?> postMethodName(@RequestBody Register entity) {
 		try {
@@ -621,6 +633,24 @@ public class JobController {
 			return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
 		}
 
+	}
+
+	@PostMapping(value = "/send_finished_file")
+	public  ResponseEntity<?> sendFinishedFile(@RequestBody JobApplicants entity){
+		try{
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Date date = new Date();
+			Long applicantId = entity.getApplicantId();
+			Long jobId = entity.getJobId();
+			String finishedFile = entity.getFinishedFile();
+			String dates = dateFormat.format(date);
+
+			jobApplicantRepository.uploadFinishedFile(applicantId, jobId, finishedFile, dates);
+		}
+		catch (Exception e){
+			return ResponseEntity.ok(e);
+		}
+		return  ResponseEntity.ok("file is send");
 	}
 
 	@RequestMapping(value = "/finish-file", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
