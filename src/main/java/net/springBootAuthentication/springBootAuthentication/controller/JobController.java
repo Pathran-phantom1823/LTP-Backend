@@ -513,7 +513,7 @@ public class JobController {
 	public ResponseEntity<?> getAgencyFinishedJobs(@RequestBody JobTransactionModel entity) throws ResourceNotFoundException {
 		try {
 			Long id = entity.getOrgId();
-			List<CustomJobHistory> list = jobsTransactionRepository.getJobHistory(id);
+			List<CustomJobHistory> list = jobsTransactionRepository.getAgencyFinishedJobs(id);
 
 			return ResponseEntity.ok(list);
 		} catch (Exception e) {
@@ -644,13 +644,13 @@ public class JobController {
 			Long jobId = entity.getJobId();
 			String finishedFile = entity.getFinishedFile();
 			String dates = dateFormat.format(date);
-
 			jobApplicantRepository.uploadFinishedFile(applicantId, jobId, finishedFile, dates);
+			return  ResponseEntity.ok("file is send");
 		}
 		catch (Exception e){
 			return ResponseEntity.ok(e);
 		}
-		return  ResponseEntity.ok("file is send");
+
 	}
 
 	@RequestMapping(value = "/finish-file", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -696,19 +696,19 @@ public class JobController {
 			String filename = tempFileName.replaceAll("\\s+", "_");
 
 			File convertfile = new File(
-					"src/main/resources/files/" + String.format("%d%s%s", jobs.getApplicantId(), date, filename));
+					"src/main/resources/files/" + String.format("%d%s%s", jobs.getApplicantId(), dateFormat.format(date), filename));
 
 			convertfile.createNewFile();
 			FileOutputStream fout = new FileOutputStream(convertfile);
 			fout.write(file.getBytes());
 			fout.close();
 
-			Long id = jobs.getId();
-			JobTransactionModel jobApplicants = jobsTransactionRepository.findById(id)
-					.orElseThrow(() -> new ResourceNotFoundException("not found"));
-			jobApplicants.setFinishFile(filename);
-			jobApplicants.setDateFinished(dateFormat.format(date));
-			jobsTransactionRepository.save(jobApplicants);
+			Long applicantId = jobs.getApplicantId();
+			Long jobId = jobs.getJobId();
+			String finishedFile = String.format("%d%s%s", jobs.getApplicantId(), dateFormat.format(date), filename);
+			String dates = dateFormat.format(date);
+
+			jobsTransactionRepository.uploadFinishedOrgFile(applicantId, jobId, finishedFile, dates);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
 		}

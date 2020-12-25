@@ -1,6 +1,8 @@
 package net.springBootAuthentication.springBootAuthentication.customModel;
 
 public interface CustomJobHistory {
+    String getJobId();
+
     String getDateFinish();
 
     String getDatePosted();
@@ -18,5 +20,7 @@ public interface CustomJobHistory {
     Integer getFixedPrice();
 
     String getTitle();
+
+    String getFinishedFile();
 
 }
