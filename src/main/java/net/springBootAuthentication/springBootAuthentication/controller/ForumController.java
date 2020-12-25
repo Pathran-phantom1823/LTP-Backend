@@ -1,5 +1,6 @@
 package net.springBootAuthentication.springBootAuthentication.controller;
 
+import java.nio.file.ReadOnlyFileSystemException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -186,5 +187,57 @@ public class ForumController {
         List<CommentLikesModel> res = commentsLikesRepository.findAll();
         return ResponseEntity.ok(res);
     }
+
+    @PostMapping(value = "/update-forum")
+    public ResponseEntity<?>updateForum(@RequestBody ForumPostModel entity)throws ResourceNotFoundException{
+        try {
+            Long id = entity.getId();
+            ForumPostModel posts = forumPostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            posts.setTopic(entity.getTopic());
+            posts.setDescription(entity.getDescription());
+            forumPostRepository.save(posts);
+            return  ResponseEntity.ok("Updated");
+        }catch (Exception e){
+            return ResponseEntity.ok(e);
+        }
+    }
+    @PostMapping(value = "/delete-forum")
+    public ResponseEntity<?>deleteForum(@RequestBody ForumPostModel entity)throws ResourceNotFoundException{
+        try {
+            Long id = entity.getId();
+            ForumPostModel posts = forumPostRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            forumPostRepository.delete(posts);
+            return  ResponseEntity.ok("deleted");
+        }catch (Exception e){
+            return ResponseEntity.ok(e);
+        }
+    }
+
+
+    @PostMapping(value = "/update-comment")
+    public ResponseEntity<?>updateComment(@RequestBody CommentsModel entity)throws ResourceNotFoundException{
+        try {
+            Long id = entity.getId();
+            CommentsModel posts = commentsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            posts.setComment(entity.getComment());
+            commentsRepository.save(posts);
+            return  ResponseEntity.ok("Updated");
+        }catch (Exception e){
+            return ResponseEntity.ok(e);
+        }
+    }
+    @PostMapping(value = "/delete-comment")
+    public ResponseEntity<?>deleteComment(@RequestBody CommentsModel entity)throws ResourceNotFoundException{
+        try {
+            Long id = entity.getId();
+            CommentsModel posts = commentsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("not found"));
+            commentsRepository.delete(posts);
+            return  ResponseEntity.ok("deleted");
+        }catch (Exception e){
+            return ResponseEntity.ok(e);
+        }
+    }
+
+
 
 }
