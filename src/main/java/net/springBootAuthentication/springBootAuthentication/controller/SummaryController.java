@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import net.springBootAuthentication.springBootAuthentication.customModel.AgencyChartSummaryRequestModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.ChartSummaryRequestModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.FinishedJobsYearsSummary;
+import net.springBootAuthentication.springBootAuthentication.customModel.IntegerRequestModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentSummaryModel;
 import net.springBootAuthentication.springBootAuthentication.customModel.PaymentYearsSummary;
 import net.springBootAuthentication.springBootAuthentication.customModel.QuotationChartModel;
@@ -213,5 +215,85 @@ public class SummaryController {
 			}
 			return ResponseEntity.ok(count);
 	}
-
+	
+	@PostMapping("/agency_job_count")
+	public ResponseEntity<?> agencyJobCount(@RequestBody IntegerRequestModel request){
+		ArrayList<Integer> total = null;
+		try {
+			total = summary.agencyCountJobs(request.getNum());
+		}catch(Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "agencyJobsTotalCount", total));
+	}
+	
+	@PostMapping("/agency_members_count")
+	public ResponseEntity<?> agencyMembersCount(@RequestBody IntegerRequestModel request){
+		ArrayList<Integer> total = null;
+		try {
+			total = summary.agencyMembersTotal(request.getNum());
+		}catch(Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "agencyMembersTotal", total));
+	}
+	
+	@PostMapping("/agencyFinishedJobsTableSummary")
+	public ResponseEntity<Response> agencyTableJobsSummary(@RequestBody IntegerRequestModel request) {
+		ArrayList<finishedJobModel> sum = null;
+		try {
+			sum = summary.agencyJobsSummary(request.getNum());
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, "invalid_request", new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "agencyFinishedJobsTableSummary", sum));
+	}
+	
+	@PostMapping("/agency_finished_jobs")
+	public ResponseEntity<Response> agencyFinishedJobsChart(@RequestBody AgencyChartSummaryRequestModel request) {
+		ArrayList<finishedJobsChartModel> sum = null;
+		try {
+			sum = summary.agencyFinishedJobs(request.getMonth(), request.getYear(), request.getId());
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "agency_finishedJobs_summary", sum));
+	}
+	
+	@PostMapping("/agency_Income")
+	public ResponseEntity<Response> agencyIncome(@RequestBody AgencyChartSummaryRequestModel request) {
+		ArrayList<finishedJobsChartModel> sum = null;
+		try {
+			sum = summary.agencyIncome(request.getMonth(), request.getYear(), request.getId());
+		}catch(Exception e) {
+			System.out.println(e);
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "agency_income_for_chart", sum));
+	}
+	
+	
+	@PostMapping("/agency_job_income")
+	public ResponseEntity<?> agencyJobIncome(@RequestBody IntegerRequestModel request){
+		ArrayList<Double> total = null;
+		try {
+			total = summary.agencyJobsIncome(request.getNum());
+		}catch(Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "agencyJobIncome", total));
+	}
+		
+	@PostMapping("/agency_quotations_income")
+	public ResponseEntity<?> agencyQuotationsIncome(@RequestBody IntegerRequestModel request){
+		ArrayList<Double> total = null;
+		try {
+			total = summary.agencyQuotationsIncome(request.getNum());
+		}catch(Exception e) {
+			return ResponseEntity.ok(new Response(500, e.getMessage(), new ArrayList<String>()));
+		}
+		return ResponseEntity.ok(new Response(200, "agencyQuotationIncome", total));
+	}
 }

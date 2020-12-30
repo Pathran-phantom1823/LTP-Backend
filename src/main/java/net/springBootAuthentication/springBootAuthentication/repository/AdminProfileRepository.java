@@ -96,8 +96,36 @@ public interface AdminProfileRepository extends JpaRepository<AdminProfileModel,
     @Transactional
     @Query(value = "{call spFinishedJobSize()}", nativeQuery = true)
     ArrayList<Integer> finishedJobSize();
+    
+    @Transactional
+    @Query(value = "{call spJobCountTotal(:id)}" , nativeQuery = true)
+    ArrayList<Integer> agencyCountJobs(@Param("id") int id);
+    
+    @Transactional
+    @Query(value = "{call spOrgMemberTotal(:id)}" , nativeQuery = true)
+    ArrayList<Integer> agencyMembersTotal(@Param("id") int id);
 
     @Transactional
     @Query(value = "{call spCountJobs()}" , nativeQuery = true)
     ArrayList<JobCountInterface> countJobs();
+    
+    @Transactional
+    @Query(value = "{call spAgencyFinishedJobsWithin(:id)}", nativeQuery = true)
+    ArrayList<finishedJobModel> agencyJobsSummary(@Param("id") int id);
+    
+    @Transactional
+    @Query(value = "{call spAgencyFinishedJobsChart(:month, :year, :id)}", nativeQuery = true)
+    ArrayList<finishedJobsChartModel> agencyFinishedJobs(@Param("month") int month, @Param("year") int year, @Param("id") int id);
+    
+    @Transactional
+    @Query(value = "{call spAgencyIncome(:month, :year, :id)}", nativeQuery = true)
+    ArrayList<finishedJobsChartModel> agencyIncome(@Param("month") int month, @Param("year") int year, @Param("id") int id);
+    
+    @Transactional
+    @Query(value = "{call spAgencyJobsIncome(:id)}" , nativeQuery = true)
+    ArrayList<Double> agencyJobsIncome(@Param("id") int id);
+    
+    @Transactional
+    @Query(value = "{call spAgencyQuotationsIncome(:id)}" , nativeQuery = true)
+    ArrayList<Double> agencyQuotationsIncome(@Param("id") int id);
 }
