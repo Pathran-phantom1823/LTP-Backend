@@ -59,4 +59,5 @@ public  interface CustomJobs {
 
      String getAssigned();
 
+     String getIsPaid();
 }

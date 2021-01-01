@@ -42,6 +42,9 @@ public interface JobApplicantsRepository extends JpaRepository<JobApplicants, Lo
 
     @Query(value = "{call getWorkedJobs()}", nativeQuery = true)
     List<CustomWorkedJobs> getWorkedJobs();
+
+    @Query(value = "{call getFinishedQuotations()}", nativeQuery = true)
+    List<CustomWorkedJobs> getFinishedQuotations();
     
     @Query(value = "{call spGetPaymentDetails(:id, :jobId)}", nativeQuery = true)
     List<GetPaymentDetailsModel> getPaymentDetails(@Param("id") Long id, @Param("jobId") Long jobId);

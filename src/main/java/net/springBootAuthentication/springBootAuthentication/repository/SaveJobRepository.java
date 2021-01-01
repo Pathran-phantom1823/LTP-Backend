@@ -17,4 +17,9 @@ public interface SaveJobRepository extends JpaRepository<SaveJob, Long>{
     
     @Query(value = "{call getSaveJobs(:id)}", nativeQuery = true)
     List<CustomJobs> getSaveJobs(@Param("id") Long id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "{call unsavejob(:jobId, :accountId)}", nativeQuery = true)
+   void unsavejob(@Param("jobId") Long jobId, @Param("accountId") Long accountId);
 }
