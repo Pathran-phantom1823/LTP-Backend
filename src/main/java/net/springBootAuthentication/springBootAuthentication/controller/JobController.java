@@ -287,12 +287,7 @@ public class JobController {
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Date date = new Date();
-			Jobs job = jobsRepository.findById(data.getJobId())
-					.orElseThrow(() -> new ResourceNotFoundException("job not found"));
 			SaveJob saveJob = new SaveJob();
-
-			job.setIsAvailable("false");
-			jobsRepository.save(job);
 			saveJob.setDateSaved(dateFormat.format(date));
 			saveJob.setJobId(data.getJobId());
 			saveJob.setPostedById(data.getPostedById());
@@ -318,6 +313,23 @@ public class JobController {
 
 		} catch (Exception e) {
 			return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
+		}
+
+	}
+
+	@PostMapping(value = "/unsavejob")
+	public ResponseEntity<?> unsavejob(@RequestBody SaveJob data) {
+		try {
+			Long jobId = data.getJobId();
+			Long accountId = data.getSavedById();
+			System.out.println(jobId);
+			System.out.println(accountId);
+			saveJobRepository.unsavejob(jobId, accountId);
+
+			return ResponseEntity.ok("deleted");
+
+		} catch (Exception e) {
+			return new ResponseEntity<>(e, HttpStatus.OK);
 		}
 
 	}
@@ -833,6 +845,16 @@ public class JobController {
 	public ResponseEntity<?> getWorkedJobs() {
 		try {
 			List<CustomWorkedJobs> list = jobApplicantRepository.getWorkedJobs();
+			return ResponseEntity.ok(list);
+		} catch (Exception e) {
+			return ResponseEntity.ok(e);
+		}
+	}
+
+	@GetMapping(value = "/getFinishedQuotation")
+	public ResponseEntity<?> getFinishedQuotation() {
+		try {
+			List<CustomWorkedJobs> list = jobApplicantRepository.getFinishedQuotations();
 			return ResponseEntity.ok(list);
 		} catch (Exception e) {
 			return ResponseEntity.ok(e);
