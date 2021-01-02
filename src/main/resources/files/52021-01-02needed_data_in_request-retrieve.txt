@@ -1,0 +1,17 @@
+need data
+	account_id
+	amount
+	billing_per_month_human
+	bookmark
+	code
+	created_at_human
+	currency 
+	id
+	initial_amount
+	interest
+	money_type
+	needed_on_human
+	rating
+	reason
+	type
+	

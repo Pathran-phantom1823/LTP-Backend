@@ -129,13 +129,13 @@ public class JobController {
 			jobs2.setFixedPrice(jobs.getFixedPrice());
 			jobs2.setType(jobs.getType());
 			jobs2.setIsAvailable("true");
-			jobs2.setIsPaid(jobs.getIsPaid());
+			jobs2.setIsPaid("false");
 			// jobs2.setPostById(user.getId());
 			jobsRepository.save(jobs2);
 
 			return ResponseEntity.ok(jobs2);
 		} catch (Exception e) {
-			return new ResponseEntity<>(e, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<>(e, HttpStatus.OK);
 		}
 
 	}
