@@ -205,8 +205,8 @@ public class PaypalController {
 			servicePayment.setDateCreated(dateFormat.format(date));
 			servicePayment.setTransferred(false);
 			jobs.setIsPaid("true");
-			jobsRepository.save(jobs);
-			servicePaymentRepository.save(servicePayment);
+			servicePaymentRepository.saveAndFlush(servicePayment);
+			jobsRepository.saveAndFlush(jobs);
 
 		}catch (Exception e) {
 			return ResponseEntity.ok(e);
